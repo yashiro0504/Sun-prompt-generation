@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suno Indie Track & Lyrics Generator v3.0</title>
-  <meta name="description" content="영미권 명곡 팝/인디 100곡의 사운드 메타데이터 기반 · 고정 바리톤 보컬 + 맞춤형 서사 가사 & Suno AI 프롬프트 생성기">
+  <title>Suno Indie Track & Lyrics Generator v3.5 (DeepSeek AI Integrated)</title>
+  <meta name="description" content="영미권 명곡 팝/인디 100곡 사운드 메타데이터 + DeepSeek AI 아티스트 작사 스타일 모사 + 고정 바리톤 보컬 프롬프트 생성기">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
@@ -121,7 +121,41 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      flex-wrap: wrap;
     }
+
+    .api-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .api-badge.connected {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+
+    .api-badge.offline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+    }
+
+    .api-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .api-badge.connected .api-dot { background: #10b981; box-shadow: 0 0 8px #10b981; }
+    .api-badge.offline .api-dot { background: var(--text-muted); }
 
     /* ========== MAIN GRID ========== */
     .app-grid {
@@ -569,6 +603,31 @@
       max-height: 480px;
       overflow-y: auto;
       line-height: 1.8;
+      min-height: 160px;
+    }
+
+    /* AI Loading Spinner */
+    .ai-spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      text-align: center;
+    }
+
+    .ai-spinner {
+      width: 42px;
+      height: 42px;
+      border: 3px solid rgba(99, 102, 241, 0.2);
+      border-top-color: var(--accent-highlight);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     /* Action bar on lyrics card */
@@ -711,7 +770,7 @@
       font-size: 0.7rem;
     }
 
-    /* ========== SAVED MODAL ========== */
+    /* ========== MODALS ========== */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -730,9 +789,9 @@
       background: var(--bg-primary);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-xl);
-      max-width: 700px;
+      max-width: 680px;
       width: 100%;
-      max-height: 80vh;
+      max-height: 85vh;
       overflow-y: auto;
       padding: 28px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
@@ -742,7 +801,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--glass-border);
     }
@@ -805,11 +864,16 @@
     <!-- HEADER -->
     <header>
       <div class="header-left">
-        <div class="logo-badge">🎸 SUNO AI INDIE ENGINE v3.0</div>
+        <div class="logo-badge">🎸 SUNO AI INDIE ENGINE v3.5 · DEEPSEEK</div>
         <h1>Pop Reference Suno Generator</h1>
-        <p>100곡의 사운드 메타데이터 + 고정 시그니처 바리톤 보컬 & 감성 한국어 가사 메이커</p>
+        <p>100곡의 사운드 메타데이터 + DeepSeek AI 아티스트 작사 모사 & 고정 바리톤 보컬</p>
       </div>
       <div class="header-actions">
+        <!-- DeepSeek API status button -->
+        <div class="api-badge offline" id="api-status-btn" onclick="openApiModal()">
+          <span class="api-dot"></span>
+          <span id="api-status-text">DeepSeek API 설정</span>
+        </div>
         <button class="btn-action-outline" onclick="openSavedModal()">
           📂 보관함 (<span id="saved-count">0</span>)
         </button>
@@ -909,7 +973,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button class="btn-generate" onclick="generateAll()">
+        <button class="btn-generate" id="btn-generate-main" onclick="generateAll()">
           <span>🚀</span> Suno 프롬프트 & 가사 생성하기
         </button>
       </div>
@@ -977,6 +1041,9 @@
               <span class="panel-icon">✍️</span>
               <h2 class="panel-title">[Step 2] Cinematic Korean Lyrics (Suno Meta Tags)</h2>
             </div>
+            <div id="lyric-engine-indicator" style="font-size:0.75rem; color:var(--text-muted);">
+              <!-- Rendered by JS -->
+            </div>
           </div>
 
           <div class="prompt-box-wrapper">
@@ -1029,6 +1096,34 @@
 
   </div>
 
+  <!-- DEEPSEEK API MODAL -->
+  <div class="modal-overlay" id="api-modal" onclick="closeApiModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="panel-title-wrap">
+          <span class="panel-icon">🤖</span>
+          <h3 style="font-family:'Outfit'; font-size:1.2rem;">DeepSeek AI API 설정</h3>
+        </div>
+        <button class="btn-sm" onclick="closeApiModal()">닫기</button>
+      </div>
+      <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6;">
+        DeepSeek API 키(<code style="color:#a5b4fc;">sk-...</code>)를 입력하시면, 선택하신 100곡의 레퍼런스 아티스트(Radiohead, Cigarettes After Sex, The Beatles 등)의 <strong>고유한 작사 문법, 은유, 문장 호흡</strong>을 AI(<code>deepseek-chat</code>)가 실시간 분석하여 고품질 한국어 인디 가사를 창작합니다.<br>
+        <span style="color:var(--text-muted); font-size:0.75rem;">※ API 키는 브라우저 내부(localStorage)에만 안전하게 보관되며 DeepSeek 공식 서버(api.deepseek.com)로만 직접 전송됩니다.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">DeepSeek API Key</label>
+        <input type="password" id="deepseek-key-input" class="form-input" placeholder="sk-...">
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
+        <button class="btn-sm" style="color:#f87171;" onclick="clearApiKey()">키 삭제 (템플릿 모드로 복귀)</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action-outline" onclick="testApiKey()">연결 테스트</button>
+          <button class="btn-action-primary" onclick="saveApiKey()">저장하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SAVED MODAL -->
   <div class="modal-overlay" id="saved-modal" onclick="closeSavedModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
@@ -1047,7 +1142,7 @@
 
   <script>
   /* ================================================================
-     Pop Reference Suno Generator v3.0 Engine
+     Pop Reference Suno Generator v3.5 (DeepSeek AI Engine)
      ================================================================ */
 
   let POP_REFERENCES = [];
@@ -1057,12 +1152,20 @@
   let currentBpm = 76;
   let promptMode = 'compact';
   let currentChosenTitle = '';
+  let isGenerating = false;
 
   const CATEGORY_MAP = {
     'britpop': 'Britpop / Alternative Rock',
     'dreampop': 'Dream Pop / Bedroom Pop',
     'retropop': 'Classic Retro Pop',
     'modernindie': 'Modern Indie Pop'
+  };
+
+  const THEME_NAMES = {
+    'regret': '이별과 미련 (서툰 마지막 말, 잊지 못하는 미련과 회한)',
+    'nocturnal': '심야의 독백 (도시의 가로등 불빛, 깊은 고독과 자아 성찰)',
+    'seasonal': '계절의 기억 (지나간 찬란했던 계절의 향기와 아련한 잔상)',
+    'solace': '소소한 위로 (지친 하루 끝, 덤덤한 공간에서 전하는 따뜻한 위안)'
   };
 
   // Fixed Vocal Profile
@@ -1086,10 +1189,95 @@
   }
 
   function initApp() {
+    updateApiStatusUI();
     selectCategory('britpop');
     renderDB();
     updateSavedCount();
     generateAll();
+  }
+
+  // API Key Management
+  function getApiKey() {
+    return localStorage.getItem('deepseek_api_key') || '';
+  }
+
+  function updateApiStatusUI() {
+    const key = getApiKey();
+    const btn = document.getElementById('api-status-btn');
+    const text = document.getElementById('api-status-text');
+    const indicator = document.getElementById('lyric-engine-indicator');
+
+    if (key && key.startsWith('sk-')) {
+      btn.className = 'api-badge connected';
+      text.textContent = '🟢 DeepSeek AI 연동됨';
+      if (indicator) indicator.innerHTML = '<span style="color:#34d399; font-weight:600;">🤖 DeepSeek AI 작사 활성화</span>';
+    } else {
+      btn.className = 'api-badge offline';
+      text.textContent = 'DeepSeek API 설정 (키 없음)';
+      if (indicator) indicator.innerHTML = '<span style="color:var(--text-muted);">⚪ 절차적 템플릿 작사 (API 미등록)</span>';
+    }
+  }
+
+  function openApiModal() {
+    document.getElementById('deepseek-key-input').value = getApiKey();
+    document.getElementById('api-modal').classList.add('show');
+  }
+
+  function closeApiModal() {
+    document.getElementById('api-modal').classList.remove('show');
+  }
+
+  function saveApiKey() {
+    const key = document.getElementById('deepseek-key-input').value.trim();
+    if (!key) {
+      showToast('⚠️ API 키를 입력해 주세요');
+      return;
+    }
+    localStorage.setItem('deepseek_api_key', key);
+    updateApiStatusUI();
+    closeApiModal();
+    showToast('🔑 DeepSeek API 키가 저장되었습니다!');
+  }
+
+  function clearApiKey() {
+    localStorage.removeItem('deepseek_api_key');
+    document.getElementById('deepseek-key-input').value = '';
+    updateApiStatusUI();
+    closeApiModal();
+    showToast('API 키가 삭제되었습니다 (템플릿 모드로 복귀)');
+  }
+
+  async function testApiKey() {
+    const key = document.getElementById('deepseek-key-input').value.trim();
+    if (!key) {
+      showToast('⚠️ 키를 입력 후 테스트해 주세요');
+      return;
+    }
+    showToast('📡 DeepSeek 연결 테스트 중...');
+
+    try {
+      const res = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [{ role: 'user', content: 'Say "OK" in 1 word.' }],
+          max_tokens: 5
+        })
+      });
+
+      if (res.ok) {
+        showToast('✅ DeepSeek API 연결 성공!');
+      } else {
+        const err = await res.json();
+        showToast(`❌ 연결 실패: ${err.error?.message || '인증 오류'}`);
+      }
+    } catch(e) {
+      showToast(`❌ 네트워크 연결 오류: ${e.message}`);
+    }
   }
 
   // Theme Select
@@ -1155,7 +1343,9 @@
   });
 
   // Generator Trigger
-  function generateAll() {
+  async function generateAll() {
+    if (isGenerating) return;
+
     const topic = document.getElementById('topic-input').value.trim() || '심야 빨래방';
     const activeMoods = getActiveMoods();
 
@@ -1170,34 +1360,154 @@
     }
 
     renderSummaryBox();
-    generateTitleSuggestions(topic, selectedTheme);
     generateSunoPrompt(activeRefTrack, activeMoods);
-    generateKoreanLyrics(topic, activeRefTrack, activeMoods, selectedTheme);
+
+    const apiKey = getApiKey();
+    if (apiKey && apiKey.startsWith('sk-')) {
+      // Call DeepSeek AI
+      await generateLyricsWithDeepSeek(topic, activeRefTrack, activeMoods, selectedTheme, apiKey);
+    } else {
+      // Procedural Template fallback
+      generateTitleSuggestionsProcedural(topic, selectedTheme);
+      generateKoreanLyricsProcedural(topic, activeRefTrack, activeMoods, selectedTheme);
+    }
   }
 
-  // Title Generator
-  function generateTitleSuggestions(topic, theme) {
-    const titlePresets = {
-      'regret': [
-        `${topic}의 밤`, `남겨진 온기`, `서툰 마지막 말`, `얼룩진 기억`, `끝내 묻지 못한 말`
-      ],
-      'nocturnal': [
-        `새벽 세 시의 ${topic}`, `밤의 궤도`, `도시의 그림자`, `가로등 불빛 아래`, `나 홀로 걷는 길`
-      ],
-      'seasonal': [
-        `빛바랜 계절`, `${topic}의 계절`, `바람이 머물던 자리`, `가을의 잔상`, `그리움의 무게`
-      ],
-      'solace': [
-        `작은 쉼표`, `괜찮아지는 밤`, `${topic}에서 보내는 편지`, `따스한 위로`, `지친 하루의 끝`
-      ]
-    };
+  // DeepSeek AI Lyric Generation
+  async function generateLyricsWithDeepSeek(topic, track, moods, theme, apiKey) {
+    isGenerating = true;
+    const btnGen = document.getElementById('btn-generate-main');
+    btnGen.disabled = true;
+    btnGen.innerHTML = '<span>⏳</span> DeepSeek AI가 작사 중...';
 
+    const lyricsBlock = document.getElementById('korean-lyrics-output');
+    lyricsBlock.innerHTML = `
+      <div class="ai-spinner-container">
+        <div class="ai-spinner"></div>
+        <div style="font-weight:700; font-size:1.05rem; color:#c7d2fe;">🤖 DeepSeek AI 작사 생성 중...</div>
+        <div style="font-size:0.82rem; color:var(--text-muted); margin-top:6px;">
+          [${track.artist} - ${track.title}] 특유의 작사 감성과 서사를 분석하여 한국어 가사를 창작하고 있습니다.
+        </div>
+      </div>
+    `;
+
+    try {
+      const themeKorean = THEME_NAMES[theme] || theme;
+      const moodStr = moods.join(', ') || track.key_mood.join(', ');
+
+      const response = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            {
+              role: 'system',
+              content: `당신은 대한민국 최고 수준의 한국 감성 인디 록 / 인디 발라드 전문 작사가입니다.
+당신의 역할은 지정된 영미권 레퍼런스 아티스트의 고유한 감성, 문장 호흡, 은유 방식, 자조적이거나 몽환적인 뉘앙스를 심도 있게 벤치마킹하여, 사용자가 제시한 소재와 서사 테마에 어울리는 한국어 가사를 창작하는 것입니다.
+
+[필수 작사 원칙]
+1. 단순한 단어 나열이 아니라, 구체적인 사물 묘사(영수증, 유리창 빗물, 가로등, 차가운 캔커피 등)와 서정적인 감정선이 살아있는 시적인 가사를 쓰세요.
+2. 중저음 바리톤 남성 보컬(deep baritone male vocals, clear Korean diction)의 담담하고 묵직한 호흡에 맞는 말맛을 살리세요.
+3. 가사는 Suno AI가 음악 구조로 완벽하게 인식할 수 있도록 반드시 아래의 표준 메타 태그를 대괄호[]로 포함하세요:
+   [Intro: ...]
+   [Verse 1]
+   [Pre-Chorus]
+   [Chorus: ...]
+   [Verse 2]
+   [Guitar Solo: ...]
+   [Bridge: ...]
+   [Chorus: ...]
+   [Outro: ...]
+   필요 시 (Whisper), [Falsetto], (Sigh) 같은 보컬 연출 태그도 자연스럽게 넣으세요.
+
+[출력 형식 가이드]
+- 맨 첫 줄에 이 곡에 어울리는 감성 제목 5개를 쉼표로 구분하여 아래 형식으로 반드시 출력하세요:
+TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
+- 그 다음 빈 줄 하나를 두고 완성된 가사 전문을 출력하세요.
+- 서두나 끝맺음 인사말, 설명 등 불필요한 사족은 일체 출력하지 마세요.`
+            },
+            {
+              role: 'user',
+              content: `[곡 정보]
+- 레퍼런스 곡: "${track.title}" by ${track.artist} (${track.category})
+- 레퍼런스 사운드: ${track.sound_tags}
+- 레퍼런스 서사 지침: ${track.story_structure}
+- 소재 / 이야기 주제: "${topic}"
+- 서사 테마: ${themeKorean}
+- 분위기/무드: ${moodStr}
+- 템포: ${currentBpm} BPM
+
+위 레퍼런스 아티스트(${track.artist})의 감성을 깊이 담아 한국어 인디 가사와 추천 제목 5개를 작성해 주세요.`
+            }
+          ],
+          temperature: 0.85,
+          max_tokens: 1500
+        })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error?.message || `HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices[0]?.message?.content || '';
+
+      // Parse TITLES line
+      let titles = [];
+      let lyricsOnly = content;
+
+      if (content.startsWith('TITLES:')) {
+        const parts = content.split('\n');
+        const titleLine = parts[0].replace('TITLES:', '').trim();
+        titles = titleLine.split(',').map(t => t.trim()).filter(Boolean);
+        lyricsOnly = parts.slice(1).join('\n').trim();
+      }
+
+      // Render Titles
+      if (titles.length > 0) {
+        renderTitleChips(titles);
+      } else {
+        generateTitleSuggestionsProcedural(topic, theme);
+      }
+
+      lyricsBlock.textContent = lyricsOnly;
+      showToast('✨ DeepSeek AI 가사 작사 완료!');
+
+    } catch (err) {
+      console.error('DeepSeek generation failed:', err);
+      showToast(`⚠️ DeepSeek 호출 실패: ${err.message}. 템플릿으로 대체합니다.`);
+      generateTitleSuggestionsProcedural(topic, theme);
+      generateKoreanLyricsProcedural(topic, track, moods, theme);
+    } finally {
+      isGenerating = false;
+      btnGen.disabled = false;
+      btnGen.innerHTML = '<span>🚀</span> Suno 프롬프트 & 가사 생성하기';
+    }
+  }
+
+  // Procedural Title Generator (Fallback)
+  function generateTitleSuggestionsProcedural(topic, theme) {
+    const titlePresets = {
+      'regret': [`${topic}의 밤`, `남겨진 온기`, `서툰 마지막 말`, `얼룩진 기억`, `끝내 묻지 못한 말`],
+      'nocturnal': [`새벽 세 시의 ${topic}`, `밤의 궤도`, `도시의 그림자`, `가로등 불빛 아래`, `나 홀로 걷는 길`],
+      'seasonal': [`빛바랜 계절`, `${topic}의 계절`, `바람이 머물던 자리`, `가을의 잔상`, `그리움의 무게`],
+      'solace': [`작은 쉼표`, `괜찮아지는 밤`, `${topic}에서 보내는 편지`, `따스한 위로`, `지친 하루의 끝`]
+    };
     const titles = titlePresets[theme] || titlePresets['regret'];
+    renderTitleChips(titles);
+  }
+
+  function renderTitleChips(titles) {
     currentChosenTitle = titles[0];
     document.getElementById('active-title-label').textContent = `선택된 제목: "${currentChosenTitle}"`;
 
     const container = document.getElementById('title-chip-container');
-    container.innerHTML = titles.map((t, idx) => `
+    container.innerHTML = titles.map(t => `
       <span class="title-chip" onclick="selectTitle('${escapeHtml(t)}')">
         🎵 ${escapeHtml(t)}
       </span>
@@ -1231,11 +1541,9 @@
     const moodStr = moods.length > 0 ? moods.join(', ') : track.key_mood.join(', ');
 
     if (promptMode === 'compact') {
-      // Compact optimized for Suno prompt limits & maximum compliance
       const compactPrompt = `${genreTag}, ${currentBpm} BPM, ${soundTags}, ${FIXED_VOCAL_SIGNATURE}, ${moodStr}`;
       document.getElementById('suno-prompt-output').textContent = compactPrompt;
     } else {
-      // Detailed Pro View
       const detailedPrompt =
         `[Genre & Vibe: ${genreTag}, ${moodStr}]\n` +
         `[Tempo & Groove: ${currentBpm} BPM, steady dynamic backbeat]\n` +
@@ -1246,8 +1554,8 @@
     }
   }
 
-  // Step 2: Grounded Cinematic Korean Lyrics Generator
-  function generateKoreanLyrics(topic, track, moods, theme) {
+  // Procedural Lyrics Generator (Fallback)
+  function generateKoreanLyricsProcedural(topic, track, moods, theme) {
     const themeLyrics = {
       'regret': {
         verse1: `${topic}에 홀로 남아\n시계 바늘 소리만 귓가에 맴돌고\n지우지 못한 너의 마지막 말들이\n물에 번진 잉크처럼 가슴에 스민다`,
