@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suno Indie Track & Lyrics Generator v4.0 (Anti-AI Cliché & YouTube Release Kit)</title>
-  <meta name="description" content="영미권 명곡 100곡 사운드 메타데이터 + DeepSeek AI 탈(脫)AI 감성 작사 & 음수율 최적화 + 유튜브 업로드 패키지 올인원 생성기">
+  <title>전득필 (Jeon Deuk-pil) OAC Daily Studio v5.0</title>
+  <meta name="description" content="싱어송라이터 전득필(Jeon Deuk-pil) 공식 유튜브 아티스트 채널(OAC) 1일 1곡 발매 올인원 제작 스튜디오">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
@@ -13,10 +13,10 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg-deep: #070813;
-      --bg-primary: #0e1022;
-      --bg-secondary: #151833;
-      --bg-elevated: #1e2246;
+      --bg-deep: #060711;
+      --bg-primary: #0d0f1f;
+      --bg-secondary: #141730;
+      --bg-elevated: #1c2042;
       --glass-bg: rgba(255, 255, 255, 0.035);
       --glass-border: rgba(255, 255, 255, 0.07);
       --glass-blur: 16px;
@@ -32,6 +32,7 @@
       --accent-highlight: #6366f1;
       --accent-green: #10b981;
       --accent-youtube: #ef4444;
+      --accent-gold: #fbbf24;
 
       --radius-sm: 8px;
       --radius-md: 14px;
@@ -54,7 +55,7 @@
       position: fixed;
       top: -30%; left: -20%;
       width: 70vw; height: 70vh;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -64,7 +65,7 @@
       position: fixed;
       bottom: -20%; right: -10%;
       width: 60vw; height: 60vh;
-      background: radial-gradient(circle, rgba(236, 72, 153, 0.05) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.05) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -72,9 +73,9 @@
     .container {
       position: relative;
       z-index: 1;
-      max-width: 1320px;
+      max-width: 1340px;
       margin: 0 auto;
-      padding: 24px 24px 100px;
+      padding: 20px 24px 100px;
     }
 
     /* ========== HEADER ========== */
@@ -82,9 +83,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 0 28px;
+      padding: 16px 0 26px;
       flex-wrap: wrap;
       gap: 16px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 24px;
     }
 
     .header-left .logo-badge {
@@ -93,20 +96,20 @@
       gap: 8px;
       padding: 5px 14px;
       border-radius: 30px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #a5b4fc;
-      font-size: 0.78rem;
-      font-weight: 600;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
+      font-size: 0.76rem;
+      font-weight: 700;
       letter-spacing: 0.05em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     header h1 {
       font-family: 'Outfit', sans-serif;
       font-size: 2.2rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 40%, #f472b6 80%);
+      background: linear-gradient(135deg, #fcd34d 0%, #c084fc 50%, #60a5fa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -0.02em;
@@ -114,7 +117,7 @@
 
     header p {
       color: var(--text-secondary);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       margin-top: 4px;
     }
 
@@ -221,6 +224,11 @@
       font-weight: 400;
     }
 
+    .input-with-action {
+      display: flex;
+      gap: 8px;
+    }
+
     .form-input {
       width: 100%;
       padding: 12px 16px;
@@ -237,6 +245,27 @@
     .form-input:focus {
       border-color: var(--accent-highlight);
       box-shadow: 0 0 16px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn-dice {
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.12);
+      color: #fcd34d;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-dice:hover {
+      background: rgba(245, 158, 11, 0.25);
+      transform: translateY(-1px);
     }
 
     /* Narrative Theme Selector */
@@ -355,13 +384,13 @@
     /* Action Button */
     .btn-generate {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       border-radius: var(--radius-md);
       border: none;
       background: linear-gradient(135deg, #6366f1, #a855f7);
       color: #fff;
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 0.98rem;
+      font-weight: 800;
       cursor: pointer;
       transition: var(--transition);
       display: flex;
@@ -369,12 +398,12 @@
       justify-content: center;
       gap: 8px;
       margin-top: 14px;
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
     }
 
     .btn-generate:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.45);
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
     }
 
     /* ========== OUTPUT PANEL ========== */
@@ -475,9 +504,9 @@
     .title-chip {
       padding: 6px 14px;
       border-radius: 20px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #c7d2fe;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
@@ -488,8 +517,8 @@
     }
 
     .title-chip:hover {
-      background: var(--accent-highlight);
-      color: #fff;
+      background: #f59e0b;
+      color: #000;
       transform: translateY(-1px);
     }
 
@@ -721,6 +750,15 @@
       transform: translateX(4px);
     }
 
+    /* Midjourney Prompt Box */
+    .cover-prompt-card {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+
     /* ========== EXPLORER SECTION (100 DB) ========== */
     .explorer-section {
       margin-top: 48px;
@@ -817,7 +855,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(8px);
       z-index: 9000;
       display: none;
@@ -866,7 +904,7 @@
       gap: 14px;
     }
 
-    .saved-title { font-weight: 700; font-size: 0.95rem; color: #c7d2fe; }
+    .saved-title { font-weight: 700; font-size: 0.95rem; color: #fcd34d; }
     .saved-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 
     /* Toast */
@@ -907,9 +945,9 @@
     <!-- HEADER -->
     <header>
       <div class="header-left">
-        <div class="logo-badge">🎸 SUNO AI INDIE ENGINE v4.0 · PRO SUITE</div>
-        <h1>Pop Reference Suno Generator</h1>
-        <p>100곡 사운드 메타데이터 + 脫(탈)AI 감성 작사 & 음수율 최적화 + YouTube 업로드 패키지</p>
+        <div class="logo-badge">🎸 전득필 (Jeon Deuk-pil) OAC STUDIO v5.0</div>
+        <h1>전득필 공식 1일 1곡 스튜디오</h1>
+        <p>중저음 바리톤 보컬 + 脫(탈)AI 감성 일기 + OAC 발매 & 3000px 앨범커버 원스톱 패키지</p>
       </div>
       <div class="header-actions">
         <!-- DeepSeek API status button -->
@@ -918,7 +956,7 @@
           <span id="api-status-text">DeepSeek API 설정</span>
         </div>
         <button class="btn-action-outline" onclick="openSavedModal()">
-          📂 보관함 (<span id="saved-count">0</span>)
+          📂 전득필 디스코그래피 (<span id="saved-count">0</span>집)
         </button>
       </div>
     </header>
@@ -930,23 +968,29 @@
       <div class="panel-card">
         <div class="panel-header">
           <div class="panel-title-wrap">
-            <span class="panel-icon">🎛️</span>
-            <h2 class="panel-title">Track Parameters</h2>
+            <span class="panel-icon">🎙️</span>
+            <h2 class="panel-title">전득필 작곡 파라미터</h2>
           </div>
+          <span style="font-size:0.75rem; color:#fcd34d; font-weight:600;">Fixed: Deep Baritone</span>
         </div>
 
-        <!-- Topic/Keyword Input -->
+        <!-- Topic/Keyword Input with Random Diary Button -->
         <div class="form-group">
           <label class="form-label">
-            📝 곡 소재 / 이야기 주제
+            📝 오늘의 노래 소재 / 이야기
             <span class="label-sub">구체적 일상 사물이나 상황</span>
           </label>
-          <input type="text" id="topic-input" class="form-input" placeholder="예: 심야 빨래방, 젖은 정류장, 새벽 고속도로, 한강변 노을..." value="심야 빨래방">
+          <div class="input-with-action">
+            <input type="text" id="topic-input" class="form-input" placeholder="예: 심야 빨래방, 젖은 정류장, 새벽 고속도로..." value="심야 빨래방">
+            <button class="btn-dice" onclick="rollDailyDiaryTopic()" title="전득필의 50가지 일상 시나리오 중 랜덤 뽑기">
+              🎲 일기 뽑기
+            </button>
+          </div>
         </div>
 
         <!-- Story Narrative Arc Selector -->
         <div class="form-group">
-          <label class="form-label">📖 서사 테마 (가사 스토리 전개)</label>
+          <label class="form-label">📖 서사 테마 (전득필의 감정선)</label>
           <div class="theme-grid">
             <div class="theme-chip active" data-theme="regret" onclick="selectTheme('regret')">
               💔 이별과 미련
@@ -978,7 +1022,7 @@
 
         <!-- Genre Category Pick -->
         <div class="form-group">
-          <label class="form-label">🎼 레퍼런스 장르 카테고리</label>
+          <label class="form-label">🎼 사운드 레퍼런스 카테고리</label>
           <div class="category-grid">
             <div class="category-chip active" data-cat="britpop" onclick="selectCategory('britpop')">
               🇬🇧 Britpop / Alt Rock
@@ -1009,7 +1053,7 @@
 
         <!-- Selected Reference Track Preview -->
         <div class="form-group">
-          <label class="form-label">🎯 매칭된 레퍼런스</label>
+          <label class="form-label">🎯 매칭된 영미권 명곡 레퍼런스</label>
           <div id="selected-ref-info" style="font-size: 0.85rem; color: #a5b4fc; background: var(--bg-primary); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
             High and Dry - Radiohead (자동 매칭됨)
           </div>
@@ -1017,7 +1061,7 @@
 
         <!-- Submit Button -->
         <button class="btn-generate" id="btn-generate-main" onclick="generateAll()">
-          <span>🚀</span> Suno 프롬프트 & 가사 생성하기
+          <span>🚀</span> 전득필 신곡 패키지 일괄 생성하기
         </button>
       </div>
 
@@ -1044,8 +1088,8 @@
         <!-- Title Recommendations -->
         <div class="title-suggestions-card">
           <div class="form-label" style="margin-bottom: 0;">
-            <span>💡 감성 곡 제목 추천 (클릭 시 복사)</span>
-            <span class="label-sub" id="active-title-label">선택된 제목: 밤의 궤도</span>
+            <span>💡 전득필 공식 타이틀 추천 (클릭 시 복사)</span>
+            <span class="label-sub" id="active-title-label">선택된 제목: 밤의 궤도 (Orbit of the Night)</span>
           </div>
           <div class="title-chip-wrap" id="title-chip-container">
             <!-- Rendered by JS -->
@@ -1082,7 +1126,7 @@
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">✍️</span>
-              <h2 class="panel-title">[Step 2] Cinematic Korean Lyrics (탈-AI 일상어 & 음율 최적화)</h2>
+              <h2 class="panel-title">[Step 2] 전득필 감성 가사 (Suno Meta Tags)</h2>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
               <button class="btn-sm" id="btn-toggle-meter" onclick="toggleSyllableMeter()">📏 음수율(글자 수) 보기</button>
@@ -1102,40 +1146,51 @@
               📦 Title + Style + Lyrics 전체 복사
             </button>
             <button class="btn-action-primary" onclick="saveCurrentSet()">
-              💾 보관함에 저장
+              💾 디스코그래피에 발매 저장
             </button>
           </div>
         </div>
 
-        <!-- Step 3: YouTube Release Kit -->
+        <!-- Step 3: OAC & YouTube Release Kit -->
         <div class="panel-card">
           <div class="panel-header">
             <div class="panel-title-wrap">
-              <span class="panel-icon">📺</span>
-              <h2 class="panel-title">[Step 3] YouTube 업로드 패키지 (제목 3종 & 설명글)</h2>
+              <span class="panel-icon">💿</span>
+              <h2 class="panel-title">[Step 3] OAC 공식 발매 & YouTube 배포 패키지</h2>
             </div>
             <button class="btn-action-primary" style="background:linear-gradient(135deg, var(--accent-youtube), #b91c1c);" onclick="copyFullYouTubeKit()">
-              📋 유튜브 설명글 전체 복사
+              📋 OAC 설명글 전체 복사
             </button>
           </div>
 
-          <!-- YouTube Titles -->
+          <!-- Midjourney 3000x3000px Cover Prompt -->
+          <div class="cover-prompt-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:0.8rem; font-weight:700; color:#fcd34d;">🖼️ Midjourney / FLUX 1:1 앨범 커버 프롬프트</span>
+              <button class="btn-sm" onclick="copyToClipboard('midjourney-prompt-box', '앨범 커버 프롬프트가 복사되었습니다!')">프롬프트 복사</button>
+            </div>
+            <div id="midjourney-prompt-box" style="font-family:'Courier New', monospace; font-size:0.8rem; color:#cbd5e1; white-space:pre-wrap; word-break:break-all;">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- YouTube Official Titles -->
           <div class="form-group">
             <label class="form-label">
-              🎬 유튜브 추천 영상 제목 (클릭 시 복사)
-              <span class="label-sub">플레이리스트형 / 발매형 / 서사형</span>
+              🎬 OAC 추천 영상 제목 (클릭 시 1초 만에 복사)
+              <span class="label-sub">공식 발매형 / 플레이리스트형 / 서사형</span>
             </label>
             <div class="yt-title-chips" id="yt-title-chips">
               <!-- Rendered by JS -->
             </div>
           </div>
 
-          <!-- YouTube Description -->
+          <!-- YouTube Description with Liner Notes -->
           <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label">📝 유튜브 본문 설명글 (감성 소개문 + 크레딧 + 가사 + 해시태그)</label>
+            <label class="form-label">📝 OAC 공식 설명글 & 전득필의 작가의 말 (Liner Notes)</label>
             <div class="prompt-box-wrapper">
-              <div class="code-block" style="max-height:220px; font-family:'Inter', sans-serif; font-size:0.85rem; color:#cbd5e1;" id="yt-desc-output">loading description...</div>
-              <button class="copy-btn" onclick="copyToClipboard('yt-desc-output', '유튜브 설명글이 복사되었습니다!')">📋 복사</button>
+              <div class="code-block" style="max-height:240px; font-family:'Inter', sans-serif; font-size:0.85rem; color:#cbd5e1;" id="yt-desc-output">loading description...</div>
+              <button class="copy-btn" onclick="copyToClipboard('yt-desc-output', 'OAC 설명글이 복사되었습니다!')">📋 복사</button>
             </div>
           </div>
         </div>
@@ -1150,7 +1205,7 @@
           <div class="panel-header" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
             <div class="panel-title-wrap">
               <span class="panel-icon">📚</span>
-              <h2 class="panel-title">Pop Reference 100 Database</h2>
+              <h2 class="panel-title">전득필의 100대 영미권 사운드 레퍼런스 DB</h2>
             </div>
           </div>
 
@@ -1181,12 +1236,12 @@
       <div class="modal-header">
         <div class="panel-title-wrap">
           <span class="panel-icon">🤖</span>
-          <h3 style="font-family:'Outfit'; font-size:1.2rem;">DeepSeek AI API 설정</h3>
+          <h3 style="font-family:'Outfit'; font-size:1.2rem;">DeepSeek AI API 설정 (전득필 작사 엔진)</h3>
         </div>
         <button class="btn-sm" onclick="closeApiModal()">닫기</button>
       </div>
       <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6;">
-        DeepSeek API 키(<code style="color:#a5b4fc;">sk-...</code>)를 입력하시면, 선택하신 100곡의 레퍼런스 아티스트 고유 감성과 작사 스타일을 <strong>탈(脫)AI 일상 사물 언어와 정돈된 음수율</strong>로 실시간 창작합니다.<br>
+        DeepSeek API 키(<code style="color:#a5b4fc;">sk-...</code>)를 입력하시면, 선택하신 레퍼런스 아티스트 고유 감성과 작사 스타일을 <strong>전득필의 중저음 바리톤 페르소나 및 脫(탈)AI 일상 언어</strong>로 실시간 창작합니다.<br>
         <span style="color:var(--text-muted); font-size:0.75rem;">※ API 키는 브라우저 내부(localStorage)에만 안전하게 보관되며 DeepSeek 공식 서버(api.deepseek.com)로만 직접 전송됩니다.</span>
       </div>
       <div class="form-group">
@@ -1207,7 +1262,7 @@
   <div class="modal-overlay" id="saved-modal" onclick="closeSavedModal(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <h3 style="font-family:'Outfit'; font-size:1.2rem;">📂 저장된 프롬프트 & 가사 세트</h3>
+        <h3 style="font-family:'Outfit'; font-size:1.2rem;">📂 전득필 공식 디스코그래피 아카이브</h3>
         <button class="btn-sm" onclick="closeSavedModal()">닫기</button>
       </div>
       <div class="saved-list" id="saved-list-container">
@@ -1221,8 +1276,7 @@
 
   <script>
   /* ================================================================
-     Pop Reference Suno Generator v4.0 Engine
-     Anti-AI Cliché & Syllable Meter + YouTube Release Kit
+     전득필 (Jeon Deuk-pil) OAC Daily Studio v5.0 Engine
      ================================================================ */
 
   let POP_REFERENCES = [];
@@ -1235,7 +1289,8 @@
   let currentRawLyrics = '';
   let showSyllableMeter = false;
   let currentYtTitles = [];
-  let currentYtIntro = '';
+  let currentLinerNotes = '';
+  let currentCoverPrompt = '';
   let isGenerating = false;
 
   const CATEGORY_MAP = {
@@ -1252,7 +1307,36 @@
     'solace': '소소한 위로 (지친 퇴근길, 낡은 선풍기 소리, 덤덤한 공간에서 전하는 따뜻한 위안)'
   };
 
-  // Fixed Vocal Profile
+  // 전득필의 일기장 50선 (365일 소재 고갈 방지 풀)
+  const DIARY_TOPIC_POOL = [
+    "비에 젖은 채로 타는 퇴근길 지하철 2호선",
+    "새벽 4시 편의점 파라솔 앞 식어버린 컵라면",
+    "이사 가기 전 텅 빈 원룸 바닥에 남은 가구 자국",
+    "낡은 세탁소 골목에서 풍기는 스팀 다리미 냄새",
+    "오래된 공중전화 부스 유리창에 맺힌 빗물",
+    "고장 난 보일러 소리와 방안에 맴도는 찬 공기",
+    "주머니 속 구겨진 채 발견된 찢어진 버스 영수증",
+    "지하 단칸방 환기창 틈으로 올려다본 사람들의 발자국",
+    "막차 버스 맨 뒷자리 차창에 기댄 이마의 차가움",
+    "새벽 3시 10분, 꺼지지 않는 신호등의 노란 점멸등",
+    "낡은 옥상 난간에 기대어 피워 올린 담배 연기",
+    "비 내리는 일요일 오후, 멈춰버린 괘종시계 소리",
+    "문 닫힌 동네 LP판 카페의 희미한 쇼윈도 불빛",
+    "다 마신 캔맥주 캔을 발로 차며 걷는 둑방길",
+    "너와 마지막으로 헤어졌던 붉은 우체통 앞 골목길",
+    "식어버린 보온병에서 흘러나오는 미지근한 보리차",
+    "한밤중 한강 다리 난간을 스치는 거친 강바람",
+    "비좁은 현관에 아무렇게나 놓인 낡은 스니커즈 한 켤레",
+    "서랍 깊숙한 곳에서 발견된 유효기간 지난 영화 티켓",
+    "새벽 시장 골목을 밝히는 백열전구의 따스한 먼지 빛",
+    "고속도로 간이 졸음쉼터에서 바라본 도시의 흐릿한 불빛",
+    "헤어진 뒤 처음으로 내리는 11월의 쌀쌀한 첫눈",
+    "새벽 라디오 주파수 사이로 흐르는 지직거리는 노이즈",
+    "동네 목욕탕 굴뚝에서 피어오르는 저녁 연기",
+    "낡은 카세트 플레이어에서 늘어지며 돌아가는 테이프 소리"
+  ];
+
+  // Fixed Vocal Profile for 전득필 (Jeon Deuk-pil)
   const FIXED_VOCAL_SIGNATURE = 'deep baritone male vocals, clear Korean diction, intimate baritone vocal, articulate Korean, percussive consonants';
 
   // Load Reference DB
@@ -1280,6 +1364,14 @@
     generateAll();
   }
 
+  // Random Diary Roll
+  function rollDailyDiaryTopic() {
+    const randomTopic = DIARY_TOPIC_POOL[Math.floor(Math.random() * DIARY_TOPIC_POOL.length)];
+    document.getElementById('topic-input').value = randomTopic;
+    showToast(`🎲 오늘의 일기 소재: "${randomTopic}"`);
+    generateAll();
+  }
+
   // API Key Management
   function getApiKey() {
     return localStorage.getItem('deepseek_api_key') || '';
@@ -1294,7 +1386,7 @@
     if (key && key.startsWith('sk-')) {
       btn.className = 'api-badge connected';
       text.textContent = '🟢 DeepSeek AI 연동됨';
-      if (indicator) indicator.innerHTML = '<span style="color:#34d399; font-weight:600;">🤖 脫(탈)AI 실시간 작사 활성화</span>';
+      if (indicator) indicator.innerHTML = '<span style="color:#34d399; font-weight:600;">🤖 전득필 AI 작사 활성화</span>';
     } else {
       btn.className = 'api-badge offline';
       text.textContent = 'DeepSeek API 설정 (키 없음)';
@@ -1449,30 +1541,28 @@
 
     const apiKey = getApiKey();
     if (apiKey && apiKey.startsWith('sk-')) {
-      // Call DeepSeek AI with Anti-AI & Meter Rules
       await generateWithDeepSeek(topic, activeRefTrack, activeMoods, selectedTheme, apiKey);
     } else {
-      // Procedural Template fallback
       generateProcedural(topic, activeRefTrack, activeMoods, selectedTheme);
     }
 
     renderYouTubeKit();
   }
 
-  // DeepSeek AI Generation (Anti-AI Cliché + Syllable Meter + YouTube Kit)
+  // DeepSeek AI Generation (전득필 Persona + Anti-AI Cliché + Syllable Meter + OAC Pack)
   async function generateWithDeepSeek(topic, track, moods, theme, apiKey) {
     isGenerating = true;
     const btnGen = document.getElementById('btn-generate-main');
     btnGen.disabled = true;
-    btnGen.innerHTML = '<span>⏳</span> DeepSeek AI 작사 & 분석 중...';
+    btnGen.innerHTML = '<span>⏳</span> 전득필 AI 작사 & OAC 패키지 생성 중...';
 
     const lyricsBlock = document.getElementById('korean-lyrics-output');
     lyricsBlock.innerHTML = `
       <div class="ai-spinner-container">
         <div class="ai-spinner"></div>
-        <div style="font-weight:700; font-size:1.05rem; color:#c7d2fe;">🤖 脫(탈)AI 실시간 작사 & 운율 설계 중...</div>
+        <div style="font-weight:700; font-size:1.05rem; color:#fcd34d;">🎙️ 전득필(Jeon Deuk-pil) 감성 작사 진행 중...</div>
         <div style="font-size:0.82rem; color:var(--text-muted); margin-top:6px;">
-          상투적인 AI 어휘를 배제하고, [${track.artist}] 고유의 일상적 서사와 음수율을 정밀하게 계산하고 있습니다.
+          [${track.artist}]의 사운드 질감을 바탕으로, 일상 사물의 쌉싸름한 온기를 담은 가사를 쓰고 있습니다.
         </div>
       </div>
     `;
@@ -1492,24 +1582,26 @@
           messages: [
             {
               role: 'system',
-              content: `당신은 대한민국 최고 수준의 한국 감성 인디 록 / 인디 발라드 전문 작사가입니다.
-당신의 임무는 영미권 명곡 레퍼런스 아티스트의 고유 작사 문법을 벤치마킹하여, 사람 냄새가 짙게 묻어나는 수준 높은 한국어 인디 가사와 유튜브 패키지를 창작하는 것입니다.
+              content: `당신은 대한민국 인디 씬의 독보적인 싱어송라이터 '전득필(Jeon Deuk-pil)'입니다.
+전득필은 70~90년대 빈티지 아날로그 록/포크의 묵직한 감수성으로, 현대 도시를 살아가는 청춘의 고단함과 쓸쓸한 일상을 덤덤하게 노래하는 중저음 바리톤 보컬리스트입니다.
+당신의 임무는 영미권 레퍼런스 명곡의 사운드 질감을 흡수하여, 전득필 명의의 수준 높은 한국어 인디 가사와 OAC(공식 아티스트 채널) 발매 패키지를 완성하는 것입니다.
 
-[🔥 절대 규칙 1: AI스러운 상투적 어휘 원천 배제 (Anti-AI Cliché)]
+[🔥 절대 원칙 1: 탈(脫)AI 일상 사물 언어 - 상투어 원천 배제]
 - 🚫 금지 어휘: "찬란한 빛/별/미래", "어둠을 헤치고/뚫고", "영원한 사랑/약속", "시간의 강/바다", "마음의 미로", "영혼의 울림", "희망의 날개", "꿈을 향해 달려", "운명의 장난", "가슴속 깊은 상처" 등 뻔하고 오글거리는 AI 특유의 추상적인 미사여구는 절대 쓰지 마세요.
-- ✅ 필수 어휘: 손에 만져지는 구체적인 일상의 사물과 공간(찢어진 영수증, 식은 캔커피, 젖은 스니커즈, 편의점 파라솔, 자판기 불빛, 새벽 3시 10분, 낡은 가디건, 덜컹거리는 버스 손잡이 등)과 쌉싸름한 독백체(~했잖아, ~겠지, ~인 걸까, ~스민다, ~밤)로 작성하세요.
+- ✅ 전득필의 언어: 손에 만져지는 구체적인 일상 사물(찢어진 영수증, 식은 캔커피, 젖은 스니커즈, 편의점 파라솔, 자판기 불빛, 새벽 3시 10분, 낡은 가디건, 덜컹거리는 버스 손잡이 등)과 쌉싸름한 1인칭 독백체(~했잖아, ~겠지, ~인 걸까, ~스민다, ~밤)로 작성하세요.
 
-[🎵 절대 규칙 2: 한국어 음수율(글자 수) & 라임(Rhyme) 준수]
-1. 한 줄당 글자 수(음수율)를 8자~14자 내외로 균일하게 맞추어, 노래를 부를 때 박자가 밀리거나 말이 꼬이지 않고 입에 착 감기도록 작성하세요 (3-4조, 4-4조, 7-5조 호흡).
-2. 각 행의 말끝(각운)에 자연스러운 라임(~네, ~해, ~고, ~처럼, ~길 등)을 의도적으로 배치하여 멜로디컬한 운율감을 극대화하세요.
+[🎵 절대 원칙 2: 전득필 특유의 음수율 & 라임(Rhyme)]
+1. 한 줄당 글자 수(음수율)를 8자~14자 내외로 균일하게 맞추어, 노래를 부를 때 박자가 밀리거나 혀가 꼬이지 않고 입에 착 감기도록 작성하세요 (3-4조, 4-4조, 7-5조 호흡).
+2. 각 행의 말끝(각운)에 자연스러운 라임(~네, ~해, ~고, ~처럼, ~길 등)을 의도적으로 배치하세요.
 
-[🎙️ 절대 규칙 3: 중저음 바리톤 남성 보컬 맞춤]
-- 중저음 바리톤 남성 보컬(deep baritone male vocals, clear Korean diction)의 담담하고 묵직한 호흡에 맞는 말맛을 살리세요.
+[🎙️ 절대 원칙 3: 중저음 바리톤 보컬 맞춤]
+- 깊고 묵직한 중저음 바리톤 남성 보컬(deep baritone male vocals, clear Korean diction)의 담담한 호흡에 맞는 말맛을 살리세요.
 
 [출력 형식 가이드 (반드시 아래 형식 엄수)]
-TITLES: 곡제목1, 곡제목2, 곡제목3, 곡제목4, 곡제목5
-YT_TITLES: [플레이리스트형 제목] | [아티스트 레퍼런스형 제목] | [서사 감성형 제목]
-YT_INTRO: 곡의 배경과 쌉싸름한 여운을 담은 감성적인 유튜브 소개문 2~3줄
+TITLES: 한글제목 (영문부제) 5개를 쉼표로 구분하여 출력
+YT_TITLES: [전득필 OAC 발매형] | [플레이리스트형] | [서사형]
+LINER_NOTES: 전득필 명의의 앨범 소개글 (멜론/스포티파이/유튜브 설명란에 들어갈 쌉싸름한 2~3줄 작가의 말)
+COVER_PROMPT: Midjourney v6 전용 1:1 정방형 앨범 커버 영문 프롬프트 (35mm candid film photograph, vintage Korean indie aesthetic, [소재 시각 묘사], 1990s retro film grain, moody street lighting, square aspect ratio --ar 1:1 --v 6.0)
 LYRICS:
 [Intro: ...]
 [Verse 1]
@@ -1528,24 +1620,24 @@ LYRICS:
 ...
 [Outro: ...]
 
-불필요한 서두나 사족 없이 위 형식 그대로 출력하세요.`
+불필요한 인사말이나 부가 설명 없이 위 형식 그대로만 출력하세요.`
             },
             {
               role: 'user',
-              content: `[곡 정보]
-- 레퍼런스 곡: "${track.title}" by ${track.artist} (${track.category})
-- 레퍼런스 사운드: ${track.sound_tags}
+              content: `[전득필 신곡 작업 의뢰]
+- 사운드 레퍼런스: "${track.title}" by ${track.artist} (${track.category})
+- 사운드 특징: ${track.sound_tags}
 - 레퍼런스 서사 지침: ${track.story_structure}
-- 소재 / 이야기 주제: "${topic}"
+- 오늘의 일기 소재: "${topic}"
 - 서사 테마: ${themeKorean}
 - 분위기/무드: ${moodStr}
 - 템포: ${currentBpm} BPM
 
-위 레퍼런스 아티스트(${track.artist})의 감성을 깊이 담아 한국어 인디 가사와 유튜브 패키지를 작성해 주세요.`
+전득필의 목소리와 감성으로 신곡 가사와 OAC 발매 패키지를 완성해 주세요.`
             }
           ],
           temperature: 0.85,
-          max_tokens: 1800
+          max_tokens: 2000
         })
       });
 
@@ -1558,7 +1650,7 @@ LYRICS:
       const content = data.choices[0]?.message?.content || '';
 
       parseAndApplyAIOutput(content, topic, theme);
-      showToast('✨ 탈-AI 감성 가사 & 유튜브 패키지 완성!');
+      showToast('✨ 전득필 신곡 패키지 생성 완료!');
 
     } catch (err) {
       console.error('DeepSeek generation failed:', err);
@@ -1567,7 +1659,7 @@ LYRICS:
     } finally {
       isGenerating = false;
       btnGen.disabled = false;
-      btnGen.innerHTML = '<span>🚀</span> Suno 프롬프트 & 가사 생성하기';
+      btnGen.innerHTML = '<span>🚀</span> 전득필 신곡 패키지 일괄 생성하기';
     }
   }
 
@@ -1576,7 +1668,8 @@ LYRICS:
     const lines = content.split('\n');
     let titles = [];
     let ytTitles = [];
-    let ytIntro = '';
+    let linerNotes = '';
+    let coverPrompt = '';
     let lyricsLines = [];
     let mode = '';
 
@@ -1585,8 +1678,10 @@ LYRICS:
         titles = line.replace('TITLES:', '').split(',').map(s => s.trim()).filter(Boolean);
       } else if (line.startsWith('YT_TITLES:')) {
         ytTitles = line.replace('YT_TITLES:', '').split('|').map(s => s.trim()).filter(Boolean);
-      } else if (line.startsWith('YT_INTRO:')) {
-        ytIntro = line.replace('YT_INTRO:', '').trim();
+      } else if (line.startsWith('LINER_NOTES:')) {
+        linerNotes = line.replace('LINER_NOTES:', '').trim();
+      } else if (line.startsWith('COVER_PROMPT:')) {
+        coverPrompt = line.replace('COVER_PROMPT:', '').trim();
       } else if (line.startsWith('LYRICS:')) {
         mode = 'lyrics';
       } else if (mode === 'lyrics') {
@@ -1598,7 +1693,8 @@ LYRICS:
     else generateTitleSuggestionsProcedural(topic, theme);
 
     currentYtTitles = ytTitles.length > 0 ? ytTitles : getFallbackYtTitles(topic);
-    currentYtIntro = ytIntro || `${topic}의 차가운 공기 속에서 흘려보낸 이야기입니다.`;
+    currentLinerNotes = linerNotes || `어느 차가운 새벽, ${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다. - 전득필`;
+    currentCoverPrompt = coverPrompt || `Album cover art, 35mm candid film photography, vintage Korean indie aesthetic, a lonely scene at ${topic}, 1990s retro film grain, moody street lighting, melancholic analog tone, vinyl record texture, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
     currentRawLyrics = lyricsLines.join('\n').trim() || content;
 
     renderLyricsDisplay();
@@ -1662,18 +1758,19 @@ LYRICS:
       `[Outro: Fade Out with Ambient Guitar]\n${tmpl.outro}`;
 
     currentYtTitles = getFallbackYtTitles(topic);
-    currentYtIntro = `${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다.`;
+    currentLinerNotes = `어느 차가운 새벽, ${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다. - 전득필`;
+    currentCoverPrompt = `Album cover art, 35mm candid film photography, vintage Korean indie aesthetic, a lonely scene at ${topic}, 1990s retro film grain, moody street lighting, melancholic analog tone, vinyl record texture, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
 
     renderLyricsDisplay();
     renderYouTubeKit();
   }
 
   function getFallbackYtTitles(topic) {
-    const title = currentChosenTitle || '무제';
+    const title = currentChosenTitle || '밤의 궤도 (Orbit of the Night)';
     return [
-      `[Playlist] 늦은 밤 홀로 ${topic}에서 듣는 감성 인디 록 | ${title}`,
-      `${title} (Inspired by ${activeRefTrack ? activeRefTrack.artist : 'Radiohead'}) - Korean Indie Rock`,
-      `${topic}의 차가운 새벽에 흘려보낸 이야기 - ${title}`
+      `전득필 (Jeon Deuk-pil) - ${title} [Official Audio]`,
+      `[Playlist] 늦은 밤 홀로 ${topic}에서 듣는 전득필의 감성 인디 록`,
+      `전득필 (Jeon Deuk-pil) - ${title} (Inspired by ${activeRefTrack ? activeRefTrack.artist : 'Radiohead'})`
     ];
   }
 
@@ -1687,14 +1784,12 @@ LYRICS:
       return;
     }
 
-    // Syllable count mode
     const lines = currentRawLyrics.split('\n');
     const processed = lines.map(line => {
       const trimmed = line.trim();
       if (!trimmed || trimmed.startsWith('[') || trimmed.startsWith('(')) {
         return line;
       }
-      // Count hangul/alphanumeric characters
       const count = trimmed.replace(/\s+/g, '').length;
       return `${line} <span class="meter-badge">${count}자</span>`;
     }).join('\n');
@@ -1715,50 +1810,87 @@ LYRICS:
   function renderYouTubeKit() {
     const titleContainer = document.getElementById('yt-title-chips');
     const descOutput = document.getElementById('yt-desc-output');
-    const songTitle = currentChosenTitle || '무제';
+    const coverBox = document.getElementById('midjourney-prompt-box');
+    const songTitle = currentChosenTitle || '밤의 궤도 (Orbit of the Night)';
+
+    // Render Cover Prompt
+    coverBox.textContent = currentCoverPrompt || `Album cover art, 35mm candid film photography, vintage Korean indie aesthetic, a lonely scene, 1990s retro film grain, moody street lighting, square aspect ratio --ar 1:1 --v 6.0`;
 
     // Render YouTube Title Chips
     if (currentYtTitles.length === 0) {
       currentYtTitles = getFallbackYtTitles(document.getElementById('topic-input').value.trim() || '심야 빨래방');
     }
 
-    titleContainer.innerHTML = currentYtTitles.map((ytTitle, idx) => `
-      <div class="yt-title-chip" onclick="copyText('${escapeHtml(ytTitle)}', '유튜브 제목이 복사되었습니다!')">
+    titleContainer.innerHTML = currentYtTitles.map(ytTitle => `
+      <div class="yt-title-chip" onclick="copyText('${escapeHtml(ytTitle)}', 'OAC 제목이 복사되었습니다!')">
         <span>🎬 ${escapeHtml(ytTitle)}</span>
         <span style="font-size:0.75rem; color:var(--text-muted);">복사</span>
       </div>
     `).join('');
 
-    // Render YouTube Description
+    // Render OAC Description
     const refArtist = activeRefTrack ? `${activeRefTrack.title} - ${activeRefTrack.artist}` : 'Radiohead';
+    const volNum = getSavedSets().length + 1;
+
     const descText =
-      `${currentYtIntro || '어둠이 내려앉은 시간에 전하는 작은 위로.'}\n\n` +
-      `🎧 Track Credits:\n` +
-      `- Title: ${songTitle}\n` +
-      `- Genre: Korean Indie Rock / Melancholic Indie Ballad\n` +
-      `- Vocal: Deep Baritone Male Vocals (Articulate Korean Diction)\n` +
-      `- Tempo: ${currentBpm} BPM\n` +
-      `- Sound Reference: ${refArtist}\n\n` +
-      `📜 Lyrics:\n` +
+      `Provided to YouTube by 전득필 (Jeon Deuk-pil)\n\n` +
+      `Track: ${songTitle}\n` +
+      `Artist: 전득필 (Jeon Deuk-pil)\n` +
+      `Album: [전득필 Single Vol.${volNum.toString().padStart(2, '0')}] ${songTitle.split('(')[0].trim()}\n` +
+      `Released on: ${new Date().toISOString().split('T')[0]}\n\n` +
+      `──────────────────────────────\n` +
+      `[Liner Notes / 작가의 말]\n` +
+      `${currentLinerNotes}\n\n` +
+      `[Track Credits]\n` +
+      `- Produced & Composed by 전득필\n` +
+      `- Lyrics by 전득필\n` +
+      `- Vocal: 전득필 (Deep Baritone, 4/4 Time Signature, ${currentBpm} BPM)\n` +
+      `- Sound Reference Style: ${refArtist}\n\n` +
+      `──────────────────────────────\n` +
+      `[Lyrics / 가사]\n` +
       `${currentRawLyrics}\n\n` +
       `==============================\n` +
-      `#인디록 #감성인디 #새벽감성 #인디발라드 #플레이리스트 #KoreanIndie #SunoAI`;
+      `#전득필 #JeonDeukpil #인디록 #감성인디 #새벽감성 #인디발라드 #플레이리스트 #SunoAI #KoreanIndie`;
 
     descOutput.textContent = descText;
   }
 
   function copyFullYouTubeKit() {
     const text = document.getElementById('yt-desc-output').textContent;
-    copyText(text, '📺 유튜브 설명글 전체 복사 완료!');
+    copyText(text, '📺 OAC 설명글 전체 복사 완료!');
   }
 
   // Procedural Title Generator (Fallback)
   function generateTitleSuggestionsProcedural(topic, theme) {
     const titlePresets = {
-      'regret': [`${topic}의 밤`, `남겨진 온기`, `서툰 마지막 말`, `얼룩진 기억`, `끝내 묻지 못한 말`],
-      'nocturnal': [`새벽 세 시의 ${topic}`, `밤의 궤도`, `도시의 그림자`, `가로등 불빛 아래`, `나 홀로 걷는 길`],
-      'seasonal': [`빛바랜 계절`, `${topic}의 계절`, `바람이 머물던 자리`, `가을의 잔상`, `그리움의 무게`],
-      'solace': [`작은 쉼표`, `괜찮아지는 밤`, `${topic}에서 보내는 편지`, `따스한 위로`, `지친 하루의 끝`]
+      'regret': [
+        `밤의 궤도 (Orbit of the Night)`,
+        `남겨진 온기 (Lingering Warmth)`,
+        `서툰 마지막 말 (Clumsy Last Words)`,
+        `얼룩진 기억 (Stained Memories)`,
+        `끝내 묻지 못한 말 (Unspoken)`
+      ],
+      'nocturnal': [
+        `새벽 세 시의 ${topic} (3 AM Monologue)`,
+        `도시의 그림자 (Shadows of the City)`,
+        `가로등 불빛 아래 (Under the Streetlamp)`,
+        `홀로 걷는 길 (Solitary Walk)`,
+        `방황의 밤 (Night of Wandering)`
+      ],
+      'seasonal': [
+        `빛바랜 계절 (Faded Season)`,
+        `${topic}의 계절 (Season of Memory)`,
+        `바람이 머물던 자리 (Where the Wind Stayed)`,
+        `가을의 잔상 (Autumn Afterglow)`,
+        `그리움의 무게 (Weight of Longing)`
+      ],
+      'solace': [
+        `작은 쉼표 (A Small Rest)`,
+        `괜찮아지는 밤 (It Will Be Okay)`,
+        `따스한 위로 (Gentle Solace)`,
+        `지친 하루의 끝 (End of a Weary Day)`,
+        `${topic}에서 보내는 편지 (Letter From Here)`
+      ]
     };
     const titles = titlePresets[theme] || titlePresets['regret'];
     renderTitleChips(titles);
@@ -1909,8 +2041,9 @@ LYRICS:
     const lyrics = currentRawLyrics;
 
     const fullSet =
-      `=== [Suno AI Track Preset] ===\n` +
-      `[Title]: ${title}\n\n` +
+      `=== [전득필 Suno AI Track Preset] ===\n` +
+      `[Title]: ${title}\n` +
+      `[Artist]: 전득필 (Jeon Deuk-pil)\n\n` +
       `[Style of Music]:\n${style}\n\n` +
       `[Lyrics]:\n${lyrics}\n` +
       `=============================`;
@@ -1921,7 +2054,7 @@ LYRICS:
   // Saved / LocalStorage History
   function getSavedSets() {
     try {
-      return JSON.parse(localStorage.getItem('suno_saved_tracks') || '[]');
+      return JSON.parse(localStorage.getItem('jeon_deukpil_discography') || '[]');
     } catch(e) {
       return [];
     }
@@ -1929,20 +2062,25 @@ LYRICS:
 
   function saveCurrentSet() {
     const sets = getSavedSets();
+    const volNum = sets.length + 1;
+    const songTitle = currentChosenTitle || '무제';
+
     const newEntry = {
       id: Date.now(),
-      title: currentChosenTitle || '무제',
+      vol: `Vol.${volNum.toString().padStart(2, '0')}`,
+      title: songTitle,
       refTrack: activeRefTrack ? `${activeRefTrack.title} - ${activeRefTrack.artist}` : 'Radiohead',
       bpm: currentBpm,
       style: document.getElementById('suno-prompt-output').textContent,
       lyrics: currentRawLyrics,
+      coverPrompt: currentCoverPrompt,
       ytDesc: document.getElementById('yt-desc-output').textContent,
       date: new Date().toLocaleDateString('ko-KR')
     };
     sets.unshift(newEntry);
-    localStorage.setItem('suno_saved_tracks', JSON.stringify(sets));
+    localStorage.setItem('jeon_deukpil_discography', JSON.stringify(sets));
     updateSavedCount();
-    showToast('💾 보관함에 저장되었습니다!');
+    showToast(`💾 [전득필 Single Vol.${volNum.toString().padStart(2, '0')}] 발매 보관 완료!`);
   }
 
   function updateSavedCount() {
@@ -1955,12 +2093,12 @@ LYRICS:
     const container = document.getElementById('saved-list-container');
 
     if (sets.length === 0) {
-      container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">보관함이 비어 있습니다. [보관함에 저장] 버튼을 눌러보세요.</div>';
+      container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">아직 발매 보관된 곡이 없습니다. [디스코그래피에 발매 저장] 버튼을 눌러보세요.</div>';
     } else {
       container.innerHTML = sets.map(s => `
         <div class="saved-item">
           <div>
-            <div class="saved-title">${escapeHtml(s.title)}</div>
+            <div class="saved-title">[${s.vol}] ${escapeHtml(s.title)}</div>
             <div class="saved-sub">레퍼런스: ${escapeHtml(s.refTrack)} (${s.bpm} BPM) · ${s.date}</div>
           </div>
           <div style="display:flex; gap:8px;">
@@ -1987,17 +2125,18 @@ LYRICS:
     document.getElementById('active-title-label').textContent = `선택된 제목: "${currentChosenTitle}"`;
     document.getElementById('suno-prompt-output').textContent = entry.style;
     currentRawLyrics = entry.lyrics;
+    currentCoverPrompt = entry.coverPrompt || '';
     renderLyricsDisplay();
     renderYouTubeKit();
     closeSavedModal();
-    showToast(`📂 "${entry.title}" 세트를 불러왔습니다!`);
+    showToast(`📂 "[${entry.vol}] ${entry.title}" 세트를 불러왔습니다!`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function deleteSavedSet(id) {
     let sets = getSavedSets();
     sets = sets.filter(s => s.id !== id);
-    localStorage.setItem('suno_saved_tracks', JSON.stringify(sets));
+    localStorage.setItem('jeon_deukpil_discography', JSON.stringify(sets));
     updateSavedCount();
     openSavedModal();
     showToast('삭제되었습니다');
