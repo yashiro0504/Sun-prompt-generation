@@ -551,22 +551,10 @@
           <h2 class="panel-title">Track Parameters</h2>
         </div>
 
-        <!-- Preset Quick Picks -->
-        <div class="form-group">
-          <label class="form-label">⚡ 빠른 소재 프리셋</label>
-          <div class="preset-container">
-            <button class="preset-btn" onclick="applyPreset('심야 빨래방', '쓸쓸함', 'britpop')">🧺 심야 빨래방</button>
-            <button class="preset-btn" onclick="applyPreset('비 내리는 버스 정류장', '몽환적', 'dreampop')">🌧️ 비 오는 정류장</button>
-            <button class="preset-btn" onclick="applyPreset('새벽 3시 고속도로', '아련함', 'retropop')">🚗 새벽 고속도로</button>
-            <button class="preset-btn" onclick="applyPreset('퇴근길 붉은 노을', '담담함', 'modernindie')">🌅 퇴근길 노을</button>
-            <button class="preset-btn" onclick="applyPreset('오래된 LP 카페', '따뜻함', 'retropop')">☕ 오래된 카페</button>
-          </div>
-        </div>
-
         <!-- Topic/Keyword Input -->
         <div class="form-group">
-          <label class="form-label">📝 곡 소재 / 키워드</label>
-          <input type="text" id="topic-input" class="form-input" placeholder="예: 심야 빨래방의 돌아가는 세탁기 소리" value="심야 빨래방">
+          <label class="form-label">📝 곡 소재 / 이야기 주제</label>
+          <input type="text" id="topic-input" class="form-input" placeholder="어떤 소재든 자유롭게 입력하세요 (예: 새벽 고속도로, 비 오는 날의 창가, 한강변 노을)" value="심야 빨래방">
         </div>
 
         <!-- Mood Select Chips -->
@@ -736,19 +724,6 @@
   function initApp() {
     selectCategory('britpop');
     renderDB();
-    generateAll();
-  }
-
-  // Preset Application
-  function applyPreset(topic, moodKey, catKey) {
-    document.getElementById('topic-input').value = topic;
-    selectCategory(catKey);
-
-    // Set mood active tag
-    document.querySelectorAll('.mood-tag').forEach(t => {
-      t.classList.toggle('active', t.dataset.mood === moodKey);
-    });
-
     generateAll();
   }
 
