@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suno Indie Track & Lyrics Generator v3.5 (DeepSeek AI Integrated)</title>
-  <meta name="description" content="영미권 명곡 팝/인디 100곡 사운드 메타데이터 + DeepSeek AI 아티스트 작사 스타일 모사 + 고정 바리톤 보컬 프롬프트 생성기">
+  <title>Suno Indie Track & Lyrics Generator v4.0 (Anti-AI Cliché & YouTube Release Kit)</title>
+  <meta name="description" content="영미권 명곡 100곡 사운드 메타데이터 + DeepSeek AI 탈(脫)AI 감성 작사 & 음수율 최적화 + 유튜브 업로드 패키지 올인원 생성기">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
@@ -31,6 +31,7 @@
       --accent-modernindie: #06b6d4;
       --accent-highlight: #6366f1;
       --accent-green: #10b981;
+      --accent-youtube: #ef4444;
 
       --radius-sm: 8px;
       --radius-md: 14px;
@@ -606,6 +607,17 @@
       min-height: 160px;
     }
 
+    .meter-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+      font-family: 'Inter', sans-serif;
+    }
+
     /* AI Loading Spinner */
     .ai-spinner-container {
       display: flex;
@@ -636,6 +648,7 @@
       justify-content: flex-end;
       gap: 10px;
       margin-top: 14px;
+      flex-wrap: wrap;
     }
 
     .btn-action-outline {
@@ -676,6 +689,36 @@
     .btn-action-primary:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    /* YouTube Release Kit */
+    .yt-title-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .yt-title-chip {
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .yt-title-chip:hover {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: var(--accent-youtube);
+      color: #fff;
+      transform: translateX(4px);
     }
 
     /* ========== EXPLORER SECTION (100 DB) ========== */
@@ -864,9 +907,9 @@
     <!-- HEADER -->
     <header>
       <div class="header-left">
-        <div class="logo-badge">🎸 SUNO AI INDIE ENGINE v3.5 · DEEPSEEK</div>
+        <div class="logo-badge">🎸 SUNO AI INDIE ENGINE v4.0 · PRO SUITE</div>
         <h1>Pop Reference Suno Generator</h1>
-        <p>100곡의 사운드 메타데이터 + DeepSeek AI 아티스트 작사 모사 & 고정 바리톤 보컬</p>
+        <p>100곡 사운드 메타데이터 + 脫(탈)AI 감성 작사 & 음수율 최적화 + YouTube 업로드 패키지</p>
       </div>
       <div class="header-actions">
         <!-- DeepSeek API status button -->
@@ -896,7 +939,7 @@
         <div class="form-group">
           <label class="form-label">
             📝 곡 소재 / 이야기 주제
-            <span class="label-sub">어떤 이야기든 자유롭게 입력</span>
+            <span class="label-sub">구체적 일상 사물이나 상황</span>
           </label>
           <input type="text" id="topic-input" class="form-input" placeholder="예: 심야 빨래방, 젖은 정류장, 새벽 고속도로, 한강변 노을..." value="심야 빨래방">
         </div>
@@ -1039,10 +1082,13 @@
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">✍️</span>
-              <h2 class="panel-title">[Step 2] Cinematic Korean Lyrics (Suno Meta Tags)</h2>
+              <h2 class="panel-title">[Step 2] Cinematic Korean Lyrics (탈-AI 일상어 & 음율 최적화)</h2>
             </div>
-            <div id="lyric-engine-indicator" style="font-size:0.75rem; color:var(--text-muted);">
-              <!-- Rendered by JS -->
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="btn-sm" id="btn-toggle-meter" onclick="toggleSyllableMeter()">📏 음수율(글자 수) 보기</button>
+              <div id="lyric-engine-indicator" style="font-size:0.75rem; color:var(--text-muted);">
+                <!-- Rendered by JS -->
+              </div>
             </div>
           </div>
 
@@ -1058,6 +1104,39 @@
             <button class="btn-action-primary" onclick="saveCurrentSet()">
               💾 보관함에 저장
             </button>
+          </div>
+        </div>
+
+        <!-- Step 3: YouTube Release Kit -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title-wrap">
+              <span class="panel-icon">📺</span>
+              <h2 class="panel-title">[Step 3] YouTube 업로드 패키지 (제목 3종 & 설명글)</h2>
+            </div>
+            <button class="btn-action-primary" style="background:linear-gradient(135deg, var(--accent-youtube), #b91c1c);" onclick="copyFullYouTubeKit()">
+              📋 유튜브 설명글 전체 복사
+            </button>
+          </div>
+
+          <!-- YouTube Titles -->
+          <div class="form-group">
+            <label class="form-label">
+              🎬 유튜브 추천 영상 제목 (클릭 시 복사)
+              <span class="label-sub">플레이리스트형 / 발매형 / 서사형</span>
+            </label>
+            <div class="yt-title-chips" id="yt-title-chips">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- YouTube Description -->
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">📝 유튜브 본문 설명글 (감성 소개문 + 크레딧 + 가사 + 해시태그)</label>
+            <div class="prompt-box-wrapper">
+              <div class="code-block" style="max-height:220px; font-family:'Inter', sans-serif; font-size:0.85rem; color:#cbd5e1;" id="yt-desc-output">loading description...</div>
+              <button class="copy-btn" onclick="copyToClipboard('yt-desc-output', '유튜브 설명글이 복사되었습니다!')">📋 복사</button>
+            </div>
           </div>
         </div>
 
@@ -1107,7 +1186,7 @@
         <button class="btn-sm" onclick="closeApiModal()">닫기</button>
       </div>
       <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6;">
-        DeepSeek API 키(<code style="color:#a5b4fc;">sk-...</code>)를 입력하시면, 선택하신 100곡의 레퍼런스 아티스트(Radiohead, Cigarettes After Sex, The Beatles 등)의 <strong>고유한 작사 문법, 은유, 문장 호흡</strong>을 AI(<code>deepseek-chat</code>)가 실시간 분석하여 고품질 한국어 인디 가사를 창작합니다.<br>
+        DeepSeek API 키(<code style="color:#a5b4fc;">sk-...</code>)를 입력하시면, 선택하신 100곡의 레퍼런스 아티스트 고유 감성과 작사 스타일을 <strong>탈(脫)AI 일상 사물 언어와 정돈된 음수율</strong>로 실시간 창작합니다.<br>
         <span style="color:var(--text-muted); font-size:0.75rem;">※ API 키는 브라우저 내부(localStorage)에만 안전하게 보관되며 DeepSeek 공식 서버(api.deepseek.com)로만 직접 전송됩니다.</span>
       </div>
       <div class="form-group">
@@ -1142,7 +1221,8 @@
 
   <script>
   /* ================================================================
-     Pop Reference Suno Generator v3.5 (DeepSeek AI Engine)
+     Pop Reference Suno Generator v4.0 Engine
+     Anti-AI Cliché & Syllable Meter + YouTube Release Kit
      ================================================================ */
 
   let POP_REFERENCES = [];
@@ -1152,6 +1232,10 @@
   let currentBpm = 76;
   let promptMode = 'compact';
   let currentChosenTitle = '';
+  let currentRawLyrics = '';
+  let showSyllableMeter = false;
+  let currentYtTitles = [];
+  let currentYtIntro = '';
   let isGenerating = false;
 
   const CATEGORY_MAP = {
@@ -1162,10 +1246,10 @@
   };
 
   const THEME_NAMES = {
-    'regret': '이별과 미련 (서툰 마지막 말, 잊지 못하는 미련과 회한)',
-    'nocturnal': '심야의 독백 (도시의 가로등 불빛, 깊은 고독과 자아 성찰)',
-    'seasonal': '계절의 기억 (지나간 찬란했던 계절의 향기와 아련한 잔상)',
-    'solace': '소소한 위로 (지친 하루 끝, 덤덤한 공간에서 전하는 따뜻한 위안)'
+    'regret': '이별과 미련 (서툰 마지막 말, 찢어진 영수증, 잊지 못하는 미련과 회한)',
+    'nocturnal': '심야의 독백 (골목길 가로등, 식어버린 캔커피, 깊은 고독과 자아 성찰)',
+    'seasonal': '계절의 기억 (물기 젖은 스니커즈, 마른 잎, 지나간 계절의 쌉싸름한 잔상)',
+    'solace': '소소한 위로 (지친 퇴근길, 낡은 선풍기 소리, 덤덤한 공간에서 전하는 따뜻한 위안)'
   };
 
   // Fixed Vocal Profile
@@ -1210,7 +1294,7 @@
     if (key && key.startsWith('sk-')) {
       btn.className = 'api-badge connected';
       text.textContent = '🟢 DeepSeek AI 연동됨';
-      if (indicator) indicator.innerHTML = '<span style="color:#34d399; font-weight:600;">🤖 DeepSeek AI 작사 활성화</span>';
+      if (indicator) indicator.innerHTML = '<span style="color:#34d399; font-weight:600;">🤖 脫(탈)AI 실시간 작사 활성화</span>';
     } else {
       btn.className = 'api-badge offline';
       text.textContent = 'DeepSeek API 설정 (키 없음)';
@@ -1313,6 +1397,7 @@
     document.getElementById('bpm-val').textContent = `${currentBpm} BPM`;
     if (activeRefTrack) {
       generateSunoPrompt(activeRefTrack, getActiveMoods());
+      renderYouTubeKit();
     }
   }
 
@@ -1364,29 +1449,30 @@
 
     const apiKey = getApiKey();
     if (apiKey && apiKey.startsWith('sk-')) {
-      // Call DeepSeek AI
-      await generateLyricsWithDeepSeek(topic, activeRefTrack, activeMoods, selectedTheme, apiKey);
+      // Call DeepSeek AI with Anti-AI & Meter Rules
+      await generateWithDeepSeek(topic, activeRefTrack, activeMoods, selectedTheme, apiKey);
     } else {
       // Procedural Template fallback
-      generateTitleSuggestionsProcedural(topic, selectedTheme);
-      generateKoreanLyricsProcedural(topic, activeRefTrack, activeMoods, selectedTheme);
+      generateProcedural(topic, activeRefTrack, activeMoods, selectedTheme);
     }
+
+    renderYouTubeKit();
   }
 
-  // DeepSeek AI Lyric Generation
-  async function generateLyricsWithDeepSeek(topic, track, moods, theme, apiKey) {
+  // DeepSeek AI Generation (Anti-AI Cliché + Syllable Meter + YouTube Kit)
+  async function generateWithDeepSeek(topic, track, moods, theme, apiKey) {
     isGenerating = true;
     const btnGen = document.getElementById('btn-generate-main');
     btnGen.disabled = true;
-    btnGen.innerHTML = '<span>⏳</span> DeepSeek AI가 작사 중...';
+    btnGen.innerHTML = '<span>⏳</span> DeepSeek AI 작사 & 분석 중...';
 
     const lyricsBlock = document.getElementById('korean-lyrics-output');
     lyricsBlock.innerHTML = `
       <div class="ai-spinner-container">
         <div class="ai-spinner"></div>
-        <div style="font-weight:700; font-size:1.05rem; color:#c7d2fe;">🤖 DeepSeek AI 작사 생성 중...</div>
+        <div style="font-weight:700; font-size:1.05rem; color:#c7d2fe;">🤖 脫(탈)AI 실시간 작사 & 운율 설계 중...</div>
         <div style="font-size:0.82rem; color:var(--text-muted); margin-top:6px;">
-          [${track.artist} - ${track.title}] 특유의 작사 감성과 서사를 분석하여 한국어 가사를 창작하고 있습니다.
+          상투적인 AI 어휘를 배제하고, [${track.artist}] 고유의 일상적 서사와 음수율을 정밀하게 계산하고 있습니다.
         </div>
       </div>
     `;
@@ -1407,28 +1493,42 @@
             {
               role: 'system',
               content: `당신은 대한민국 최고 수준의 한국 감성 인디 록 / 인디 발라드 전문 작사가입니다.
-당신의 역할은 지정된 영미권 레퍼런스 아티스트의 고유한 감성, 문장 호흡, 은유 방식, 자조적이거나 몽환적인 뉘앙스를 심도 있게 벤치마킹하여, 사용자가 제시한 소재와 서사 테마에 어울리는 한국어 가사를 창작하는 것입니다.
+당신의 임무는 영미권 명곡 레퍼런스 아티스트의 고유 작사 문법을 벤치마킹하여, 사람 냄새가 짙게 묻어나는 수준 높은 한국어 인디 가사와 유튜브 패키지를 창작하는 것입니다.
 
-[필수 작사 원칙]
-1. 단순한 단어 나열이 아니라, 구체적인 사물 묘사(영수증, 유리창 빗물, 가로등, 차가운 캔커피 등)와 서정적인 감정선이 살아있는 시적인 가사를 쓰세요.
-2. 중저음 바리톤 남성 보컬(deep baritone male vocals, clear Korean diction)의 담담하고 묵직한 호흡에 맞는 말맛을 살리세요.
-3. 가사는 Suno AI가 음악 구조로 완벽하게 인식할 수 있도록 반드시 아래의 표준 메타 태그를 대괄호[]로 포함하세요:
-   [Intro: ...]
-   [Verse 1]
-   [Pre-Chorus]
-   [Chorus: ...]
-   [Verse 2]
-   [Guitar Solo: ...]
-   [Bridge: ...]
-   [Chorus: ...]
-   [Outro: ...]
-   필요 시 (Whisper), [Falsetto], (Sigh) 같은 보컬 연출 태그도 자연스럽게 넣으세요.
+[🔥 절대 규칙 1: AI스러운 상투적 어휘 원천 배제 (Anti-AI Cliché)]
+- 🚫 금지 어휘: "찬란한 빛/별/미래", "어둠을 헤치고/뚫고", "영원한 사랑/약속", "시간의 강/바다", "마음의 미로", "영혼의 울림", "희망의 날개", "꿈을 향해 달려", "운명의 장난", "가슴속 깊은 상처" 등 뻔하고 오글거리는 AI 특유의 추상적인 미사여구는 절대 쓰지 마세요.
+- ✅ 필수 어휘: 손에 만져지는 구체적인 일상의 사물과 공간(찢어진 영수증, 식은 캔커피, 젖은 스니커즈, 편의점 파라솔, 자판기 불빛, 새벽 3시 10분, 낡은 가디건, 덜컹거리는 버스 손잡이 등)과 쌉싸름한 독백체(~했잖아, ~겠지, ~인 걸까, ~스민다, ~밤)로 작성하세요.
 
-[출력 형식 가이드]
-- 맨 첫 줄에 이 곡에 어울리는 감성 제목 5개를 쉼표로 구분하여 아래 형식으로 반드시 출력하세요:
-TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
-- 그 다음 빈 줄 하나를 두고 완성된 가사 전문을 출력하세요.
-- 서두나 끝맺음 인사말, 설명 등 불필요한 사족은 일체 출력하지 마세요.`
+[🎵 절대 규칙 2: 한국어 음수율(글자 수) & 라임(Rhyme) 준수]
+1. 한 줄당 글자 수(음수율)를 8자~14자 내외로 균일하게 맞추어, 노래를 부를 때 박자가 밀리거나 말이 꼬이지 않고 입에 착 감기도록 작성하세요 (3-4조, 4-4조, 7-5조 호흡).
+2. 각 행의 말끝(각운)에 자연스러운 라임(~네, ~해, ~고, ~처럼, ~길 등)을 의도적으로 배치하여 멜로디컬한 운율감을 극대화하세요.
+
+[🎙️ 절대 규칙 3: 중저음 바리톤 남성 보컬 맞춤]
+- 중저음 바리톤 남성 보컬(deep baritone male vocals, clear Korean diction)의 담담하고 묵직한 호흡에 맞는 말맛을 살리세요.
+
+[출력 형식 가이드 (반드시 아래 형식 엄수)]
+TITLES: 곡제목1, 곡제목2, 곡제목3, 곡제목4, 곡제목5
+YT_TITLES: [플레이리스트형 제목] | [아티스트 레퍼런스형 제목] | [서사 감성형 제목]
+YT_INTRO: 곡의 배경과 쌉싸름한 여운을 담은 감성적인 유튜브 소개문 2~3줄
+LYRICS:
+[Intro: ...]
+[Verse 1]
+...
+[Pre-Chorus]
+...
+[Chorus: ...]
+...
+[Verse 2]
+...
+[Guitar Solo: ...]
+...
+[Bridge: ...]
+...
+[Chorus: ...]
+...
+[Outro: ...]
+
+불필요한 서두나 사족 없이 위 형식 그대로 출력하세요.`
             },
             {
               role: 'user',
@@ -1441,11 +1541,11 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
 - 분위기/무드: ${moodStr}
 - 템포: ${currentBpm} BPM
 
-위 레퍼런스 아티스트(${track.artist})의 감성을 깊이 담아 한국어 인디 가사와 추천 제목 5개를 작성해 주세요.`
+위 레퍼런스 아티스트(${track.artist})의 감성을 깊이 담아 한국어 인디 가사와 유튜브 패키지를 작성해 주세요.`
             }
           ],
           temperature: 0.85,
-          max_tokens: 1500
+          max_tokens: 1800
         })
       });
 
@@ -1457,37 +1557,199 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
       const data = await response.json();
       const content = data.choices[0]?.message?.content || '';
 
-      // Parse TITLES line
-      let titles = [];
-      let lyricsOnly = content;
-
-      if (content.startsWith('TITLES:')) {
-        const parts = content.split('\n');
-        const titleLine = parts[0].replace('TITLES:', '').trim();
-        titles = titleLine.split(',').map(t => t.trim()).filter(Boolean);
-        lyricsOnly = parts.slice(1).join('\n').trim();
-      }
-
-      // Render Titles
-      if (titles.length > 0) {
-        renderTitleChips(titles);
-      } else {
-        generateTitleSuggestionsProcedural(topic, theme);
-      }
-
-      lyricsBlock.textContent = lyricsOnly;
-      showToast('✨ DeepSeek AI 가사 작사 완료!');
+      parseAndApplyAIOutput(content, topic, theme);
+      showToast('✨ 탈-AI 감성 가사 & 유튜브 패키지 완성!');
 
     } catch (err) {
       console.error('DeepSeek generation failed:', err);
       showToast(`⚠️ DeepSeek 호출 실패: ${err.message}. 템플릿으로 대체합니다.`);
-      generateTitleSuggestionsProcedural(topic, theme);
-      generateKoreanLyricsProcedural(topic, track, moods, theme);
+      generateProcedural(topic, track, moods, theme);
     } finally {
       isGenerating = false;
       btnGen.disabled = false;
       btnGen.innerHTML = '<span>🚀</span> Suno 프롬프트 & 가사 생성하기';
     }
+  }
+
+  // Parse AI Response
+  function parseAndApplyAIOutput(content, topic, theme) {
+    const lines = content.split('\n');
+    let titles = [];
+    let ytTitles = [];
+    let ytIntro = '';
+    let lyricsLines = [];
+    let mode = '';
+
+    for (let line of lines) {
+      if (line.startsWith('TITLES:')) {
+        titles = line.replace('TITLES:', '').split(',').map(s => s.trim()).filter(Boolean);
+      } else if (line.startsWith('YT_TITLES:')) {
+        ytTitles = line.replace('YT_TITLES:', '').split('|').map(s => s.trim()).filter(Boolean);
+      } else if (line.startsWith('YT_INTRO:')) {
+        ytIntro = line.replace('YT_INTRO:', '').trim();
+      } else if (line.startsWith('LYRICS:')) {
+        mode = 'lyrics';
+      } else if (mode === 'lyrics') {
+        lyricsLines.push(line);
+      }
+    }
+
+    if (titles.length > 0) renderTitleChips(titles);
+    else generateTitleSuggestionsProcedural(topic, theme);
+
+    currentYtTitles = ytTitles.length > 0 ? ytTitles : getFallbackYtTitles(topic);
+    currentYtIntro = ytIntro || `${topic}의 차가운 공기 속에서 흘려보낸 이야기입니다.`;
+    currentRawLyrics = lyricsLines.join('\n').trim() || content;
+
+    renderLyricsDisplay();
+    renderYouTubeKit();
+  }
+
+  // Procedural Fallback Engine
+  function generateProcedural(topic, track, moods, theme) {
+    generateTitleSuggestionsProcedural(topic, theme);
+
+    const themeLyrics = {
+      'regret': {
+        verse1: `주머니 속 구겨진 영수증 하나\n너와 마시던 캔커피 날짜가 남아\n지우지 못한 마지막 그 한마디가\n물기 젖은 신발처럼 무겁게 스민다`,
+        pre: `돌아서던 뒷모습이 자꾸만 밟혀\n끝내 하지 못했던 말이 목에 걸려`,
+        chorus: `우린 왜 그리 서툴게 스쳐갔을까\n사소했던 오해 속에 너를 놓치고\n${topic} 위로 흩어지는 찬 한숨\n되돌릴 수 없는 시간만 자꾸 세어본다`,
+        verse2: `어둑해진 골목길 자판기 불빛\n너와 나란히 서서 웃던 그 자리\n괜찮다고 혼잣말을 읊조려 봐도\n시린 바람결에 네 향기만 묻어온다`,
+        solo: `[Guitar Solo: Reverb-drenched Melancholic Electric Guitar - ${currentBpm} BPM]`,
+        bridge: `(Whisper) 정말로 너 없이도 괜찮아질 수 있을까\n차갑게 식어버린 밤의 무게를 견디며`,
+        outro: `멀어지는 낡은 버스 소리\n안녕, 나의 서툰 계절아`
+      },
+      'nocturnal': {
+        verse1: `모두 잠든 ${topic}의 새벽 두 시\n가로등 푸른 불빛 아래 길게 누운 그림자\n도시의 소음이 물러간 빈 도로 위엔\n숨겨둔 독백만이 낮게 맴돌고 있다`,
+        pre: `어디로 가는지도 모른 채 걷는 걸음\n차가운 밤공기가 머릿속을 스치고`,
+        chorus: `새벽의 궤도를 따라 흘러가는 생각들\n아무도 보지 않는 이 고요한 밤의 끝에서\n나는 다시 가만히 나를 마주한다\n어둠 속에 빛나는 작은 불빛 하나 품은 채`,
+        verse2: `식어버린 캔커피 손에 쥐어보고\n올려다본 하늘엔 별 하나 흐릿하네\n어제와 다를 바 없는 내일이라 해도\n조용히 숨을 고르며 오늘을 건넌다`,
+        solo: `[Guitar Solo: Ambient Post-rock Guitar Swells - ${currentBpm} BPM]`,
+        bridge: `[Falsetto] 어둠이 깊을수록\n새벽빛은 더 가까이 다가오니까`,
+        outro: `지평선 너머로 번지는 희미한 푸른빛\n(Fade Out...)`
+      },
+      'seasonal': {
+        verse1: `바람의 냄새가 계절의 끝을 알리고\n${topic} 길목엔 마른 잎들이 뒹군다\n너와 나란히 걷던 그 계절이 지나\n어느새 옷깃을 여미는 시간이 왔네`,
+        pre: `빛바랜 기억의 서랍을 가만히 열면\n눈부셨던 그날의 미소가 그대로인데`,
+        chorus: `계절은 돌고 돌아 다시 이곳에 오는데\n너는 어디쯤 홀로 머물러 있을까\n${topic} 바람결에 실려오는 너의 흔적\n잊었다 생각했는데 또다시 가슴이 저린다`,
+        verse2: `길가에 서 있는 낡은 벤치 위\n손끝으로 쓸어내린 차가운 빗방울\n지나간 시간은 붙잡을 수가 없어서\n떨어지는 낙엽처럼 손끝을 스쳐가네`,
+        solo: `[Guitar Solo: Warm Fingerpicked Acoustic & Electric Cry - ${currentBpm} BPM]`,
+        bridge: `(Sigh) 찬란했던 그 계절은 가고\n추억만이 묵직한 옷처럼 남아`,
+        outro: `불어오는 계절의 끝자락\n잘 지내라는 혼잣말만 허공에 날리네`
+      },
+      'solace': {
+        verse1: `하루 끝에 지친 몸을 이끌고 찾아온 ${topic}\n조용한 온기가 지친 어깨를 감싸 안는다\n아무것도 묻지 않는 덤덤한 공간 속에서\n비로소 깊은 숨을 내쉬어 본다`,
+        pre: `누군가에게 착한 사람이어야 했던 하루\n이제는 가면을 벗고 편히 쉬어도 괜찮아`,
+        chorus: `오늘도 수고 많았다고\n누구도 해주지 않던 그 말을 내게 건넨다\n${topic} 차분한 공기 속에 마음을 내려놓고\n내일은 조금 더 다정해질 수 있기를`,
+        verse2: `창밖으로 보이는 바쁜 사람들의 퇴근길\n모두가 저마다의 짐을 지고 걸어가네\n완벽하지 않아도 괜찮다는 걸\n따뜻한 차 한 잔을 마시며 배우는 밤`,
+        solo: `[Guitar Solo: Soothing Clean Tone Guitar Melody - ${currentBpm} BPM]`,
+        bridge: `(Softly) 버텨낸 것만으로도 충분해\n너는 이미 빛나고 있으니까`,
+        outro: `포근해진 공기 속으로\n조용히 찾아오는 평온한 꿈`
+      }
+    };
+
+    const tmpl = themeLyrics[theme] || themeLyrics['regret'];
+
+    currentRawLyrics =
+      `[Intro: ${track.sound_tags.split(',')[0]} - Soft Ambient Atmosphere]\n\n` +
+      `[Verse 1]\n${tmpl.verse1}\n\n` +
+      `[Pre-Chorus]\n${tmpl.pre}\n\n` +
+      `[Chorus: Full Band Entrance, ${currentBpm} BPM, ${track.sound_tags.split(',')[1] || 'Soaring Chorus'}]\n${tmpl.chorus}\n\n` +
+      `[Verse 2]\n${tmpl.verse2}\n\n` +
+      `${tmpl.solo}\n\n` +
+      `[Bridge: Stripped down Backing & Low Vocals]\n${tmpl.bridge}\n\n` +
+      `[Chorus: Emotional Peak, Half-volume Lift]\n${tmpl.chorus}\n\n` +
+      `[Outro: Fade Out with Ambient Guitar]\n${tmpl.outro}`;
+
+    currentYtTitles = getFallbackYtTitles(topic);
+    currentYtIntro = `${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다.`;
+
+    renderLyricsDisplay();
+    renderYouTubeKit();
+  }
+
+  function getFallbackYtTitles(topic) {
+    const title = currentChosenTitle || '무제';
+    return [
+      `[Playlist] 늦은 밤 홀로 ${topic}에서 듣는 감성 인디 록 | ${title}`,
+      `${title} (Inspired by ${activeRefTrack ? activeRefTrack.artist : 'Radiohead'}) - Korean Indie Rock`,
+      `${topic}의 차가운 새벽에 흘려보낸 이야기 - ${title}`
+    ];
+  }
+
+  // Syllable Meter Calculation
+  function renderLyricsDisplay() {
+    const box = document.getElementById('korean-lyrics-output');
+    if (!currentRawLyrics) return;
+
+    if (!showSyllableMeter) {
+      box.textContent = currentRawLyrics;
+      return;
+    }
+
+    // Syllable count mode
+    const lines = currentRawLyrics.split('\n');
+    const processed = lines.map(line => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('[') || trimmed.startsWith('(')) {
+        return line;
+      }
+      // Count hangul/alphanumeric characters
+      const count = trimmed.replace(/\s+/g, '').length;
+      return `${line} <span class="meter-badge">${count}자</span>`;
+    }).join('\n');
+
+    box.innerHTML = processed;
+  }
+
+  function toggleSyllableMeter() {
+    showSyllableMeter = !showSyllableMeter;
+    const btn = document.getElementById('btn-toggle-meter');
+    btn.style.color = showSyllableMeter ? '#a5b4fc' : '';
+    btn.style.borderColor = showSyllableMeter ? 'var(--accent-highlight)' : '';
+    renderLyricsDisplay();
+    showToast(showSyllableMeter ? '📏 음수율(글자 수) 표시 켜짐' : '📏 음수율 표시 꺼짐');
+  }
+
+  // YouTube Release Kit Render
+  function renderYouTubeKit() {
+    const titleContainer = document.getElementById('yt-title-chips');
+    const descOutput = document.getElementById('yt-desc-output');
+    const songTitle = currentChosenTitle || '무제';
+
+    // Render YouTube Title Chips
+    if (currentYtTitles.length === 0) {
+      currentYtTitles = getFallbackYtTitles(document.getElementById('topic-input').value.trim() || '심야 빨래방');
+    }
+
+    titleContainer.innerHTML = currentYtTitles.map((ytTitle, idx) => `
+      <div class="yt-title-chip" onclick="copyText('${escapeHtml(ytTitle)}', '유튜브 제목이 복사되었습니다!')">
+        <span>🎬 ${escapeHtml(ytTitle)}</span>
+        <span style="font-size:0.75rem; color:var(--text-muted);">복사</span>
+      </div>
+    `).join('');
+
+    // Render YouTube Description
+    const refArtist = activeRefTrack ? `${activeRefTrack.title} - ${activeRefTrack.artist}` : 'Radiohead';
+    const descText =
+      `${currentYtIntro || '어둠이 내려앉은 시간에 전하는 작은 위로.'}\n\n` +
+      `🎧 Track Credits:\n` +
+      `- Title: ${songTitle}\n` +
+      `- Genre: Korean Indie Rock / Melancholic Indie Ballad\n` +
+      `- Vocal: Deep Baritone Male Vocals (Articulate Korean Diction)\n` +
+      `- Tempo: ${currentBpm} BPM\n` +
+      `- Sound Reference: ${refArtist}\n\n` +
+      `📜 Lyrics:\n` +
+      `${currentRawLyrics}\n\n` +
+      `==============================\n` +
+      `#인디록 #감성인디 #새벽감성 #인디발라드 #플레이리스트 #KoreanIndie #SunoAI`;
+
+    descOutput.textContent = descText;
+  }
+
+  function copyFullYouTubeKit() {
+    const text = document.getElementById('yt-desc-output').textContent;
+    copyText(text, '📺 유튜브 설명글 전체 복사 완료!');
   }
 
   // Procedural Title Generator (Fallback)
@@ -1517,6 +1779,7 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
   function selectTitle(title) {
     currentChosenTitle = title;
     document.getElementById('active-title-label').textContent = `선택된 제목: "${currentChosenTitle}"`;
+    renderYouTubeKit();
     copyText(title, `제목 "${title}" 복사됨!`);
   }
 
@@ -1552,63 +1815,6 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
         `[Atmosphere: cinematic build, warm analog saturation, cavernous plate reverb, half-volume chorus lift]`;
       document.getElementById('suno-prompt-output').textContent = detailedPrompt;
     }
-  }
-
-  // Procedural Lyrics Generator (Fallback)
-  function generateKoreanLyricsProcedural(topic, track, moods, theme) {
-    const themeLyrics = {
-      'regret': {
-        verse1: `${topic}에 홀로 남아\n시계 바늘 소리만 귓가에 맴돌고\n지우지 못한 너의 마지막 말들이\n물에 번진 잉크처럼 가슴에 스민다`,
-        pre: `돌아서던 뒷모습이 자꾸만 아른거려\n끝내 하지 못했던 그 한마디가 목에 걸려`,
-        chorus: `우린 왜 그리 서툴렀을까\n사소했던 오해들 속에 너를 놓치고\n${topic} 위로 흩어지는 한숨\n되돌릴 수 없는 시간만 자꾸 멍하니 센다`,
-        verse2: `구겨진 겉옷 주머니 속에\n남아있는 작은 티켓 한 장\n너와 함께 웃던 그날의 기억이\n유리창 빗물처럼 천천히 흘러내려`,
-        solo: `[Guitar Solo: Reverb-drenched Melancholic Electric Guitar - ${currentBpm} BPM]`,
-        bridge: `(Whisper) 정말로 너 없이도 괜찮아질 수 있을까\n차갑게 식어가는 밤의 무게를 견디며`,
-        outro: `멀어지는 발걸음 소리\n안녕, 나의 서툰 계절아`
-      },
-      'nocturnal': {
-        verse1: `모두가 잠든 ${topic}의 새벽\n가로등 푸른 불빛 아래 길게 드리운 그림자\n도시의 소음이 물러간 빈자리엔\n숨겨둔 독백만이 낮게 가라앉는다`,
-        pre: `어디로 가는지도 모른 채 걷는 발걸음\n차가운 밤공기가 머릿속을 스치고`,
-        chorus: `새벽의 궤도를 따라 흘러가는 생각들\n아무도 보지 않는 이 고요한 밤의 끝에서\n나는 다시 나를 마주한다\n어둠 속에 빛나는 작은 불빛 하나를 품은 채`,
-        verse2: `자판기 따뜻한 캔커피 하나 손에 쥐고\n올려다본 하늘엔 별 하나 흐릿하게 떴네\n어제와 다를 바 없는 내일이라 해도\n조용히 숨을 고르며 밤을 건넌다`,
-        solo: `[Guitar Solo: Ambient Post-rock Guitar Swells - ${currentBpm} BPM]`,
-        bridge: `[Falsetto] 어둠이 깊을수록\n새벽은 더 가까이 다가오니까`,
-        outro: `지평선 너머로 번지는 희미한 새벽빛\n(Fade Out...)`
-      },
-      'seasonal': {
-        verse1: `바람의 냄새가 계절의 끝을 알리고\n${topic} 길목엔 마른 잎들이 뒹군다\n너와 나란히 걷던 그 계절이 지나\n어느새 옷깃을 여미는 시간이 왔네`,
-        pre: `빛바랜 기억의 서랍을 가만히 열면\n눈부셨던 여름날의 미소가 그대로인데`,
-        chorus: `계절은 돌고 돌아 다시 이곳에 오는데\n너는 어디쯤 머물러 있을까\n${topic} 바람결에 실려오는 너의 향기\n잊었다 생각했는데 또다시 가슴이 저린다`,
-        verse2: `길가에 서 있는 오래된 벤치 위\n우리가 새겨둔 이름은 아직 선명한데\n지나간 시간은 잡을 수가 없어서\n떨어지는 낙엽처럼 손끝을 스쳐가네`,
-        solo: `[Guitar Solo: Warm Fingerpicked Acoustic & Electric Cry - ${currentBpm} BPM]`,
-        bridge: `(Sigh) 찬란했던 그 계절은 가고\n추억만이 묵직한 옷처럼 남아`,
-        outro: `불어오는 계절의 끝자락\n잘 지내라는 혼잣말만 허공에 날리네`
-      },
-      'solace': {
-        verse1: `하루 끝에 지친 몸을 이끌고 찾아온 ${topic}\n조용한 온기가 지친 어깨를 감싸 안는다\n아무것도 묻지 않는 덤덤한 공간 속에서\n비로소 깊은 숨을 내쉬어 본다`,
-        pre: `누군가에게 착한 사람이어야 했던 하루\n이제는 가면을 벗고 편히 쉬어도 괜찮아`,
-        chorus: `오늘도 수고 많았다고\n누구도 해주지 않던 그 말을 내게 건넨다\n${topic} 차분한 공기 속에 마음을 내려놓고\n내일은 조금 더 다정해질 수 있기를`,
-        verse2: `창밖으로 보이는 바쁜 사람들의 퇴근길\n모두가 저마다의 짐을 지고 걸어가네\n완벽하지 않아도 괜찮다는 걸\n따뜻한 차 한 잔을 마시며 배우는 밤`,
-        solo: `[Guitar Solo: Soothing Clean Tone Guitar Melody - ${currentBpm} BPM]`,
-        bridge: `(Softly) 버텨낸 것만으로도 충분해\n너는 이미 빛나고 있으니까`,
-        outro: `포근해진 공기 속으로\n조용히 찾아오는 평온한 꿈`
-      }
-    };
-
-    const tmpl = themeLyrics[theme] || themeLyrics['regret'];
-
-    const fullLyrics =
-      `[Intro: ${track.sound_tags.split(',')[0]} - Soft Ambient Atmosphere]\n\n` +
-      `[Verse 1]\n${tmpl.verse1}\n\n` +
-      `[Pre-Chorus]\n${tmpl.pre}\n\n` +
-      `[Chorus: Full Band Entrance, ${currentBpm} BPM, ${track.sound_tags.split(',')[1] || 'Soaring Chorus'}]\n${tmpl.chorus}\n\n` +
-      `[Verse 2]\n${tmpl.verse2}\n\n` +
-      `${tmpl.solo}\n\n` +
-      `[Bridge: Stripped down Backing & Low Vocals]\n${tmpl.bridge}\n\n` +
-      `[Chorus: Emotional Peak, Half-volume Lift]\n${tmpl.chorus}\n\n` +
-      `[Outro: Fade Out with Ambient Guitar]\n${tmpl.outro}`;
-
-    document.getElementById('korean-lyrics-output').textContent = fullLyrics;
   }
 
   // Render Reference DB Explorer
@@ -1700,7 +1906,7 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
   function copyFullSunoSet() {
     const title = currentChosenTitle || '무제';
     const style = document.getElementById('suno-prompt-output').textContent;
-    const lyrics = document.getElementById('korean-lyrics-output').textContent;
+    const lyrics = currentRawLyrics;
 
     const fullSet =
       `=== [Suno AI Track Preset] ===\n` +
@@ -1729,7 +1935,8 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
       refTrack: activeRefTrack ? `${activeRefTrack.title} - ${activeRefTrack.artist}` : 'Radiohead',
       bpm: currentBpm,
       style: document.getElementById('suno-prompt-output').textContent,
-      lyrics: document.getElementById('korean-lyrics-output').textContent,
+      lyrics: currentRawLyrics,
+      ytDesc: document.getElementById('yt-desc-output').textContent,
       date: new Date().toLocaleDateString('ko-KR')
     };
     sets.unshift(newEntry);
@@ -1779,7 +1986,9 @@ TITLES: 제목1, 제목2, 제목3, 제목4, 제목5
     currentChosenTitle = entry.title;
     document.getElementById('active-title-label').textContent = `선택된 제목: "${currentChosenTitle}"`;
     document.getElementById('suno-prompt-output').textContent = entry.style;
-    document.getElementById('korean-lyrics-output').textContent = entry.lyrics;
+    currentRawLyrics = entry.lyrics;
+    renderLyricsDisplay();
+    renderYouTubeKit();
     closeSavedModal();
     showToast(`📂 "${entry.title}" 세트를 불러왔습니다!`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
