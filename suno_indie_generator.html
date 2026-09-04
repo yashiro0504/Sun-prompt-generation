@@ -1597,13 +1597,17 @@
 [🎙️ 절대 원칙 3: 중저음 바리톤 보컬 맞춤]
 - 깊고 묵직한 중저음 바리톤 남성 보컬(deep baritone male vocals, clear Korean diction)의 담담한 호흡에 맞는 말맛을 살리세요.
 
+[🚫 절대 원칙 4: 인트로([Intro]) 절대 금지 - [Verse 1]부터 즉시 시작]
+- 수노(Suno) AI에 가사를 넣을 때 인트로 태그([Intro], [Acoustic Intro] 등)가 들어가면 수노가 전주를 기괴하게 질질 끌거나, 인트로 지시어 자체를 발음해버리거나, 사운드가 뭉개지는 심각한 결함이 발생합니다.
+- 따라서 인트로 태그([Intro: ...])나 전주 지시어는 일절 넣지 마세요!
+- 가사는 첫 줄부터 무조건 [Verse 1]으로 직행해야 합니다.
+
 [출력 형식 가이드 (반드시 아래 형식 엄수)]
 TITLES: 한글제목 (영문부제) 5개를 쉼표로 구분하여 출력
 YT_TITLES: [전득필 OAC 발매형] | [플레이리스트형] | [서사형]
 LINER_NOTES: 전득필 명의의 앨범 소개글 (멜론/스포티파이/유튜브 설명란에 들어갈 쌉싸름한 2~3줄 작가의 말)
 COVER_PROMPT: Midjourney v6 전용 1:1 정방형 앨범 커버 영문 프롬프트 (35mm candid film photograph, vintage Korean indie aesthetic, [소재 시각 묘사], 1990s retro film grain, moody street lighting, square aspect ratio --ar 1:1 --v 6.0)
 LYRICS:
-[Intro: ...]
 [Verse 1]
 ...
 [Pre-Chorus]
@@ -1627,7 +1631,7 @@ LYRICS:
               content: `[전득필 신곡 작업 의뢰]
 - 사운드 레퍼런스: "${track.title}" by ${track.artist} (${track.category})
 - 사운드 특징: ${track.sound_tags}
-- 레퍼런스 서사 지침: ${track.story_structure}
+- 레퍼런스 서사 지침: ${track.story_structure} (※주의: 가사는 인트로 없이 바로 [Verse 1]부터 시작할 것)
 - 오늘의 일기 소재: "${topic}"
 - 서사 테마: ${themeKorean}
 - 분위기/무드: ${moodStr}
@@ -1695,7 +1699,19 @@ LYRICS:
     currentYtTitles = ytTitles.length > 0 ? ytTitles : getFallbackYtTitles(topic);
     currentLinerNotes = linerNotes || `어느 차가운 새벽, ${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다. - 전득필`;
     currentCoverPrompt = coverPrompt || `Album cover art, 35mm candid film photography, vintage Korean indie aesthetic, a lonely scene at ${topic}, 1990s retro film grain, moody street lighting, melancholic analog tone, vinyl record texture, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
-    currentRawLyrics = lyricsLines.join('\n').trim() || content;
+
+    // 수노(Suno) 이상 동작 방지를 위해 [Intro] 섹션 및 태그 완벽 필터링
+    let rawLyricsText = lyricsLines.join('\n').trim() || content;
+    rawLyricsText = rawLyricsText.replace(/^\s*\[intro[^\]]*\][^\n]*(\r?\n)*/gim, '').trim();
+    const verse1Idx = rawLyricsText.indexOf('[Verse 1]');
+    if (verse1Idx > 0) {
+      const prefix = rawLyricsText.substring(0, verse1Idx);
+      if (/intro/i.test(prefix)) {
+        rawLyricsText = rawLyricsText.substring(verse1Idx).trim();
+      }
+    }
+
+    currentRawLyrics = rawLyricsText;
 
     renderLyricsDisplay();
     renderYouTubeKit();
@@ -1747,7 +1763,6 @@ LYRICS:
     const tmpl = themeLyrics[theme] || themeLyrics['regret'];
 
     currentRawLyrics =
-      `[Intro: ${track.sound_tags.split(',')[0]} - Soft Ambient Atmosphere]\n\n` +
       `[Verse 1]\n${tmpl.verse1}\n\n` +
       `[Pre-Chorus]\n${tmpl.pre}\n\n` +
       `[Chorus: Full Band Entrance, ${currentBpm} BPM, ${track.sound_tags.split(',')[1] || 'Soaring Chorus'}]\n${tmpl.chorus}\n\n` +
