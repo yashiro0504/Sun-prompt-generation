@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="사이버 빗소리 & 몽환적 로파이 BGM AI 음악 프롬프트 자동 생성기 - Suno AI / Udio 맞춤형 칠웨이브 및 Lofi Hip-hop 프롬프트">
+    <title>🌧️✨ Cyber Rain Lofi Prompt Generator Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Outfit:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN SYSTEM — Cyber Midnight Rain Theme
+           ═══════════════════════════════════════════ */
+        :root {
+            --bg-dark: #070913;
+            --bg-card: rgba(15, 20, 38, 0.75);
+            --bg-card-hover: rgba(24, 31, 56, 0.85);
+            --border-color: rgba(99, 102, 241, 0.2);
+            --border-hover: rgba(168, 85, 247, 0.5);
+
+            --neon-blue: #38bdf8;
+            --neon-indigo: #818cf8;
+            --neon-purple: #c084fc;
+            --neon-pink: #f472b6;
+            --rain-glow: rgba(56, 189, 248, 0.25);
+            --purple-glow: rgba(192, 132, 252, 0.25);
+            --amber-warmth: #fbbf24;
+
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+
+            --font-title: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+
+            --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.5);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── Canvas Rain Effect Background ── */
+        #rainCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 20px 20px 80px;
+        }
+
+        /* ═══════════════════════════════════════════
+           GLOBAL UNIFIED HEADER NAVIGATION BAR
+           ═══════════════════════════════════════════ */
+        .global-header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(7, 9, 19, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 12px 24px;
+            margin-bottom: 24px;
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .brand-icon { font-size: 24px; }
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .brand-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--neon-blue);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .nav-link.active {
+            color: #070913;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            font-weight: 700;
+            box-shadow: 0 0 16px var(--rain-glow);
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-suno {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-suno:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        @media (max-width: 860px) {
+            .nav-container { flex-direction: column; align-items: stretch; }
+            .nav-links { overflow-x: auto; white-space: nowrap; justify-content: start; }
+        }
+
+        /* ── Header Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            border-radius: 30px;
+            background: rgba(192, 132, 252, 0.15);
+            border: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            box-shadow: 0 0 12px var(--purple-glow);
+        }
+
+        .header h1 {
+            font-family: var(--font-title);
+            font-size: clamp(28px, 4.5vw, 44px);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--neon-blue) 40%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: var(--text-sub);
+            font-size: 15px;
+            margin-top: 8px;
+        }
+
+        /* ── Main Layout ── */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .card-title {
+            font-family: var(--font-title);
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-title .icon {
+            font-size: 20px;
+        }
+
+        /* ── Control Sections ── */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .opt-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--neon-blue);
+        }
+
+        .opt-btn.active {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(192, 132, 252, 0.25));
+            border-color: var(--neon-blue);
+            color: #fff;
+            box-shadow: 0 0 12px var(--rain-glow);
+        }
+
+        /* ── Tag Selectors ── */
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-sub);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tag-chip:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .tag-chip.selected {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(192, 132, 252, 0.3));
+            border-color: var(--neon-purple);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 0 10px var(--purple-glow);
+        }
+
+        /* ── Output Box ── */
+        .output-box {
+            background: rgba(7, 9, 19, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            font-family: var(--font-code);
+            font-size: 13.5px;
+            color: #e2e8f0;
+            min-height: 100px;
+            max-height: 220px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-title);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            flex: 2;
+            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-indigo) 50%, var(--neon-purple) 100%);
+            color: #0b0f19;
+            box-shadow: 0 0 20px var(--rain-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.15);
+            box-shadow: 0 0 25px var(--rain-glow);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--neon-blue);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="rainCanvas"></canvas>
+
+    <div class="app-wrapper">
+        <nav class="global-header">
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">
+                    <span class="brand-icon">🎵</span>
+                    <div>
+                        <span class="brand-title">SUNO AI PROMPT STUDIO</span>
+                        <span class="brand-badge">PRO v2.5</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <span>🤠</span> Country Pro
+                    </a>
+                    <a href="cyber_lofi.html" class="nav-link active">
+                        <span>🌧️</span> Cyber Rain Lofi
+                    </a>
+                    <a href="dev_focus.html" class="nav-link">
+                        <span>💻</span> Dev Deep Focus
+                    </a>
+                    <a href="phonk_walker.html" class="nav-link">
+                        <span>🏎️</span> Drift Phonk & EDM
+                    </a>
+                </div>
+                <div class="nav-actions">
+                    <a href="https://suno.com" target="_blank" rel="noopener" class="btn-suno">
+                        <span>🚀 Launch Suno AI</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="badge-tag">⭐ 100만 구독자 보증 유망 1순위 채널 프롬프트 제조기</div>
+            <h1>🌧️ Cyber Rain Lofi Prompt Generator</h1>
+            <p>공부·코딩·수면 BGM 전용! 비 내리는 사이버펑크 감성 Lofi & Chillwave AI 프롬프트 정밀 제어기</p>
+        </header>
+
+        <!-- Main Form Grid -->
+        <div class="grid-layout">
+            <!-- Left Column: Controls -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎛️</span>
+                    <span>Lofi 분위기 & 음향 요소 선택</span>
+                </div>
+
+                <!-- Concept Preset -->
+                <div class="form-group">
+                    <label class="form-label">메인 분위기 (Concept)</label>
+                    <div class="option-grid" id="conceptGrid">
+                        <div class="opt-btn active" data-val="Cyberpunk Rain Alleyway">🌧️ 사이버 빗소리골목</div>
+                        <div class="opt-btn" data-val="Midnight Neon Coffee Shop">☕ 심야 네온 카페</div>
+                        <div class="opt-btn" data-val="Late Night Room Coding">💻 새벽 2시 코딩방</div>
+                        <div class="opt-btn" data-val="Cozy Hologram Bedroom">🛋️ 홀로그램 자장가</div>
+                        <div class="opt-btn" data-val="Tokyo Highway Night Drive">🌃 도쿄 도심 고속도로</div>
+                    </div>
+                </div>
+
+                <!-- Tempo / BPM -->
+                <div class="form-group">
+                    <label class="form-label">템포 & 비트 (BPM)</label>
+                    <div class="option-grid" id="bpmGrid">
+                        <div class="opt-btn active" data-val="72 BPM, slow lazy chill beat">💤 Slow 72 BPM (수면)</div>
+                        <div class="opt-btn" data-val="80 BPM, relaxed lo-fi hip hop groove">☕ Moderate 80 BPM (공부)</div>
+                        <div class="opt-btn" data-val="88 BPM, boombap lo-fi swing">🎧 Chill Hop 88 BPM (작업)</div>
+                    </div>
+                </div>
+
+                <!-- Instruments Tag Chips -->
+                <div class="form-group">
+                    <label class="form-label">음악 악기 & 효과음 (중복 선택)</label>
+                    <div class="tag-group" id="instTags">
+                        <span class="tag-chip selected" data-val="vinyl crackle and rain sfx">🌧️ LP노이즈+빗소리</span>
+                        <span class="tag-chip selected" data-val="warm Rhodes electric piano">🎹 따뜻한 로즈 피아노</span>
+                        <span class="tag-chip selected" data-val="subtle acoustic jazz guitar">🎸 감성 아쿠스틱 기타</span>
+                        <span class="tag-chip" data-val="muted trumpet solos">🎺 마일드 첼로/트럼펫</span>
+                        <span class="tag-chip" data-val="ethereal synth pads">🌌 몽환적 씬스 패드</span>
+                        <span class="tag-chip" data-val="smooth deep sub bass">🔊 딥 서브 베이스</span>
+                        <span class="tag-chip" data-val="soft analog tape hiss">📼 아날로그 테이프 노이즈</span>
+                    </div>
+                </div>
+
+                <!-- Vocal Type -->
+                <div class="form-group">
+                    <label class="form-label">보컬 유무 & 톤</label>
+                    <div class="option-grid" id="vocalGrid">
+                        <div class="opt-btn active" data-val="Instrumental, No vocals, Pure Chill BGM">📵 순수 연주곡 (노가사 BGM)</div>
+                        <div class="opt-btn" data-val="Whispering female vocal chops">🗣️ 몽환적 여성 보컬찹</div>
+                        <div class="opt-btn" data-val="Soft cozy spoken word sample">🎙️ 아날로그 스포큰 워드</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Outputs -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🚀</span>
+                    <span>완성된 AI 프롬프트 & 유튜브 패키지</span>
+                </div>
+
+                <!-- Suno Style Prompt Output -->
+                <div class="form-group">
+                    <label class="form-label">1. Suno / Udio 음악 스타일 프롬프트 (Style Prompt)</label>
+                    <div class="output-box" id="stylePromptBox"></div>
+                    <button class="btn btn-secondary" onclick="copyText('stylePromptBox')">📋 Style 프롬프트 복사</button>
+                </div>
+
+                <!-- Youtube Package Output -->
+                <div class="form-group">
+                    <label class="form-label">2. 유튜브 제목, 태그 & Midjourney 썸네일 프롬프트</label>
+                    <div class="output-box" id="ytPackageBox"></div>
+                    <button class="btn btn-secondary" onclick="copyText('ytPackageBox')">📋 유튜브 패키지 전체 복사</button>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateAllPrompts()">⚡ 프롬프트 새로 생성하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">복사되었습니다!</div>
+
+    <script>
+        /* ── Canvas Background Rain Effect ── */
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+        let drops = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 90; i++) {
+            drops.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                length: Math.random() * 20 + 10,
+                speed: Math.random() * 4 + 2,
+                opacity: Math.random() * 0.4 + 0.1
+            });
+        }
+
+        function drawRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drops.forEach(drop => {
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x - drop.length * 0.2, drop.y + drop.length);
+                ctx.strokeStyle = `rgba(56, 189, 248, ${drop.opacity})`;
+                ctx.lineWidth = 1.2;
+                ctx.stroke();
+
+                drop.y += drop.speed;
+                drop.x -= drop.speed * 0.2;
+
+                if (drop.y > canvas.height) {
+                    drop.y = -20;
+                    drop.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(drawRain);
+        }
+        drawRain();
+
+        /* ── Selection Logic ── */
+        document.querySelectorAll('.opt-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.parentElement;
+                parent.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                generateAllPrompts();
+            });
+        });
+
+        document.querySelectorAll('.tag-chip').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                generateAllPrompts();
+            });
+        });
+
+        function getActiveVal(containerId) {
+            const active = document.querySelector(`#${containerId} .opt-btn.active`);
+            return active ? active.dataset.val : '';
+        }
+
+        function getSelectedTags(containerId) {
+            const tags = document.querySelectorAll(`#${containerId} .tag-chip.selected`);
+            return Array.from(tags).map(t => t.dataset.val);
+        }
+
+        function generateAllPrompts() {
+            const concept = getActiveVal('conceptGrid');
+            const bpm = getActiveVal('bpmGrid');
+            const insts = getSelectedTags('instTags').join(', ');
+            const vocal = getActiveVal('vocalGrid');
+
+            // Style Prompt
+            const stylePrompt = `lo-fi hip hop, chillhop, ${concept.toLowerCase()}, ${bpm}, ${insts}, ${vocal}, 4k ultra atmospheric warmth, cozy midnight vibes, high fidelity production`;
+            document.getElementById('stylePromptBox').innerText = stylePrompt;
+
+            // YouTube Package & Midjourney Thumbnail
+            const ytTitle = `[24/7 Lofi Live] ${concept} 🌧️ | 공부할 때 듣는 비 내리는 사이버 로파이 BGM`;
+            const mjPrompt = `/imagine prompt: A cozy cyberpunk bedroom interior, window covered with rain drops overlooking a glowing neon city at night, aesthetic lo-fi anime art style, soft blue and purple neon lighting, cinematic ambient glow, 8k resolution, --ar 16:9 --v 6.0`;
+            const tags = `#Lofi #CyberLofi #빗소리Lofi #공부할때듣는음악 #LofiHipHop #SunoAI`;
+
+            const ytPackage = `📌 [유튜브 추천 제목]\n${ytTitle}\n\n🖼️ [Midjourney 썸네일 프롬프트]\n${mjPrompt}\n\n🏷️ [추천 해시태그 & 검색 태그]\n${tags}`;
+            document.getElementById('ytPackageBox').innerText = ytPackage;
+        }
+
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            });
+        }
+
+        // Initial Generation
+        generateAllPrompts();
+    </script>
+</body>
+</html>

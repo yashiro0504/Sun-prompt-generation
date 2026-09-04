@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="드리프트 퐁크 & 알렌워커 스타일 AI 음악 프롬프트 제조 인덱스 - 노가사 보컬찹, 808 카우벨, 멜로딕 EDM AI 프롬프트 생성기">
+    <title>🏎️⚡ Drift Phonk & Alan Walker Prompt Generator Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN SYSTEM — Cyberpunk Neon Alan Walker & Tokyo Drift Theme
+           ═══════════════════════════════════════════ */
+        :root {
+            --bg-dark: #05060b;
+            --bg-card: rgba(13, 16, 27, 0.75);
+            --bg-card-hover: rgba(22, 28, 48, 0.85);
+            --border-color: rgba(0, 240, 255, 0.18);
+            --border-hover: rgba(0, 240, 255, 0.5);
+            
+            --neon-cyan: #00f0ff;
+            --neon-cyan-glow: rgba(0, 240, 255, 0.35);
+            --neon-purple: #9d4edd;
+            --neon-magenta: #ff007f;
+            --neon-magenta-glow: rgba(255, 0, 127, 0.35);
+            --gold-accent: #ffb703;
+
+            --text-main: #f0f4f8;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+
+            --font-title: 'Orbitron', sans-serif;
+            --font-sub: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 25px var(--neon-cyan-glow);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* ── Cyber Background & Canvas ── */
+        #bgCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px 20px 80px;
+        }
+
+        /* ═══════════════════════════════════════════
+           GLOBAL UNIFIED HEADER NAVIGATION BAR
+           ═══════════════════════════════════════════ */
+        .global-header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(5, 6, 11, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            padding: 12px 24px;
+            margin-bottom: 24px;
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .brand-icon { font-size: 24px; }
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .brand-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan-glow);
+        }
+
+        /* ── Header Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            background: rgba(255, 0, 127, 0.15);
+            border: 1px solid var(--neon-magenta);
+            color: var(--neon-magenta);
+            font-family: var(--font-sub);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            box-shadow: 0 0 12px var(--neon-magenta-glow);
+        }
+
+        .header h1 {
+            font-family: var(--font-title);
+            font-size: clamp(28px, 4.5vw, 46px);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--neon-cyan) 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        .header p.subtitle {
+            font-size: 15px;
+            color: var(--text-sub);
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .header p.subtitle span.hl {
+            color: var(--neon-cyan);
+            font-weight: 600;
+        }
+
+        /* ── Main Grid Layout ── */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Card Styling ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-title {
+            font-family: var(--font-title);
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            font-size: 20px;
+            color: var(--neon-cyan);
+        }
+
+        /* ── Presets Grid ── */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .preset-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preset-card:hover {
+            background: rgba(0, 240, 255, 0.08);
+            border-color: var(--neon-cyan);
+            transform: translateY(-2px);
+        }
+
+        .preset-card.active {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(157, 78, 221, 0.15));
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan-glow);
+        }
+
+        .preset-card .preset-name {
+            font-family: var(--font-sub);
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .preset-card .preset-desc {
+            font-size: 12px;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        .preset-card .preset-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            font-size: 10px;
+            font-family: var(--font-title);
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255, 0, 127, 0.2);
+            color: var(--neon-magenta);
+            border: 1px solid rgba(255, 0, 127, 0.4);
+        }
+
+        /* ── Controls & Form Controls ── */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-sub);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-select, .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(5, 7, 15, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-sm);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-select:focus, .form-input:focus, .form-textarea:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan-glow);
+        }
+
+        .form-select option {
+            background: #0d101b;
+            color: #fff;
+        }
+
+        /* ── Interactive Index Tags Matrix ── */
+        .index-matrix {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .matrix-category {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+        }
+
+        .matrix-cat-title {
+            font-family: var(--font-sub);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .matrix-cat-title span.count {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-sub);
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .tag-chip:hover {
+            background: rgba(0, 240, 255, 0.12);
+            border-color: var(--neon-cyan);
+            color: #fff;
+        }
+
+        .tag-chip.selected {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(157, 78, 221, 0.3));
+            border-color: var(--neon-cyan);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 0 10px var(--neon-cyan-glow);
+        }
+
+        .tag-chip .remove-icon {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        /* ── Action Buttons ── */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-title);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            flex: 2;
+            background: linear-gradient(135deg, var(--neon-cyan) 0%, #0099ff 50%, var(--neon-purple) 100%);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-cyan-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--neon-cyan-glow);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #fff;
+        }
+
+        /* ── Output Display Tabs & Boxes ── */
+        .output-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .output-tab-btn {
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-family: var(--font-sub);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .output-tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .output-tab-btn.active {
+            color: var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 10px var(--neon-cyan-glow);
+        }
+
+        .output-box-container {
+            position: relative;
+            background: rgba(5, 7, 15, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            min-height: 220px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13.5px;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+
+        .output-box-container .copy-btn {
+            position: absolute;
+            top: 12px; right: 12px;
+            padding: 6px 12px;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            border-radius: 4px;
+            font-family: var(--font-sub);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .output-box-container .copy-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+        }
+
+        /* ── Download Creator Pack Banner ── */
+        .pack-download-card {
+            margin-top: 20px;
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(255, 0, 127, 0.15));
+            border: 1px solid var(--neon-magenta);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .pack-download-info h4 {
+            font-family: var(--font-title);
+            font-size: 15px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .pack-download-info p {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        /* ── Toast Notification ── */
+        #toastContainer {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            background: rgba(13, 16, 27, 0.95);
+            border: 1px solid var(--neon-cyan);
+            color: #fff;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 0 20px var(--neon-cyan-glow);
+            font-family: var(--font-sub);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cyber Visualizer Canvas Background -->
+    <canvas id="bgCanvas"></canvas>
+    <div class="grid-overlay"></div>
+
+    <div class="app-wrapper">
+        
+        <nav class="global-header">
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">
+                    <span class="brand-icon">🎵</span>
+                    <div>
+                        <span class="brand-title">SUNO AI PROMPT STUDIO</span>
+                        <span class="brand-badge">PRO v2.5</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <span>🤠</span> Country Pro
+                    </a>
+                    <a href="cyber_lofi.html" class="nav-link">
+                        <span>🌧️</span> Cyber Rain Lofi
+                    </a>
+                    <a href="dev_focus.html" class="nav-link">
+                        <span>💻</span> Dev Deep Focus
+                    </a>
+                    <a href="phonk_walker.html" class="nav-link active">
+                        <span>🏎️</span> Drift Phonk & EDM
+                    </a>
+                </div>
+                <div class="nav-actions">
+                    <a href="https://suno.com" target="_blank" rel="noopener" class="btn-suno">
+                        <span>🚀 Launch Suno AI</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Header -->
+        <header class="header">
+            <div class="badge-tag">🔥 SUNO v5.5 PRO ENGINE READY — NO-LYRICS INSTRUMENTAL & VOCAL CHOP GENERATOR</div>
+            <h1>DRIFT PHONK & ALAN WALKER PROMPT INDEX</h1>
+            <p class="subtitle">
+                유튜브 <span class="hl">드리프트 퐁크 & 멜로딕 EDM</span> 채널 전용! Suno v5.5 최신 엔진 반영 — 가사 없이 808 카우벨, 톱니파 리드, 피치시프트 보컬찹 및 곡 구조 태그 자동 제조기
+            </p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="main-layout">
+
+            <!-- LEFT COLUMN: Presets & Sound Index Matrix -->
+            <div class="left-col">
+                
+                <!-- Artist & Vibe Presets -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="icon">🎹</span> 시그니처 아티스트 & 장르 프리셋 (8종)
+                        </div>
+                    </div>
+                    
+                    <div class="preset-grid" id="presetGrid">
+                        <!-- Rendered via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Interactive Tag Manufacturing Index -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="icon">🏷️</span> 사운드 & 스타일 제조 인덱스 라이브러리
+                        </div>
+                        <span style="font-size: 12px; color: var(--text-muted);">클릭하여 태그 조합</span>
+                    </div>
+
+                    <div class="index-matrix" id="indexMatrix">
+                        <!-- Rendered via JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Structure Builder & AI Prompt Generator Output -->
+            <div class="right-col">
+
+                <!-- Song Structure & Config Box -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="icon">🎛️</span> 인스트루멘털 구조 & 오디오 파라미터
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label class="form-label">BPM / 템포</label>
+                            <select class="form-select" id="bpmSelect">
+                                <option value="165 BPM High Energy Drift">165 BPM (고속 드리프트 퐁크)</option>
+                                <option value="160 BPM Phonk Bass">160 BPM (표준 드리프트 퐁크)</option>
+                                <option value="128 BPM Electro EDM">128 BPM (알렌워커 하우스 / EDM)</option>
+                                <option value="120 BPM Melodic Wave Phonk">120 BPM (미드템포 멜로딕 웨이브)</option>
+                                <option value="140 BPM Cyberpunk Phonk">140 BPM (사이버펑크 하이브리드)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">조성 (Key Scale)</label>
+                            <select class="form-select" id="keySelect">
+                                <option value="F# Minor (Atmospheric Dark)">F# Minor (알렌워커 Faded 시그니처)</option>
+                                <option value="E Minor (Aggressive Dark)">E Minor (어둡고 강렬한 퐁크 Key)</option>
+                                <option value="A Minor (Melancholic Emotion)">A Minor (감성 보컬찹 Key)</option>
+                                <option value="D Minor (Cyberpunk Driving)">D Minor (드라이빙 사운드 Key)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Suno AI 엔진 버전 (Suno Engine Version)</label>
+                        <select class="form-select" id="sunoVersionSelect" style="border-color: var(--neon-cyan); background: rgba(0, 240, 255, 0.08);">
+                            <option value="v5.5" selected>🔥 Suno AI v5.5 Pro Engine (최신 v5.5 HD 오디오 & 확장 프롬프트)</option>
+                            <option value="v5.0">⚡ Suno AI v5.0 Engine (v5 스테레오 사운드)</option>
+                            <option value="v4.0">🚀 Suno AI v4.0 Engine (고해상도 음질)</option>
+                            <option value="v3.5">🎧 Suno AI v3.5 Engine (클래식 모드)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">가사 없는 곡 구조 태그 (Structure Arrangement Tags)</label>
+                        <select class="form-select" id="structurePresetSelect">
+                            <option value="standard_walker_phonk">기본: 플럭 인트로 -> 808 카우벨 드롭 -> 보컬찹 브레이크다운 -> 메인 드롭</option>
+                            <option value="high_adrenaline_drop">고속 드롭: 패시브 인트로 -> 빌드업 -> 808 퐁크 드롭 1 -> 톱니파 솔로 -> 드롭 2</option>
+                            <option value="melodic_vocal_chop">보컬찹 중심: 멜로딕 에코 -> 보컬찹 솔로 -> 딥베이스 드롭 -> 페이드아웃</option>
+                            <option value="cyber_night_drift">사이버 퐁크: 베이스 드라이브 -> 카우벨 메인 멜로디 -> 사이렌/엔진음 -> 아웃트로</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="Generator.generateAll()">
+                            <span>⚡</span> 프롬프트 & 유튜브 패키지 생성하기
+                        </button>
+                        <button class="btn btn-secondary" onclick="Generator.resetSelection()">
+                            <span>🔄</span> 초기화
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Output Display Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="icon">🚀</span> 생성 결과 & AI 프롬프트
+                        </div>
+                    </div>
+
+                    <!-- Output Navigation Tabs -->
+                    <div class="output-tabs">
+                        <button class="output-tab-btn active" onclick="UI.switchOutputTab('tabSuno')">Suno AI v5.5 프롬프트</button>
+                        <button class="output-tab-btn" onclick="UI.switchOutputTab('tabUdio')">Udio / Stable Audio</button>
+                        <button class="output-tab-btn" onclick="UI.switchOutputTab('tabThumb')">썸네일 프롬프트 (MJ/FLUX)</button>
+                        <button class="output-tab-btn" onclick="UI.switchOutputTab('tabYoutube')">유튜브 제목 & SEO 패키지</button>
+                    </div>
+
+                    <!-- Output Tab 1: Suno AI Prompt -->
+                    <div id="tabSuno" class="tab-content">
+                        <div style="margin-bottom: 12px; font-family: var(--font-sub); font-size: 13px; color: var(--neon-cyan);">
+                            [Suno AI v5.5 / v5 / v4 지원 - Style Prompt + Lyrics Box Structure Tags]
+                        </div>
+                        <div class="output-box-container">
+                            <button class="copy-btn" onclick="UI.copyContent('sunoContent', 'Suno 프롬프트 복사 완료!')">📋 복사</button>
+                            <div id="sunoContent">생성 버튼을 누르면 Suno AI 전용 프롬프트가 표시됩니다...</div>
+                        </div>
+                    </div>
+
+                    <!-- Output Tab 2: Udio / Stable Audio -->
+                    <div id="tabUdio" class="tab-content" style="display: none;">
+                        <div style="margin-bottom: 12px; font-family: var(--font-sub); font-size: 13px; color: var(--neon-cyan);">
+                            [Udio v1.5 / Stable Audio / MusicGen 전용 태그 & 파라미터]
+                        </div>
+                        <div class="output-box-container">
+                            <button class="copy-btn" onclick="UI.copyContent('udioContent', 'Udio 프롬프트 복사 완료!')">📋 복사</button>
+                            <div id="udioContent">생성 버튼을 누르면 Udio 전용 프롬프트가 표시됩니다...</div>
+                        </div>
+                    </div>
+
+                    <!-- Output Tab 3: Midjourney / FLUX Thumbnail Prompt -->
+                    <div id="tabThumb" class="tab-content" style="display: none;">
+                        <div style="margin-bottom: 12px; font-family: var(--font-sub); font-size: 13px; color: var(--neon-magenta);">
+                            [유튜브 썸네일 이미지 생성용 Midjourney v6 / FLUX.1 이미지 프롬프트]
+                        </div>
+                        <div class="output-box-container">
+                            <button class="copy-btn" onclick="UI.copyContent('thumbContent', '썸네일 프롬프트 복사 완료!')">📋 복사</button>
+                            <div id="thumbContent">생성 버튼을 누르면 썸네일 프롬프트가 표시됩니다...</div>
+                        </div>
+                    </div>
+
+                    <!-- Output Tab 4: YouTube Title & SEO Package -->
+                    <div id="tabYoutube" class="tab-content" style="display: none;">
+                        <div style="margin-bottom: 12px; font-family: var(--font-sub); font-size: 13px; color: var(--gold-accent);">
+                            [높은 클릭률(CTR) 유튜브 제목 TOP 5 + 설명란 + 퐁크 SEO 태그]
+                        </div>
+                        <div class="output-box-container">
+                            <button class="copy-btn" onclick="UI.copyContent('ytContent', '유튜브 패키지 복사 완료!')">📋 복사</button>
+                            <div id="ytContent">생성 버튼을 누르면 유튜브 패키지가 표시됩니다...</div>
+                        </div>
+                    </div>
+
+                    <!-- Download All Package -->
+                    <div class="pack-download-card">
+                        <div class="pack-download-info">
+                            <h4>📦 드리프트 퐁크 크리에이터 전체 패키지 다운로드</h4>
+                            <p>Suno, Udio, 썸네일, 유튜브 제목 및 SEO 태그를 단 하나의 TXT 파일로 저장합니다.</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="Generator.downloadTxtPackage()" style="padding: 10px 18px; font-size: 12px;">
+                            <span>📥</span> 전체 TXT 다운로드
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer"></div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* ═══════════════════════════════════════════
+           DATA & PRESETS — Drift Phonk & Alan Walker Index
+           ═══════════════════════════════════════════ */
+        
+        const PRESETS = [
+            {
+                id: 'faded_drift',
+                name: '⚡ Faded Drift Walker',
+                badge: 'BEST',
+                desc: '알렌워커 감성 멜로딕 플럭 + 808 카우벨 드리프트 퐁크 하이브리드',
+                bpm: '160 BPM Phonk Bass',
+                key: 'F# Minor (Atmospheric Dark)',
+                tags: ['Drift Phonk', 'Alan Walker EDM', 'Pitch-Bent Saw Lead', '808 Cowbell Melody', 'Distorted 808 Bass', 'Pitch-Shifted Vocal Chops', 'F# Minor'],
+                structure: 'standard_walker_phonk'
+            },
+            {
+                id: 'spectre_tokyo',
+                name: '🏎️ Tokyo Night Spectre',
+                badge: '165 BPM',
+                desc: '도쿄 야간 심야 드라이브 고속 액션 퐁크 (808 카우벨 폭주)',
+                bpm: '165 BPM High Energy Drift',
+                key: 'E Minor (Aggressive Dark)',
+                tags: ['Drift Phonk', '808 Cowbell Melody', 'Distorted 808 Bass', 'Engine Rev & Exhaust Pop', '165 BPM Drift Beat', 'Screaming Phonk Lead', 'E Minor'],
+                structure: 'high_adrenaline_drop'
+            },
+            {
+                id: 'dark_walker_cyber',
+                name: '🌃 Dark Walker Cyberpunk',
+                badge: 'DARK',
+                desc: '어두운 디스토피아 사이버펑크 리스 베이스 & 멜로딕 톱니파 리드',
+                bpm: '140 BPM Cyberpunk Phonk',
+                key: 'D Minor (Cyberpunk Driving)',
+                tags: ['Cyberpunk Synth', 'Reese Bass', 'Pitch-Bent Saw Lead', 'Riser Sweep', 'Melancholic Ambient', 'D Minor'],
+                structure: 'cyber_night_drift'
+            },
+            {
+                id: 'melodic_wave_phonk',
+                name: '🌊 Melodic Wave Phonk',
+                badge: 'CHILL',
+                desc: '감성 몽환 웨이브 퐁크, 보컬찹 멜로디 & 딥 사이드체인 서브 베이스',
+                bpm: '120 BPM Melodic Wave Phonk',
+                key: 'A Minor (Melancholic Emotion)',
+                tags: ['Wave Phonk', 'Pitch-Shifted Vocal Chops', 'Sidechained Sub Bass', 'Vinyl Cassette Hiss', 'Melancholic Ambient', 'A Minor'],
+                structure: 'melodic_vocal_chop'
+            },
+            {
+                id: 'alone_octane_bass',
+                name: '🔥 Alone High-Octane Bass',
+                badge: 'HARD',
+                desc: '강렬한 808 피치 슬라이드 글라이드 베이스 & 하드 킥 폭격',
+                bpm: '165 BPM High Energy Drift',
+                key: 'E Minor (Aggressive Dark)',
+                tags: ['Drift Phonk', 'Glide 808 Bass', 'Hard Kick', 'Fast Hi-Hat Triplets', '808 Membrane Snare', 'Dark Aggressive'],
+                structure: 'high_adrenaline_drop'
+            },
+            {
+                id: 'on_my_way_electro',
+                name: '🎧 On My Way Electro Phonk',
+                badge: 'EDM',
+                desc: '128 BPM 일렉트로 하우스 4-on-the-floor 비트 & 퐁크 카우벨',
+                bpm: '128 BPM Electro EDM',
+                key: 'F# Minor (Atmospheric Dark)',
+                tags: ['Electro Phonk', 'Alan Walker EDM', '128 BPM Electro Drop', 'Melodic Pluck Synth', 'Female Vocal Chop Hook', 'F# Minor'],
+                structure: 'standard_walker_phonk'
+            },
+            {
+                id: 'sing_me_chops',
+                name: '🎤 Sing Me To Sleep Chops',
+                badge: 'VOCAL',
+                desc: '피치 시프트 여성 보컬찹 메인 멜로디 중심 인스트루멘털',
+                bpm: '128 BPM Electro EDM',
+                key: 'A Minor (Melancholic Emotion)',
+                tags: ['Alan Walker EDM', 'Pitch-Shifted Vocal Chops', 'Female Vocal Chop Hook', 'Reverse Vocal FX', 'Sidechained Sub Bass', 'A Minor'],
+                structure: 'melodic_vocal_chop'
+            },
+            {
+                id: 'underground_lofi_phonk',
+                name: '📼 Vintage Cassette Phonk',
+                badge: 'RETRO',
+                desc: '카세트 테이프 질감, 빈티지 바이닐 질감과 노스탤직 다크 카우벨',
+                bpm: '160 BPM Phonk Bass',
+                key: 'E Minor (Aggressive Dark)',
+                tags: ['Drift Phonk', '808 Cowbell Melody', 'Vinyl Cassette Hiss', 'Distorted 808 Bass', 'Cinematic Night Drift'],
+                structure: 'cyber_night_drift'
+            }
+        ];
+
+        const INDEX_MATRIX = {
+            mainStyle: {
+                title: '⚡ 메인 장르 & 스타일 (Main Genre & Style)',
+                tags: ['Drift Phonk', 'Melodic Phonk', 'Alan Walker EDM', 'Electro Phonk', 'Wave Phonk', 'Cyberpunk Synth']
+            },
+            leadSounds: {
+                title: '🎹 메인 리드 & 멜로디 악기 (Lead Instruments)',
+                tags: ['808 Cowbell Melody', 'Pitch-Bent Saw Lead', 'Melodic Pluck Synth', 'Metallic Synth Lead', 'Screaming Phonk Lead']
+            },
+            bassline: {
+                title: '🔊 베이스 & 서브 사운드 (Basslines)',
+                tags: ['Distorted 808 Bass', 'Glide 808 Bass', 'Sidechained Sub Bass', 'Reese Bass', 'FM Donk Bass']
+            },
+            vocalFx: {
+                title: '🎤 보컬찹 & 사운드 FX (Vocal Chops & Atmospheric FX)',
+                tags: ['Pitch-Shifted Vocal Chops', 'Female Vocal Chop Hook', 'Reverse Vocal FX', 'Vinyl Cassette Hiss', 'Engine Rev & Exhaust Pop', 'Riser Sweep']
+            },
+            rhythm: {
+                title: '🥁 리듬 & 드럼 퍼커션 (Rhythm & Percussion)',
+                tags: ['808 Membrane Snare', 'Fast Hi-Hat Triplets', 'Hard Kick', '165 BPM Drift Beat', '128 BPM Electro Drop']
+            },
+            moodKey: {
+                title: '🌌 분위기 & 조성 (Mood & Key Signature)',
+                tags: ['F# Minor', 'E Minor', 'A Minor', 'Melancholic Ambient', 'Dark Aggressive', 'Cinematic Night Drift']
+            }
+        };
+
+        const STRUCTURE_TEMPLATES = {
+            standard_walker_phonk: `[Atmospheric Ambient Intro - F# Minor]
+[Melodic Synth Pluck Solo - Alan Walker Vibe]
+[Build-Up: Snare Roll + Pitch Riser + Reverse Vocal FX]
+[Drop 1: Distorted 808 Cowbell Lead + Aggressive Drift Phonk Bass]
+[Vocal Chop Breakdown: Pitch-Shifted Female Vocal Chops (No Words)]
+[Saw Lead Solo: Pitch-Bent Lead Melody]
+[Drop 2: Full Adrenaline Phonk Bassline + Hard 808 Kick]
+[Outro: Reverb Pluck Echo Fade Out]`,
+
+            high_adrenaline_drop: `[Intro: Engine Rev + Vinyl Cassette Hiss]
+[Drop 1: Fast 165 BPM Distorted 808 Cowbell + Screaming Phonk Lead]
+[Bridge: Atmospheric Reese Bass Pad]
+[Build-Up: Triplets Snare Roll + High Frequency Riser]
+[Drop 2: Heavy 808 Glide Bass Slide + Screaming Synth Solo]
+[Outro: Sub Bass Fadeout]`,
+
+            melodic_vocal_chop: `[Intro: Reverse Reverb Vocal Chop + Ambient Pad]
+[Verse: Soft Pluck Bass + Pitch-Shifted Female Vocal Chop (Ah-ah-ee-a)]
+[Build-Up: Sidechained Kick Pulse + Snare Roll]
+[Drop: Heavy Sidechain Sub Bass + Vocal Chop Hook Melody]
+[Outro: Reverb Echo Fadeout]`,
+
+            cyber_night_drift: `[Intro: Night Highway Ambient + Distorted Bass]
+[Main Drive: 140 BPM Cyberpunk Phonk Synth]
+[Breakdown: Melancholic Saw Lead Solo]
+[Drop: Aggressive Reese Bass + Tuned 808 Cowbell Drops]
+[Outro: Engine Exhaust Fadeout]`
+        };
+
+        /* ═══════════════════════════════════════════
+           APPLICATION STATE & LOGIC
+           ═══════════════════════════════════════════ */
+        
+        let selectedTags = new Set();
+        let currentPresetId = 'faded_drift';
+
+        const UI = {
+            init() {
+                this.renderPresets();
+                this.renderIndexMatrix();
+                this.initCanvas();
+                this.applyPreset('faded_drift');
+                Generator.generateAll();
+            },
+
+            renderPresets() {
+                const container = document.getElementById('presetGrid');
+                container.innerHTML = PRESETS.map(p => `
+                    <div class="preset-card ${p.id === currentPresetId ? 'active' : ''}" onclick="UI.applyPreset('${p.id}')">
+                        ${p.badge ? `<span class="preset-badge">${p.badge}</span>` : ''}
+                        <div class="preset-name">${p.name}</div>
+                        <div class="preset-desc">${p.desc}</div>
+                    </div>
+                `).join('');
+            },
+
+            renderIndexMatrix() {
+                const container = document.getElementById('indexMatrix');
+                container.innerHTML = Object.entries(INDEX_MATRIX).map(([key, cat]) => `
+                    <div class="matrix-category">
+                        <div class="matrix-cat-title">
+                            <span>${cat.title}</span>
+                            <span class="count">${cat.tags.length} TAGS</span>
+                        </div>
+                        <div class="tag-cloud">
+                            ${cat.tags.map(tag => `
+                                <span class="tag-chip ${selectedTags.has(tag) ? 'selected' : ''}" onclick="UI.toggleTag('${tag}')">
+                                    ${tag}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            applyPreset(presetId) {
+                currentPresetId = presetId;
+                const preset = PRESETS.find(p => p.id === presetId);
+                if (!preset) return;
+
+                selectedTags = new Set(preset.tags);
+                document.getElementById('bpmSelect').value = preset.bpm;
+                document.getElementById('keySelect').value = preset.key;
+                document.getElementById('structurePresetSelect').value = preset.structure;
+
+                this.renderPresets();
+                this.renderIndexMatrix();
+                this.showToast(`프리셋 적용: ${preset.name}`);
+            },
+
+            toggleTag(tag) {
+                if (selectedTags.has(tag)) {
+                    selectedTags.delete(tag);
+                } else {
+                    selectedTags.add(tag);
+                }
+                this.renderIndexMatrix();
+            },
+
+            switchOutputTab(tabId) {
+                document.querySelectorAll('.output-tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+
+                event.target.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            },
+
+            showToast(msg) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `<span>⚡</span><span>${msg}</span>`;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            },
+
+            async copyContent(elementId, successMsg) {
+                const text = document.getElementById(elementId).innerText;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    this.showToast(successMsg);
+                } catch {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    textarea.remove();
+                    this.showToast(successMsg);
+                }
+            },
+
+            /* Background Canvas Visualizer Animation */
+            initCanvas() {
+                const canvas = document.getElementById('bgCanvas');
+                const ctx = canvas.getContext('2d');
+                let width = canvas.width = window.innerWidth;
+                let height = canvas.height = window.innerHeight;
+
+                window.addEventListener('resize', () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                });
+
+                const bars = Array.from({ length: 40 }, () => ({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    h: Math.random() * 120 + 20,
+                    speed: Math.random() * 1.5 + 0.5,
+                    color: Math.random() > 0.5 ? '#00f0ff' : '#9d4edd'
+                }));
+
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.fillStyle = 'rgba(5, 6, 11, 0.4)';
+                    ctx.fillRect(0, 0, width, height);
+
+                    bars.forEach(bar => {
+                        ctx.fillStyle = bar.color;
+                        ctx.shadowBlur = 15;
+                        ctx.shadowColor = bar.color;
+                        ctx.fillRect(bar.x, bar.y, 2, bar.h);
+                        bar.y -= bar.speed;
+                        if (bar.y + bar.h < 0) {
+                            bar.y = height + 50;
+                            bar.x = Math.random() * width;
+                        }
+                    });
+
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+        };
+
+        /* ═══════════════════════════════════════════
+           PROMPT GENERATOR ENGINE
+           ═══════════════════════════════════════════ */
+        
+        const Generator = {
+            generateAll() {
+                const tagList = Array.from(selectedTags);
+                const bpm = document.getElementById('bpmSelect').value;
+                const key = document.getElementById('keySelect').value;
+                const sunoVersion = document.getElementById('sunoVersionSelect').value;
+                const structureKey = document.getElementById('structurePresetSelect').value;
+                const structureText = STRUCTURE_TEMPLATES[structureKey] || STRUCTURE_TEMPLATES.standard_walker_phonk;
+
+                // 1. Suno AI Format (v5.5 Supported)
+                let styleMaxLen = (sunoVersion === 'v5.5' || sunoVersion === 'v5.0') ? 250 : 120;
+                let v55ExtraTags = (sunoVersion === 'v5.5') ? ', v5.5 Studio Master, Dynamic Stereo Width, Ultra HD Stem Clarity' : '';
+                
+                const rawStylePrompt = `Instrumental, ${tagList.join(', ')}, ${bpm}, ${key}, no vocals, clean mix, aggressive 808 punch, atmospheric reverb, studio mastering production${v55ExtraTags}`;
+                const sunoStylePrompt = rawStylePrompt.substring(0, styleMaxLen);
+
+                const sunoOutput = `=== [SUNO AI ${sunoVersion.toUpperCase()} PRO STYLE PROMPT (${sunoStylePrompt.length}/${styleMaxLen} CHARS)] ===
+${sunoStylePrompt}
+
+=== [SUNO AI ${sunoVersion.toUpperCase()} LYRICS BOX (NO-LYRICS STRUCTURE TAGS)] ===
+[Instrumental Track]
+[Engine: Suno AI ${sunoVersion.toUpperCase()} High Fidelity]
+[Key: ${key}]
+[Tempo: ${bpm}]
+${sunoVersion === 'v5.5' ? '[Audio Profile: Wide Stereo Field & Crisp 808 Bass Stem]\n' : ''}
+${structureText}`;
+
+                document.getElementById('sunoContent').innerText = sunoOutput;
+
+                // 2. Udio & MusicGen Format
+                const udioOutput = `=== [UDIO v1.5 / STABLE AUDIO PROMPT] ===
+Prompt Tags:
+${tagList.join(', ')}, Instrumental, ${bpm}, ${key}, Pitch-Bent Synth Lead, Distorted 808 Bass, Pitch-Shifted Vocal Chop Hooks, Atmospheric Synthwave Phonk Crossover, Reverb Echo, Mastering Quality
+
+Udio Settings:
+- Mode: Instrumental Only (Lyrics OFF)
+- Clarity & FX: High Sidechain, Crisp 808 Transients`;
+
+                document.getElementById('udioContent').innerText = udioOutput;
+
+                // 3. Midjourney / FLUX Thumbnail Prompt
+                const thumbPrompt = `YouTube Music Thumbnail, a mysterious figure in a dark hoodie with a glowing cyan neon mask standing next to a modified Japanese sports car drifting on a Tokyo highway at night, neon lights, rainy asphalt reflection, cyberpunk aesthetic, atmospheric fog, Alan Walker style mask, cinematic color grading, 8k resolution, photorealistic, hyper-detailed --ar 16:9 --style raw --v 6.0`;
+
+                document.getElementById('thumbContent').innerText = thumbPrompt;
+
+                // 4. YouTube Pack
+                const ytOutput = `=== [TOP 5 HIGH CTR YOUTUBE TITLES] ===
+1. [DRIFT PHONK] ALAN WALKER STYLE - NIGHT HIGHWAY (NO LYRICS BEAT) 🏎️⚡
+2. TOKYO DRIFT PHONK x MELODIC EDM MIX | Instrumental Vocal Chop Hits 🌌
+3. ALAN WALKER TYPE BEAT - FADED DRIFT [Aggressive 808 Phonk Instrumental] 🔥
+4. 1-HOUR ULTRA DRIFT PHONK | High Energy Tokyo Night Drive Music 🏎️💨
+5. MELODIC PHONK BEAT 2026 - Pitch Shift Chops & 808 Cowbell Drop ⚡
+
+=== [YOUTUBE DESCRIPTION TEMPLATE] ===
+🏎️⚡ High-Energy Drift Phonk x Alan Walker Style Instrumental Music!
+Perfect for Car Driving, Gaming, Gym Workout, and Midnight Drift.
+
+🎧 Track Info:
+- Genre: Drift Phonk / Melodic EDM Hybrid
+- Key: ${key}
+- BPM: ${bpm}
+- Vocals: Instrumental Vocal Chops (No Verse Lyrics)
+
+📌 SEO Hashtags:
+#DriftPhonk #AlanWalker #PhonkBeat #MelodicPhonk #TokyoDrift #SunoAI #InstrumentalBeat #CarMusic`;
+
+                document.getElementById('ytContent').innerText = ytOutput;
+                UI.showToast('✨ AI 프롬프트 패키지 생성 완료!');
+            },
+
+            resetSelection() {
+                selectedTags.clear();
+                UI.renderIndexMatrix();
+                UI.showToast('선택 항목이 초기화되었습니다.');
+            },
+
+            downloadTxtPackage() {
+                const suno = document.getElementById('sunoContent').innerText;
+                const udio = document.getElementById('udioContent').innerText;
+                const thumb = document.getElementById('thumbContent').innerText;
+                const yt = document.getElementById('ytContent').innerText;
+
+                const fullText = `════════════════════════════════════════════════════════════
+DRIFT PHONK & ALAN WALKER AI MUSIC CREATOR PACKAGE
+Generated Date: ${new Date().toLocaleString('ko-KR')}
+════════════════════════════════════════════════════════════
+
+1. SUNO AI PROMPT & STRUCTURE
+${suno}
+
+════════════════════════════════════════════════════════════
+2. UDIO / STABLE AUDIO PROMPT
+${udio}
+
+════════════════════════════════════════════════════════════
+3. MIDJOURNEY / FLUX THUMBNAIL PROMPT
+${thumb}
+
+════════════════════════════════════════════════════════════
+4. YOUTUBE TITLES & SEO PACKAGE
+${yt}
+`;
+
+                const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `drift_phonk_walker_package_${Date.now()}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+                UI.showToast('📥 크리에이터 패키지가 다운로드되었습니다!');
+            }
+        };
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+    </script>
+</body>
+</html>

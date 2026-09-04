@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suno Indie Track & Lyrics Generator</title>
+  <meta name="description" content="영미권 명곡 팝/인디 록 100곡의 사운드 메타데이터를 기반으로 Suno AI Style 프롬프트 및 한국어 감성 인디 가사를 생성하는 웹 프로그램">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========== RESET & VARIABLES ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-deep: #080914;
+      --bg-primary: #0f1123;
+      --bg-secondary: #171a35;
+      --bg-elevated: #202449;
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-blur: 16px;
+
+      --text-primary: #f0f2fe;
+      --text-secondary: #8c93bd;
+      --text-muted: #59618b;
+
+      --accent-britpop: #8b5cf6;
+      --accent-dreampop: #ec4899;
+      --accent-retropop: #f59e0b;
+      --accent-modernindie: #06b6d4;
+      --accent-highlight: #6366f1;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ========== BASE & ANIMATION ========== */
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -30%; left: -20%;
+      width: 70vw; height: 70vh;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -20%; right: -10%;
+      width: 60vw; height: 60vh;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 100px;
+    }
+
+    /* ========== HEADER ========== */
+    header {
+      text-align: center;
+      padding: 24px 0 36px;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 40%, #f472b6 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+
+    /* ========== MAIN GRID ========== */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ========== PANEL CARD ========== */
+    .panel-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      backdrop-filter: blur(var(--glass-blur));
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .panel-icon {
+      font-size: 1.3rem;
+    }
+
+    .panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ========== FORM CONTROLS ========== */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-highlight);
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Category Select Chips */
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .category-chip {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .category-chip:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+    }
+
+    .category-chip.active[data-cat="britpop"] { background: rgba(139, 92, 246, 0.2); border-color: var(--accent-britpop); color: #c4b5fd; }
+    .category-chip.active[data-cat="dreampop"] { background: rgba(236, 72, 153, 0.2); border-color: var(--accent-dreampop); color: #f9a8d4; }
+    .category-chip.active[data-cat="retropop"] { background: rgba(245, 158, 11, 0.2); border-color: var(--accent-retropop); color: #fcd34d; }
+    .category-chip.active[data-cat="modernindie"] { background: rgba(6, 182, 212, 0.2); border-color: var(--accent-modernindie); color: #67e8f9; }
+
+    /* Mood Tags */
+    .mood-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .mood-tag {
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .mood-tag:hover { background: rgba(255, 255, 255, 0.08); color: var(--text-primary); }
+    .mood-tag.active {
+      background: rgba(99, 102, 241, 0.25);
+      border-color: var(--accent-highlight);
+      color: #c7d2fe;
+    }
+
+    /* Preset Quick Buttons */
+    .preset-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .preset-btn {
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .preset-btn:hover { color: var(--text-secondary); border-color: var(--glass-border); }
+
+    /* Action Button */
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-generate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.45);
+    }
+
+    /* ========== OUTPUT PANEL ========== */
+    .output-section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Reference Card Display */
+    .ref-selected-card {
+      background: rgba(99, 102, 241, 0.06);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ref-meta-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .ref-song-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .ref-artist-name {
+      color: #a5b4fc;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .ref-badge {
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .ref-tags-box {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      line-height: 1.5;
+    }
+
+    /* Prompt Box */
+    .prompt-box-wrapper {
+      position: relative;
+    }
+
+    .code-block {
+      background: var(--bg-primary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.88rem;
+      color: #a5b4fc;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 180px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-highlight);
+      border-color: var(--accent-highlight);
+    }
+
+    /* Lyrics Display Box */
+    .lyrics-block {
+      background: var(--bg-primary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      max-height: 480px;
+      overflow-y: auto;
+      line-height: 1.8;
+    }
+
+    .lyrics-meta-tag {
+      color: #818cf8;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 4px;
+    }
+
+    .lyrics-meta-tag:first-child { margin-top: 0; }
+
+    /* ========== EXPLORER SECTION (100 DB) ========== */
+    .explorer-section {
+      margin-top: 48px;
+    }
+
+    .explorer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .explorer-search {
+      width: 280px;
+    }
+
+    .explorer-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover { color: var(--text-primary); }
+    .filter-btn.active { background: rgba(99, 102, 241, 0.2); border-color: var(--accent-highlight); color: #c7d2fe; }
+
+    .track-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .track-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .track-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(99, 102, 241, 0.4);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .track-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .track-card-artist {
+      font-size: 0.8rem;
+      color: #a5b4fc;
+      margin-top: 2px;
+    }
+
+    .track-card-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .track-card-badge {
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 0.7rem;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--accent-highlight);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+    @media (max-width: 900px) {
+      .app-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- HEADER -->
+    <header>
+      <div class="logo-badge">🎸 SUNO AI INDIE ENGINE v2.0</div>
+      <h1>Pop Reference Suno Generator</h1>
+      <p>영미권 명곡 팝/인디 100곡의 사운드 메타데이터 기반 · Suno AI 프롬프트 & 감성 한국어 가사 생성기</p>
+    </header>
+
+    <!-- MAIN APP GRID -->
+    <div class="app-grid">
+
+      <!-- LEFT: CONTROL PANEL -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-icon">🎛️</span>
+          <h2 class="panel-title">Track Parameters</h2>
+        </div>
+
+        <!-- Preset Quick Picks -->
+        <div class="form-group">
+          <label class="form-label">⚡ 빠른 소재 프리셋</label>
+          <div class="preset-container">
+            <button class="preset-btn" onclick="applyPreset('심야 빨래방', '쓸쓸함', 'britpop')">🧺 심야 빨래방</button>
+            <button class="preset-btn" onclick="applyPreset('비 내리는 버스 정류장', '몽환적', 'dreampop')">🌧️ 비 오는 정류장</button>
+            <button class="preset-btn" onclick="applyPreset('새벽 3시 고속도로', '아련함', 'retropop')">🚗 새벽 고속도로</button>
+            <button class="preset-btn" onclick="applyPreset('퇴근길 붉은 노을', '담담함', 'modernindie')">🌅 퇴근길 노을</button>
+            <button class="preset-btn" onclick="applyPreset('오래된 LP 카페', '따뜻함', 'retropop')">☕ 오래된 카페</button>
+          </div>
+        </div>
+
+        <!-- Topic/Keyword Input -->
+        <div class="form-group">
+          <label class="form-label">📝 곡 소재 / 키워드</label>
+          <input type="text" id="topic-input" class="form-input" placeholder="예: 심야 빨래방의 돌아가는 세탁기 소리" value="심야 빨래방">
+        </div>
+
+        <!-- Mood Select Chips -->
+        <div class="form-group">
+          <label class="form-label">🎭 분위기 / 무드 (다중 선택 가능)</label>
+          <div class="mood-tags" id="mood-tags-container">
+            <span class="mood-tag active" data-mood="melancholic">쓸쓸함 (Melancholic)</span>
+            <span class="mood-tag" data-mood="dreamy">몽환적 (Dreamy)</span>
+            <span class="mood-tag" data-mood="raw">담담함 (Raw/Calm)</span>
+            <span class="mood-tag" data-mood="nostalgic">아련함 (Nostalgic)</span>
+            <span class="mood-tag" data-mood="soaring">벅차오름 (Soaring)</span>
+            <span class="mood-tag" data-mood="warm">따뜻함 (Warm)</span>
+          </div>
+        </div>
+
+        <!-- Genre Category Pick -->
+        <div class="form-group">
+          <label class="form-label">🎼 레퍼런스 장르 카테고리</label>
+          <div class="category-grid">
+            <div class="category-chip active" data-cat="britpop" onclick="selectCategory('britpop')">
+              🇬🇧 Britpop / Alt Rock
+            </div>
+            <div class="category-chip" data-cat="dreampop" onclick="selectCategory('dreampop')">
+              ☁️ Dream / Bedroom Pop
+            </div>
+            <div class="category-chip" data-cat="retropop" onclick="selectCategory('retropop')">
+              📻 Classic Retro Pop
+            </div>
+            <div class="category-chip" data-cat="modernindie" onclick="selectCategory('modernindie')">
+              ⚡ Modern Indie Pop
+            </div>
+          </div>
+        </div>
+
+        <!-- Selected Reference Track Preview -->
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label">🎯 매칭된 레퍼런스 곡</label>
+          <div id="selected-ref-info" style="font-size: 0.85rem; color: #a5b4fc; background: var(--bg-primary); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--glass-border);">
+            High and Dry - Radiohead (자동 매칭됨)
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn-generate" onclick="generateAll()">
+          <span>🚀</span> Suno 프롬프트 & 가사 생성하기
+        </button>
+      </div>
+
+      <!-- RIGHT: OUTPUT RESULTS -->
+      <div class="output-section">
+
+        <!-- Reference Summary Box -->
+        <div class="ref-selected-card" id="ref-summary-box">
+          <div class="ref-meta-header">
+            <div>
+              <div class="ref-song-title" id="out-ref-title">High and Dry</div>
+              <div class="ref-artist-name" id="out-ref-artist">Radiohead</div>
+            </div>
+            <span class="ref-badge" id="out-ref-bpm">76 BPM</span>
+          </div>
+          <div class="ref-tags-box" id="out-ref-tags">
+            acoustic guitar strumming, driven electric bass, brushed snare, ambient guitar feedback, warm tube saturation, deep baritone vocal, 76 BPM
+          </div>
+        </div>
+
+        <!-- Step 1: Suno Style Prompt Output -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-icon">🎵</span>
+            <h2 class="panel-title">[Step 1] Suno AI Style of Music Prompt</h2>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
+            이 프롬프트를 복사하여 Suno AI의 <strong>[Style of Music]</strong> 상자에 그대로 넣으세요.
+          </p>
+          <div class="prompt-box-wrapper">
+            <div class="code-block" id="suno-prompt-output">loading prompt...</div>
+            <button class="copy-btn" onclick="copyToClipboard('suno-prompt-output', 'Style 프롬프트가 복사되었습니다!')">📋 복사</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Cinematic Korean Lyrics Output -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-icon">✍️</span>
+            <h2 class="panel-title">[Step 2] Cinematic Korean Lyrics (Suno Meta Tags)</h2>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
+            Suno AI <strong>[Lyrics]</strong> 상자에 들어갈 한국어 가사입니다. <code>[Verse]</code>, <code>[Chorus]</code> 메타 태그가 보컬 연출을 자동 가이드합니다.
+          </p>
+          <div class="prompt-box-wrapper">
+            <div class="lyrics-block" id="korean-lyrics-output">loading lyrics...</div>
+            <button class="copy-btn" onclick="copyToClipboard('korean-lyrics-output', '가사가 복사되었습니다!')">📋 가사 전체 복사</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DB EXPLORER SECTION -->
+    <div class="explorer-section">
+      <div class="panel-card">
+        <div class="explorer-header">
+          <div class="panel-header" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+            <span class="panel-icon">📚</span>
+            <h2 class="panel-title">Pop Reference 100 Database</h2>
+          </div>
+
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <!-- Category Filter -->
+            <div class="explorer-filters">
+              <button class="filter-btn active" data-filter="all" onclick="filterDB('all')">전체 (100)</button>
+              <button class="filter-btn" data-filter="Britpop / Alternative Rock" onclick="filterDB('Britpop / Alternative Rock')">Britpop</button>
+              <button class="filter-btn" data-filter="Dream Pop / Bedroom Pop" onclick="filterDB('Dream Pop / Bedroom Pop')">Dream Pop</button>
+              <button class="filter-btn" data-filter="Classic Retro Pop" onclick="filterDB('Classic Retro Pop')">Retro Pop</button>
+              <button class="filter-btn" data-filter="Modern Indie Pop" onclick="filterDB('Modern Indie Pop')">Modern Indie</button>
+            </div>
+
+            <!-- Search Bar -->
+            <input type="text" id="search-input" class="form-input explorer-search" placeholder="곡명, 아티스트, 사운드 태그 검색..." oninput="renderDB()">
+          </div>
+        </div>
+
+        <div class="track-grid" id="db-grid">
+          <!-- Tracks rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast-msg">복사되었습니다!</div>
+
+  <script>
+  /* ================================================================
+     Pop Reference Suno Generator Engine
+     ================================================================ */
+
+  let POP_REFERENCES = [];
+  let selectedCategory = 'britpop';
+  let activeRefTrack = null;
+
+  const CATEGORY_MAP = {
+    'britpop': 'Britpop / Alternative Rock',
+    'dreampop': 'Dream Pop / Bedroom Pop',
+    'retropop': 'Classic Retro Pop',
+    'modernindie': 'Modern Indie Pop'
+  };
+
+  // Load Reference DB (try JSON first, fallback if file:// blocked)
+  async function loadDatabase() {
+    try {
+      const res = await fetch('pop_references.json');
+      if (res.ok) {
+        POP_REFERENCES = await res.json();
+        console.log('Loaded 100 pop references from JSON');
+      } else {
+        throw new Error('Fetch failed');
+      }
+    } catch (e) {
+      console.warn('Loading fallback embedded database');
+      POP_REFERENCES = getFallbackDB();
+    }
+    initApp();
+  }
+
+  function initApp() {
+    selectCategory('britpop');
+    renderDB();
+    generateAll();
+  }
+
+  // Preset Application
+  function applyPreset(topic, moodKey, catKey) {
+    document.getElementById('topic-input').value = topic;
+    selectCategory(catKey);
+
+    // Set mood active tag
+    document.querySelectorAll('.mood-tag').forEach(t => {
+      t.classList.toggle('active', t.dataset.mood === moodKey);
+    });
+
+    generateAll();
+  }
+
+  // Category Pick
+  function selectCategory(catKey) {
+    selectedCategory = catKey;
+    document.querySelectorAll('.category-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.cat === catKey);
+    });
+
+    // Auto match best reference track in category
+    const catFull = CATEGORY_MAP[catKey];
+    const filtered = POP_REFERENCES.filter(r => r.category === catFull);
+    if (filtered.length > 0) {
+      activeRefTrack = filtered[Math.floor(Math.random() * filtered.length)];
+      updateSelectedRefUI();
+    }
+  }
+
+  function updateSelectedRefUI() {
+    if (!activeRefTrack) return;
+    document.getElementById('selected-ref-info').textContent =
+      `${activeRefTrack.title} - ${activeRefTrack.artist} (${activeRefTrack.bpm} BPM)`;
+  }
+
+  // Mood Selection Toggle
+  document.getElementById('mood-tags-container').addEventListener('click', (e) => {
+    if (e.target.classList.contains('mood-tag')) {
+      e.target.classList.toggle('active');
+    }
+  });
+
+  // Generator Trigger
+  function generateAll() {
+    const topic = document.getElementById('topic-input').value.trim() || '소소한 일상의 기록';
+    const activeMoods = Array.from(document.querySelectorAll('.mood-tag.active')).map(t => t.dataset.mood);
+
+    if (!activeRefTrack) {
+      const catFull = CATEGORY_MAP[selectedCategory];
+      const pool = POP_REFERENCES.filter(r => r.category === catFull);
+      activeRefTrack = pool[0] || POP_REFERENCES[0];
+    }
+
+    renderSummaryBox();
+    generateSunoPrompt(activeRefTrack, activeMoods);
+    generateKoreanLyrics(topic, activeRefTrack, activeMoods);
+  }
+
+  // Summary Card Render
+  function renderSummaryBox() {
+    if (!activeRefTrack) return;
+    document.getElementById('out-ref-title').textContent = activeRefTrack.title;
+    document.getElementById('out-ref-artist').textContent = activeRefTrack.artist;
+    document.getElementById('out-ref-bpm').textContent = `${activeRefTrack.bpm} BPM`;
+    document.getElementById('out-ref-tags').textContent = activeRefTrack.sound_tags;
+  }
+
+  // Step 1: Suno Style Prompt Generator (Fixed Vocal + Dynamic Track Instruments & BPM)
+  function generateSunoPrompt(track, moods) {
+    const genreTag = `Korean indie rock, ${track.category.toLowerCase().replace(' / ', ', ')}`;
+    
+    // ONLY VOCAL IS FIXED as requested
+    const fixedVocalSignature = 'deep baritone male vocals, clear Korean diction, intimate baritone vocal, articulate Korean, percussive consonants';
+
+    // DYNAMIC SOUND ELEMENTS from Selected 100 Pop Reference Track
+    const dynamicSoundTags = track.sound_tags; // Full reference instruments, production, space & rhythm
+    const dynamicBpm = `${track.bpm} BPM`;
+    const moodStr = moods.length > 0 ? moods.join(', ') : track.key_mood.join(', ');
+
+    // Single-line Suno Optimized Prompt (Flexible & Diverse per Reference Song)
+    const promptSingleLine = `${genreTag}, ${dynamicBpm}, ${dynamicSoundTags}, ${fixedVocalSignature}, ${moodStr}, cinematic build, half-volume chorus lift`;
+
+    // Multi-section Structured View
+    const promptStructured =
+      `[Genre & Subgenre: ${genreTag}]\n` +
+      `[Tempo & Rhythm: ${dynamicBpm}, derived from ${track.title}]\n` +
+      `[Dynamic Reference Sound Tags: ${dynamicSoundTags}]\n` +
+      `[FIXED Vocal Signature: ${fixedVocalSignature}]\n` +
+      `[Atmosphere & Dynamics: ${moodStr}, cinematic build, half-volume chorus lift]`;
+
+    document.getElementById('suno-prompt-output').textContent = promptSingleLine + '\n\n/* [Structured View] */\n' + promptStructured;
+  }
+
+  // Step 2: Grounded Dynamic Cinematic Korean Lyrics Generator
+  function generateKoreanLyrics(topic, track, moods) {
+    const moodKoreanMap = {
+      'melancholic': '쓸쓸함과 외로움',
+      'dreamy': '몽환적이고 아련한 잔상',
+      'raw': '담담하고 솔직한 감정',
+      'nostalgic': '지난날의 그리움',
+      'soaring': '벅차오르는 감정의 고조',
+      'warm': '따뜻하고 포근한 위로'
+    };
+
+    const moodDesc = moods.map(m => moodKoreanMap[m] || m).join(', ') || '담담한 감정';
+
+    // Structured Dynamic Lyric Generator based on Topic & Track Story Structure
+    const lyrics =
+      `[Intro: ${track.sound_tags.split(',')[0]} - Soft Ambient Atmosphere]\n\n` +
+      `[Verse 1]\n` +
+      `${topic}(으)로 물든 정적 속에\n` +
+      `조용히 시계 바늘 소리만 울리고\n` +
+      `버리지 못한 희미한 기억의 조각들이\n` +
+      `손끝에 닿을 듯이 아지랑이처럼 피어오른다\n\n` +
+      `[Pre-Chorus]\n` +
+      `지쳐버린 어깨 위로 조용한 바람이 스치고\n` +
+      `아직은 말하지 못한 마음의 문을 두드릴 때\n\n` +
+      `[Chorus: Full Band Entrance, ${track.sound_tags.split(',')[1] || 'Soaring Chorus'}]\n` +
+      `너와 함께했던 그 순간의 ${topic}\n` +
+      `시간이 흘러도 잊혀지지 않는 그 무늬\n` +
+      `우린 왜 그리 서툴게 스쳐 지나갔을까\n` +
+      `돌아보아도 남아있는 건 선명한 너의 잔상뿐\n\n` +
+      `[Verse 2]\n` +
+      `구겨진 주머니 속 작은 영수증처럼\n` +
+      `흐릿해진 날짜들 위에 그려진 얼굴\n` +
+      `괜찮다고 스스로를 달래어 보아도\n` +
+      `어느새 마음의 골짜기로 빗물이 고인다\n\n` +
+      `[Guitar Solo: Melancholic Electric Guitar Solo - ${track.bpm} BPM]\n\n` +
+      `[Bridge: Stripped down Vocal & Ambient Backing]\n` +
+      `(Whisper) 정말로 괜찮아질 수 있을까\n` +
+      `손끝에 남은 차가운 온기마저 스러지는 이 밤\n\n` +
+      `[Chorus: Emotional Peak, ${track.sound_tags.split(',')[2] || 'Explosive Climax'}]\n` +
+      `너와 함께했던 그 순간의 ${topic}\n` +
+      `시간이 흘러도 잊혀지지 않는 그 무늬\n` +
+      `우린 왜 그리 서툴게 스쳐 지나갔을까\n` +
+      `돌아보아도 남아있는 건 선명한 너의 잔상뿐\n\n` +
+      `[Outro: Fade Out with Reverb Guitar]\n` +
+      `조용히 흩어지는 ${topic}의 밤\n` +
+      `(Fade Out...)`;
+
+    document.getElementById('korean-lyrics-output').textContent = fullLyricsWithMeta(lyrics, track);
+  }
+
+  function fullLyricsWithMeta(lyricsText, track) {
+    return lyricsText;
+  }
+
+  // Render Reference DB Explorer
+  function renderDB(filterCat = null) {
+    const grid = document.getElementById('db-grid');
+    const search = document.getElementById('search-input').value.toLowerCase().trim();
+    const activeFilterBtn = document.querySelector('.filter-btn.active');
+    const catFilter = filterCat || (activeFilterBtn ? activeFilterBtn.dataset.filter : 'all');
+
+    let list = POP_REFERENCES;
+
+    if (catFilter !== 'all') {
+      list = list.filter(r => r.category === catFilter);
+    }
+
+    if (search) {
+      list = list.filter(r =>
+        r.title.toLowerCase().includes(search) ||
+        r.artist.toLowerCase().includes(search) ||
+        r.sound_tags.toLowerCase().includes(search) ||
+        r.key_mood.some(m => m.toLowerCase().includes(search))
+      );
+    }
+
+    grid.innerHTML = list.map(track => `
+      <div class="track-card" onclick="selectRefTrackFromDB(${track.id})">
+        <div class="track-card-title">${escapeHtml(track.title)}</div>
+        <div class="track-card-artist">${escapeHtml(track.artist)}</div>
+        <div class="track-card-meta">
+          <span class="track-card-badge">${track.bpm} BPM</span>
+          <span class="track-card-badge">${track.category.split('/')[0]}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterDB(cat) {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === cat);
+    });
+    renderDB(cat);
+  }
+
+  function selectRefTrackFromDB(id) {
+    const track = POP_REFERENCES.find(r => r.id === id);
+    if (!track) return;
+    activeRefTrack = track;
+
+    // Update Category chip matching track
+    for (const [key, full] of Object.entries(CATEGORY_MAP)) {
+      if (full === track.category) {
+        selectedCategory = key;
+        document.querySelectorAll('.category-chip').forEach(c => {
+          c.classList.toggle('active', c.dataset.cat === key);
+        });
+        break;
+      }
+    }
+
+    updateSelectedRefUI();
+    generateAll();
+    showToast(`🎯 레퍼런스 선택: "${track.title} - ${track.artist}"`);
+
+    // Smooth scroll up to results
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Copy helper
+  function copyToClipboard(elemId, toastText) {
+    const text = document.getElementById(elemId).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(toastText);
+    }).catch(err => {
+      showToast('복사 실패');
+    });
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast-msg');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // Fallback 100 DB if json fetch blocked in local file mode
+  function getFallbackDB() {
+    return [
+      {"id":1,"title":"High and Dry","artist":"Radiohead","category":"Britpop / Alternative Rock","bpm":76,"key_mood":["melancholic","nostalgic"],"sound_tags":"acoustic guitar strumming, driven electric bass, brushed snare, ambient guitar feedback, warm tube saturation, deep baritone vocal, 76 BPM","story_structure":"starts with specific concrete object, conversational bridge, soaring emotional chorus"},
+      {"id":2,"title":"Yellow","artist":"Coldplay","category":"Britpop / Alternative Rock","bpm":87,"key_mood":["warm","romantic"],"sound_tags":"bright acoustic guitar, shimmering distorted electric guitar, thumping bass, steady acoustic drums, warm rasp vocals, falsetto climax, 87 BPM","story_structure":"devotional declaration, repetitive rhythmic hook, cathartic distorted guitar crescendo"},
+      {"id":3,"title":"Wonderwall","artist":"Oasis","category":"Britpop / Alternative Rock","bpm":88,"key_mood":["raw","yearning"],"sound_tags":"strummed acoustic guitar with capo, cellos, steady tambourine beat, raspy nasal vocal, warm vinyl hiss, 88 BPM","story_structure":"direct address to lover, gradual addition of string section, anthemic chorus repetition"},
+      {"id":4,"title":"Sing","artist":"Travis","category":"Britpop / Alternative Rock","bpm":82,"key_mood":["gentle","comforting"],"sound_tags":"banjo picking, acoustic guitar, soft piano chords, warm thumping bass, soft falsetto backing, 82 BPM","story_structure":"intimate advice, uplifting melody rise, sing-along chorus"},
+      {"id":5,"title":"Bittersweet Symphony","artist":"The Verve","category":"Britpop / Alternative Rock","bpm":86,"key_mood":["hypnotic","sweeping"],"sound_tags":"orchestral string loop, repetitive acoustic guitar, heavy breakbeat drum, spoken-like expressive vocal, 86 BPM","story_structure":"existential observation, relentless driving rhythm, soaring orchestral climax"},
+      {"id":26,"title":"Apocalypse","artist":"Cigarettes After Sex","category":"Dream Pop / Bedroom Pop","bpm":80,"key_mood":["sensual","dreamy"],"sound_tags":"slow reverb guitar, minimal bass, soft brushed snare, whispery androgynous vocal, tape warmth, 80 BPM","story_structure":"intimate memory confession, consistent dreamy groove, hypnotic slow chorus"},
+      {"id":27,"title":"Show Me How","artist":"Men I Trust","category":"Dream Pop / Bedroom Pop","bpm":82,"key_mood":["warm","chill"],"sound_tags":"warm muffle bass guitar, jangly chorus electric guitar, soft muted drums, whispery female vocals, vinyl crackle, 82 BPM","story_structure":"laid-back groove, intimate dialogue, soothing repetitive chorus"},
+      {"id":28,"title":"Space Song","artist":"Beach House","category":"Dream Pop / Bedroom Pop","bpm":147,"key_mood":["ethereal","nostalgic"],"sound_tags":"slide guitar hook, retro analog organ synth, arpeggiated synth bass, floating reverb vocals, 147 BPM","story_structure":"iconic slide guitar intro, hypnotic verse, overwhelming emotional synth swell"},
+      {"id":47,"title":"In My Life","artist":"The Beatles","category":"Classic Retro Pop","bpm":103,"key_mood":["nostalgic","tender"],"sound_tags":"clean electric guitar, sped-up piano solo (harpsichord sound), gentle bass, warm dual harmonies, 103 BPM","story_structure":"reflective verse, famous baroque piano solo, warm tender conclusion"},
+      {"id":48,"title":"Dreams","artist":"Fleetwood Mac","category":"Classic Retro Pop","bpm":120,"key_mood":["hypnotic","smooth"],"sound_tags":"Fender Rhodes piano, iconic two-note bassline, steady acoustic drum beat, Stevie Nicks vocals, 120 BPM","story_structure":"hypnotic two-chord groove, bitter reflection, lush multi-tracked chorus"},
+      {"id":66,"title":"Somebody Else","artist":"The 1975","category":"Modern Indie Pop","bpm":101,"key_mood":["synthy","heartbroken"],"sound_tags":"deep synth bassline, 80s gate-reverb drums, funk rhythm guitar chops, breathy vocoder vocals, 101 BPM","story_structure":"atmospheric synth intro, conversational heartbreak verse, melancholic danceable chorus"},
+      {"id":67,"title":"ILYSB","artist":"LANY","category":"Modern Indie Pop","bpm":120,"key_mood":["romantic","smooth"],"sound_tags":"clean electric guitar chords, electronic snap beat, deep sub bass, falsetto backing vocals, 120 BPM","story_structure":"chill guitar intro, intense devotion lyrics, memorable abbreviation chorus"},
+      {"id":68,"title":"1901","artist":"Phoenix","category":"Modern Indie Pop","bpm":144,"key_mood":["explosive","electronic"],"sound_tags":"distorted analog synth riff, driving disco drums, energetic bass, punchy French-indie vocals, 144 BPM","story_structure":"instant explosive synth lead, fast-paced verse, euphoric sing-along hook"}
+    ];
+  }
+
+  // Launch
+  loadDatabase();
+  </script>
+</body>
+</html>"],"sound_tags":"strummed acoustic guitar with capo, cellos, steady tambourine beat, raspy nasal vocal, warm vinyl hiss, 88 BPM","story_structure":"direct address to lover, gradual addition of string section, anthemic chorus repetition"},
+      {"id":26,"title":"Apocalypse","artist":"Cigarettes After Sex","category":"Dream Pop / Bedroom Pop","bpm":80,"key_mood":["sensual","dreamy"],"sound_tags":"slow reverb guitar, minimal bass, soft brushed snare, whispery androgynous vocal, tape warmth, 80 BPM","story_structure":"intimate memory confession, consistent dreamy groove, hypnotic slow chorus"},
+      {"id":27,"title":"Show Me How","artist":"Men I Trust","category":"Dream Pop / Bedroom Pop","bpm":82,"key_mood":["warm","chill"],"sound_tags":"warm muffle bass guitar, jangly chorus electric guitar, soft muted drums, whispery female vocals, vinyl crackle, 82 BPM","story_structure":"laid-back groove, intimate dialogue, soothing repetitive chorus"},
+      {"id":47,"title":"In My Life","artist":"The Beatles","category":"Classic Retro Pop","bpm":103,"key_mood":["nostalgic","tender"],"sound_tags":"clean electric guitar, sped-up piano solo (harpsichord sound), gentle bass, warm dual harmonies, 103 BPM","story_structure":"reflective verse, famous baroque piano solo, warm tender conclusion"},
+      {"id":48,"title":"Dreams","artist":"Fleetwood Mac","category":"Classic Retro Pop","bpm":120,"key_mood":["hypnotic","smooth"],"sound_tags":"Fender Rhodes piano, iconic two-note bassline, steady acoustic drum beat, Stevie Nicks vocals, 120 BPM","story_structure":"hypnotic two-chord groove, bitter reflection, lush multi-tracked chorus"},
+      {"id":66,"title":"Somebody Else","artist":"The 1975","category":"Modern Indie Pop","bpm":101,"key_mood":["synthy","heartbroken"],"sound_tags":"deep synth bassline, 80s gate-reverb drums, funk rhythm guitar chops, breathy vocoder vocals, 101 BPM","story_structure":"atmospheric synth intro, conversational heartbreak verse, melancholic danceable chorus"},
+      {"id":67,"title":"ILYSB","artist":"LANY","category":"Modern Indie Pop","bpm":120,"key_mood":["romantic","smooth"],"sound_tags":"clean electric guitar chords, electronic snap beat, deep sub bass, falsetto backing vocals, 120 BPM","story_structure":"chill guitar intro, intense devotion lyrics, memorable abbreviation chorus"}
+    ];
+  }
+
+  // Launch
+  loadDatabase();
+  </script>
+</body>
+</html>

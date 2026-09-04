@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="유튜브 100만 구독자를 위한 Suno AI 컨트리음악 프롬프트, 영어 가사, 썸네일 프롬프트 & 유튜브 패키지 정밀 제어 자동 생성기">
+    <title>🤠 Suno Country Song Generator Pro v2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN SYSTEM — Vintage Country + Pro Creator Dark Mode
+           ═══════════════════════════════════════════ */
+        :root {
+            --bg-primary: #0a0a14;
+            --bg-secondary: #141428;
+            --bg-tertiary: #19223c;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --surface-active: rgba(212, 163, 115, 0.15);
+            --border: rgba(255, 255, 255, 0.09);
+            --border-active: rgba(212, 163, 115, 0.5);
+            --gold: #d4a373;
+            --gold-light: #f3d5b5;
+            --gold-bright: #ffc107;
+            --gold-glow: rgba(212, 163, 115, 0.35);
+            --red-yt: #ff0000;
+            --red-yt-glow: rgba(255, 0, 0, 0.3);
+            --text-primary: #fdfbf7;
+            --text-secondary: rgba(253, 251, 247, 0.7);
+            --text-muted: rgba(253, 251, 247, 0.45);
+            --error: #ff5252;
+            --error-bg: rgba(255, 82, 82, 0.12);
+            --success: #00e676;
+            --success-bg: rgba(0, 230, 118, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 24px var(--gold-glow);
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(165deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── App Container ── */
+        .app-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Stars Background ── */
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: var(--gold-light);
+            border-radius: 50%;
+            animation: twinkle var(--dur) ease-in-out infinite;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--max-opacity); transform: scale(1.2); }
+        }
+
+        /* ═══════════════════════════════════════════
+           GLOBAL UNIFIED HEADER NAVIGATION BAR
+           ═══════════════════════════════════════════ */
+        .global-header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .brand-icon { font-size: 24px; }
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .brand-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(212, 163, 115, 0.2);
+            color: #d4a373;
+            border: 1px solid rgba(212, 163, 115, 0.4);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .nav-link.active {
+            color: #121224;
+            background: linear-gradient(135deg, #d4a373, #f3d5b5);
+            font-weight: 700;
+            box-shadow: 0 0 16px rgba(212, 163, 115, 0.4);
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-suno {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-suno:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        @media (max-width: 860px) {
+            .nav-container { flex-direction: column; align-items: stretch; }
+            .nav-links { overflow-x: auto; white-space: nowrap; justify-content: start; }
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            padding: 36px 0 28px;
+        }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: rgba(255, 0, 0, 0.12);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff4d4d;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .header-icon {
+            font-size: 56px;
+            display: block;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 16px rgba(212, 163, 115, 0.5));
+            animation: float 3.5s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(30px, 5vw, 48px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        .header .subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold-light);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .card-title-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon { font-size: 22px; }
+
+        /* ── Artist Presets Bar ── */
+        .preset-bar {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            scroll-behavior: smooth;
+        }
+        .preset-chip {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(212, 163, 115, 0.08);
+            border: 1px solid rgba(212, 163, 115, 0.25);
+            border-radius: 24px;
+            color: var(--gold-light);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .preset-chip:hover {
+            background: rgba(212, 163, 115, 0.2);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--gold-glow);
+        }
+
+        /* ── API Row ── */
+        .api-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+        .provider-select, .api-key-input, .custom-select {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: var(--font-body);
+            transition: var(--transition);
+        }
+        .provider-select:focus, .api-key-input:focus, .custom-select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+        .api-key-wrapper {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .api-key-input { width: 100%; padding-right: 42px; }
+        .toggle-visibility {
+            position: absolute; right: 10px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            color: var(--text-muted); cursor: pointer; font-size: 18px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--gold);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), #c0935a);
+            border-color: transparent;
+            color: #121224;
+            font-weight: 800;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            box-shadow: var(--shadow-glow);
+        }
+        .btn-yt {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            border-color: transparent;
+            color: #fff;
+            font-weight: 700;
+        }
+        .btn-yt:hover {
+            background: linear-gradient(135deg, #ff3333, #ff0000);
+            box-shadow: 0 0 20px var(--red-yt-glow);
+        }
+
+        .api-status {
+            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+        .api-status.success { display: inline-flex; background: var(--success-bg); color: var(--success); border: 1px solid rgba(0, 230, 118, 0.3); }
+        .api-status.error { display: inline-flex; background: var(--error-bg); color: var(--error); border: 1px solid rgba(255, 82, 82, 0.3); }
+
+        /* ── Options Grid ── */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+        }
+
+        .chip-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .chip, .checkbox-chip {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .chip:hover, .checkbox-chip:hover {
+            background: var(--surface-hover);
+            border-color: rgba(212, 163, 115, 0.4);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+        .chip.selected, .checkbox-chip.selected {
+            background: var(--surface-active);
+            border-color: var(--gold);
+            color: var(--gold-light);
+            box-shadow: 0 0 14px var(--gold-glow);
+            font-weight: 600;
+        }
+        .chip .emoji, .checkbox-chip .emoji { margin-right: 5px; }
+
+        /* ── Pro Precision Control Panel ── */
+        .pro-toggle-header {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            background: rgba(212, 163, 115, 0.05);
+            border: 1px dashed rgba(212, 163, 115, 0.3);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            transition: var(--transition);
+        }
+        .pro-toggle-header:hover {
+            background: rgba(212, 163, 115, 0.1);
+            border-color: var(--gold);
+        }
+        .pro-toggle-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gold-light);
+        }
+        .pro-body {
+            display: none;
+            padding-top: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        .pro-body.open { display: block; }
+
+        .pro-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .pro-field label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .custom-textarea {
+            width: 100%;
+            min-height: 72px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            padding: 12px 14px;
+            font-size: 14px;
+            font-family: var(--font-body);
+            resize: vertical;
+            transition: var(--transition);
+        }
+        .custom-textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+        }
+
+        /* ── History Library & Story Generator ── */
+        .btn-story-random {
+            background: linear-gradient(135deg, rgba(212, 163, 115, 0.15), rgba(243, 213, 181, 0.25));
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            font-weight: 700;
+            font-size: 12.5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-story-random:hover {
+            background: var(--gold);
+            color: #121224;
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+        .history-section {
+            margin-top: 32px;
+        }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            gap: 12px;
+        }
+        .history-item:hover {
+            border-color: var(--gold);
+            background: rgba(212, 163, 115, 0.08);
+        }
+        .history-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+        .history-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .history-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .history-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        /* ── Generate Buttons ── */
+        .generate-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 32px 0;
+            flex-wrap: wrap;
+        }
+        .btn-generate {
+            padding: 16px 44px;
+            font-size: 17px;
+            border-radius: var(--radius-md);
+        }
+        .btn-random {
+            padding: 16px 36px;
+            font-size: 17px;
+            border-radius: var(--radius-md);
+        }
+
+        /* ── Output Tabs & Cards ── */
+        .output-section {
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+        .output-section.visible { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text-primary); }
+        .tab-btn.active {
+            color: var(--gold-light);
+            border-bottom-color: var(--gold);
+        }
+        .tab-btn.yt-tab.active {
+            color: #ff4d4d;
+            border-bottom-color: #ff0000;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .output-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text-primary);
+            min-height: 60px;
+            position: relative;
+        }
+        .output-box .label {
+            position: absolute; top: -10px; left: 14px;
+            background: var(--bg-secondary);
+            padding: 0 8px; font-size: 11px;
+            font-family: var(--font-body);
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px; font-weight: 700;
+        }
+        .output-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ── Loading Overlay ── */
+        .loading-overlay {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 56px 24px;
+            text-align: center;
+        }
+        .loading-overlay.visible { display: flex; }
+        .loading-spinner {
+            width: 52px; height: 52px;
+            border: 4px solid var(--border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Toast ── */
+        .toast-container {
+            position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .toast {
+            padding: 12px 20px; border-radius: var(--radius-sm);
+            font-size: 14px; font-weight: 500;
+            display: flex; align-items: center; gap: 8px;
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .toast.success { background: var(--success-bg); border: 1px solid rgba(0, 230, 118, 0.4); color: var(--success); }
+        .toast.error { background: var(--error-bg); border: 1px solid rgba(255, 82, 82, 0.4); color: var(--error); }
+        .toast.info { background: rgba(52, 152, 219, 0.15); border: 1px solid rgba(52, 152, 219, 0.4); color: #3498db; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastOut { to { opacity: 0; transform: translateX(40px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .error-alert {
+            display: none; background: var(--error-bg); border: 1px solid rgba(255, 82, 82, 0.3);
+            border-radius: var(--radius-md); padding: 16px 20px; color: var(--error); font-size: 14px;
+        }
+        .error-alert.visible { display: flex; align-items: flex-start; gap: 10px; }
+
+        .provider-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .provider-badge.gemini { background: rgba(66, 133, 244, 0.2); color: #4285f4; border: 1px solid rgba(66, 133, 244, 0.4); }
+        .provider-badge.deepseek { background: rgba(0, 210, 190, 0.18); color: #00d2be; border: 1px solid rgba(0, 210, 190, 0.4); }
+
+        .footer { text-align: center; padding: 40px 0 0; color: var(--text-muted); font-size: 13px; }
+
+        /* ── Top Navigation Bar ── */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(20, 20, 40, 0.7);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            color: var(--gold-light);
+            font-size: 15px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+        .nav-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-btn.active {
+            color: var(--gold-bright);
+            background: rgba(212, 163, 115, 0.15);
+            border-color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="global-header">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="brand-icon">🎵</span>
+            <div>
+                <span class="brand-title">SUNO AI PROMPT STUDIO</span>
+                <span class="brand-badge">PRO v2.5</span>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">
+                <span>🤠</span> Country Pro
+            </a>
+            <a href="cyber_lofi.html" class="nav-link">
+                <span>🌧️</span> Cyber Rain Lofi
+            </a>
+            <a href="dev_focus.html" class="nav-link">
+                <span>💻</span> Dev Deep Focus
+            </a>
+            <a href="phonk_walker.html" class="nav-link">
+                <span>🏎️</span> Drift Phonk & EDM
+            </a>
+        </div>
+        <div class="nav-actions">
+            <a href="https://suno.com" target="_blank" rel="noopener" class="btn-suno">
+                <span>🚀 Launch Suno AI</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="app-container">
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="header">
+        <div class="header-badge">🔥 Suno v5.5 Pro Engine Ready & 1M Creator Suite</div>
+        <span class="header-icon">🤠</span>
+        <h1>Suno Country Song Generator Pro</h1>
+        <p class="subtitle">"Your Nashville AI Hitmaker & YouTube Creator Suite (Suno v5.5 Ready)"</p>
+    </header>
+
+    <!-- ═══ ARTIST PRESETS BAR ═══ -->
+    <div class="preset-bar">
+        <div class="preset-chip" onclick="UI.applyPreset('wallen')">🤠 Morgan Wallen Style</div>
+        <div class="preset-chip" onclick="UI.applyPreset('combs')">🍺 Luke Combs Style</div>
+        <div class="preset-chip" onclick="UI.applyPreset('bryan')">🌾 Zach Bryan Style</div>
+        <div class="preset-chip" onclick="UI.applyPreset('stapleton')">🎸 Chris Stapleton Style</div>
+        <div class="preset-chip" onclick="UI.applyPreset('lainey')">👖 Lainey Wilson Funk</div>
+        <div class="preset-chip" onclick="UI.applyPreset('cody')">🐴 Cody Johnson Heartland</div>
+        <div class="preset-chip" onclick="UI.applyPreset('taylor')">🪕 Taylor Swift Folk</div>
+        <div class="preset-chip" onclick="UI.applyPreset('aldean')">🏎️ Jason Aldean Rock</div>
+        <div class="preset-chip" onclick="UI.applyPreset('musgraves')">🌸 Kacey Musgraves Style</div>
+        <div class="preset-chip" onclick="UI.applyPreset('dolly')">👑 Dolly Parton Bluegrass</div>
+        <div class="preset-chip" onclick="UI.applyPreset('childers')">🏔️ Tyler Childers Roots</div>
+        <div class="preset-chip" onclick="UI.applyPreset('cash')">🎻 Johnny Cash Storyteller</div>
+    </div>
+
+    <!-- ═══ API SETTINGS ═══ -->
+    <section class="card" id="apiCard">
+        <div class="card-title">
+            <div class="card-title-left"><span class="icon">🔑</span> AI 프로바이더 & API 키 설정</div>
+        </div>
+        <div class="api-row">
+            <select class="provider-select" id="providerSelect">
+                <option value="gemini">🔵 Google Gemini (2.0 Flash)</option>
+                <option value="deepseek">🟢 DeepSeek (V3 Chat)</option>
+            </select>
+            <div class="api-key-wrapper">
+                <input type="password" class="api-key-input" id="apiKeyInput" placeholder="API 키를 입력하세요...">
+                <button class="toggle-visibility" id="toggleKey" title="키 표시/숨기기">👁️</button>
+            </div>
+            <button class="btn" id="btnTestApi">✅ 테스트</button>
+            <button class="btn" id="btnSaveApi">💾 저장</button>
+            <span class="api-status" id="apiStatus"></span>
+        </div>
+        <div style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+            💡 API 키는 사용자 브라우저에만 저장됩니다.
+            <span id="providerHint">Gemini 키 발급: <a href="https://aistudio.google.com/apikey" target="_blank" style="color: var(--gold);">Google AI Studio</a></span>
+        </div>
+    </section>
+
+    <!-- ═══ PRO PRECISION CONTROL PANEL (TOGGLE) ═══ -->
+    <section class="card">
+        <div class="pro-toggle-header" id="proToggleHeader">
+            <div class="pro-toggle-title">
+                <span>🎛️ Suno 프롬프트 정밀 제어 (Precision Controls)</span>
+                <span style="font-size: 11px; background: rgba(212,163,115,0.2); padding: 2px 8px; border-radius: 10px; color: var(--gold-light);">PRO</span>
+            </div>
+            <span id="proToggleIcon">▼</span>
+        </div>
+
+        <div class="pro-body" id="proBody">
+            <div class="pro-row">
+                <div class="pro-field">
+                    <label>🔥 Suno AI 엔진 버전 (Suno Version)</label>
+                    <select class="custom-select" id="proSunoVersion" style="width:100%; border-color: var(--gold); background: rgba(212, 163, 115, 0.15); font-weight: 700;">
+                        <option value="v5.5" selected>🔥 Suno AI v5.5 Pro Engine (최신 v5.5 HD 오디오 & 250자 확장)</option>
+                        <option value="v5.0">⚡ Suno AI v5.0 Engine (v5 스테레오 사운드)</option>
+                        <option value="v4.0">🚀 Suno AI v4.0 Engine (고해상도 음질)</option>
+                        <option value="v3.5">🎧 Suno AI v3.5 Engine (클래식 모드)</option>
+                    </select>
+                </div>
+                <div class="pro-field">
+                    <label>🎚️ 프로덕션 & 믹싱 텍스처 (Texture)</label>
+                    <select class="custom-select" id="proTexture" style="width:100%;">
+                        <option value="">기본 (Auto Mastered)</option>
+                        <option value="Studio HD Clean, Modern Nashville Mixing">Studio HD Clean (현대적 깔끔한 믹싱)</option>
+                        <option value="Vintage 1970s Warm Tape Warmth, Analog Vinyl feel">Vintage 1970s Vinyl (따뜻한 아날로그 톤)</option>
+                        <option value="Vintage 1990s Golden Era Nashville Analog Sound">1990s Golden Era (90년대 내쉬빌 내추럴)</option>
+                        <option value="Live performance at Grand Ole Opry, Crowd atmosphere">Grand Ole Opry Live (라이브 홀 울림)</option>
+                        <option value="Raw Acoustic Porch Session, Intimate Warm Reverb">Raw Acoustic Porch (소박한 포치 어쿠스틱)</option>
+                        <option value="Stadium Country Rock Anthem, Huge Wall of Sound">Stadium Anthem (웅장한 스타디움 믹스)</option>
+                        <option value="Dusty Desert Western Film Soundtrack, Cinematic Reverb">Dusty Western Film (서부 영화 원음 시네마틱)</option>
+                    </select>
+                </div>
+                <div class="pro-field">
+                    <label>🚫 네거티브 프롬프트 (제외할 요소)</label>
+                    <select class="custom-select" id="proNegative" style="width:100%;">
+                        <option value="">없음</option>
+                        <option value="No autotune, No electronic drums, No synth bass">전자음/오토튠 완전 제외</option>
+                        <option value="No heavy electric guitar, No aggressive rock drums">어쿠스틱 전용 (드럼/일렉기타 제외)</option>
+                        <option value="No rap vocal, No pop beat, Pure roots sound">팝/랩 요소 완전 제외</option>
+                        <option value="No modern synth, No polished pop vocals, Pure traditional twang">모던 팝 스무스 보컬 제외 (순수 픽킹)</option>
+                    </select>
+                </div>
+                <div class="pro-field">
+                    <label>🎸 간주 솔로 브레이크 (Instrumental Solo)</label>
+                    <select class="custom-select" id="proSolo" style="width:100%;">
+                        <option value="[Guitar Solo]">기타 솔로 ([Guitar Solo])</option>
+                        <option value="[Fiddle Solo]">피들/바이올린 솔로 ([Fiddle Solo])</option>
+                        <option value="[Pedal Steel Solo]">페달 스틸 기타 솔로 ([Pedal Steel Solo])</option>
+                        <option value="[Banjo Breakdown]">밴조 브레이크다운 ([Banjo Breakdown])</option>
+                        <option value="[Harmonica Solo]">하모니카 솔로 ([Harmonica Solo])</option>
+                        <option value="[Dobro Slide Solo]">도브로 슬라이드 솔로 ([Dobro Slide Solo])</option>
+                    </select>
+                </div>
+                <div class="pro-field">
+                    <label>🎼 곡의 조성 & 스케일 (Key & Scale)</label>
+                    <select class="custom-select" id="proKey" style="width:100%;">
+                        <option value="">자동 조율 (Auto Key)</option>
+                        <option value="Key: E Major (Bright, Classic Country Energy)">E Major (밝고 힘찬 클래식 Key)</option>
+                        <option value="Key: A Minor (Deep Melancholic, Emotional Heartbreak)">A Minor (슬프고 우울한 발라드 Key)</option>
+                        <option value="Key: G Major (Warm Acoustic Porch Vibe)">G Major (따뜻하고 편안한 어쿠스틱 Key)</option>
+                        <option value="Key: D Major (Driving Highway Country Rock)">D Major (신나는 하이웨이 록 Key)</option>
+                    </select>
+                </div>
+                <div class="pro-field">
+                    <label>🔀 가사 서사 구조 & 라임 (Lyric Structure)</label>
+                    <select class="custom-select" id="proLyricStructure" style="width:100%;">
+                        <option value="Standard Storytelling with Catchy Chorus">표준 서사 스토리텔링 (Verse-Chorus-Bridge)</option>
+                        <option value="AABB Rhyme Scheme, Deep Nostalgic Memories">AABB 라임 (아련한 추억 회상형)</option>
+                        <option value="ABAB Rhyme Scheme, High-Energy Country Anthem">ABAB 라임 (신나는 라이브 파티형)</option>
+                        <option value="Include Spoken Word Intro, Poetic Cinematic Story">스포큰 워드 인트로 포함 (시적 영화 서사)</option>
+                    </select>
+                </div>
+                <div class="pro-field">
+                    <label>🖼️ 미드저니/플럭스 썸네일 화풍 (Thumbnail Art Style)</label>
+                    <select class="custom-select" id="proThumbStyle" style="width:100%;">
+                        <option value="Cinematic 35mm Vintage Film Grain Photography">🎬 35mm 레트로 필름 영화 (Vintage Film)</option>
+                        <option value="Classic Nashville Oil Painting Art Style">🎨 클래식 유화 화풍 (Classic Oil Painting)</option>
+                        <option value="Photorealistic 4K Golden Hour Sunset Photography">📸 4K 극실사 석양 스냅 (Photorealistic 4K)</option>
+                        <option value="Cinematic Cyberpunk Country Night with Neon Lights">🌌 네온 시네마틱 카우보이 (Cyberpunk Night)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ OPTIONS PANEL ═══ -->
+    <div class="options-grid">
+
+        <!-- Sub-genre -->
+        <section class="card">
+            <div class="card-title"><div class="card-title-left"><span class="icon">🎸</span> 서브장르</div></div>
+            <div class="chip-group" id="subgenreGroup" data-category="subgenre"></div>
+        </section>
+
+        <!-- Theme -->
+        <section class="card">
+            <div class="card-title"><div class="card-title-left"><span class="icon">🎭</span> 테마 / 주제</div></div>
+            <div class="chip-group" id="themeGroup" data-category="theme"></div>
+        </section>
+
+        <!-- Mood -->
+        <section class="card">
+            <div class="card-title"><div class="card-title-left"><span class="icon">🌤️</span> 분위기 / 무드</div></div>
+            <div class="chip-group" id="moodGroup" data-category="mood"></div>
+        </section>
+
+        <!-- Instruments -->
+        <section class="card">
+            <div class="card-title">
+                <div class="card-title-left"><span class="icon">🎻</span> 악기 구성</div>
+                <span style="font-size:12px;color:var(--text-muted);">복수 선택</span>
+            </div>
+            <div class="checkbox-group" id="instrumentGroup" data-category="instrument"></div>
+        </section>
+
+        <!-- Tempo -->
+        <section class="card">
+            <div class="card-title"><div class="card-title-left"><span class="icon">⏱️</span> 템포</div></div>
+            <div class="chip-group" id="tempoGroup" data-category="tempo"></div>
+        </section>
+
+        <!-- Vocal -->
+        <section class="card">
+            <div class="card-title"><div class="card-title-left"><span class="icon">🎤</span> 보컬 스타일</div></div>
+            <div class="chip-group" id="vocalGroup" data-category="vocal"></div>
+        </section>
+
+        <!-- Custom Input -->
+        <section class="card full-width">
+            <div class="card-title">
+                <div class="card-title-left"><span class="icon">✏️</span> 추가 요청 (선택사항)</div>
+                <button class="btn-story-random" id="btnRandomStory" type="button">🎲 독창적 스토리 아이디어 무작위 추첨</button>
+            </div>
+            <textarea class="custom-textarea" id="customInput" placeholder="예: 트럭 타고 석양 속을 달리는 기분, 90년대 감성, 'Whiskey & Rain' 구절 넣기..."></textarea>
+        </section>
+    </div>
+
+    <!-- ═══ GENERATE BUTTONS ═══ -->
+    <div class="generate-row">
+        <button class="btn btn-primary btn-generate" id="btnGenerate">⚡ AI 히트곡 & 프롬프트 생성</button>
+        <button class="btn btn-random" id="btnRandom">🎲 랜덤 스타일 조합</button>
+    </div>
+
+    <!-- ═══ ERROR ALERT ═══ -->
+    <div class="error-alert" id="errorAlert">
+        <span>❌</span>
+        <span id="errorMessage"></span>
+    </div>
+
+    <!-- ═══ LOADING ═══ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+            🎵 내쉬빌 Top 프로듀서 AI가 Suno 프롬프트, 가사 & 유튜브 크리에이터 패키지를 생성 중입니다...
+        </div>
+        <span class="provider-badge" id="loadingBadge">GEMINI</span>
+    </div>
+
+    <!-- ═══ OUTPUT SECTION WITH TABS ═══ -->
+    <div class="output-section" id="outputSection">
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="UI.switchTab('promptTab')">📋 Suno 프롬프트 & 가사</button>
+            <button class="tab-btn yt-tab" onclick="UI.switchTab('ytTab')">🎬 유튜브 크리에이터 팩 (제목/썸네일/SEO)</button>
+        </div>
+
+        <!-- TAB 1: SUNO PROMPT & LYRICS -->
+        <div class="tab-content active" id="promptTab">
+            <section class="card">
+                <div class="card-title">
+                    <div class="card-title-left"><span class="icon">📋</span> Suno 프롬프트</div>
+                    <span class="provider-badge" id="outputBadge">GEMINI</span>
+                </div>
+                <div class="output-box" id="promptOutput"><span class="label">SUNO PROMPT</span></div>
+                <div class="output-actions">
+                    <button class="btn" id="btnCopyPrompt">📋 프롬프트 복사</button>
+                </div>
+            </section>
+
+            <section class="card" style="margin-top: 20px;">
+                <div class="card-title"><div class="card-title-left"><span class="icon">📝</span> Suno 영어 가사</div></div>
+                <div class="output-box" id="lyricsOutput"><span class="label">LYRICS</span></div>
+                <div class="output-actions">
+                    <button class="btn" id="btnCopyLyrics">📋 가사 복사</button>
+                    <button class="btn" id="btnDownload">📥 전체 txt 다운로드</button>
+                    <button class="btn" id="btnRegenerate">🔄 다시 생성</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: YOUTUBE CREATOR PACK -->
+        <div class="tab-content" id="ytTab">
+            <section class="card">
+                <div class="card-title"><div class="card-title-left"><span class="icon">📌</span> 추천 유튜브 동영상 제목 (High-CTR Top 5)</div></div>
+                <div class="output-box" id="ytTitleOutput"><span class="label">YOUTUBE TITLES</span></div>
+                <div class="output-actions">
+                    <button class="btn" id="btnCopyTitles">📋 제목 5선 복사</button>
+                </div>
+            </section>
+
+            <section class="card" style="margin-top: 20px;">
+                <div class="card-title"><div class="card-title-left"><span class="icon">🖼️</span> Midjourney / AI 썸네일 생성용 이미지 프롬프트</div></div>
+                <div class="output-box" id="ytThumbOutput"><span class="label">THUMBNAIL IMAGE PROMPT</span></div>
+                <div class="output-actions">
+                    <button class="btn" id="btnCopyThumb">📋 썸네일 프롬프트 복사</button>
+                </div>
+            </section>
+
+            <section class="card" style="margin-top: 20px;">
+                <div class="card-title"><div class="card-title-left"><span class="icon">📝</span> 유튜브 영상 설명란 & 고정 댓글 템플릿</div></div>
+                <div class="output-box" id="ytDescOutput"><span class="label">DESCRIPTION & SEO TAGS</span></div>
+                <div class="output-actions">
+                    <button class="btn" id="btnCopyDesc">📋 설명란/태그 복사</button>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <!-- ═══ HISTORY LIBRARY SECTION ═══ -->
+    <section class="card history-section" id="historyCard">
+        <div class="card-title">
+            <div class="card-title-left"><span class="icon">📜</span> 최근 생성 히스토리 라이브러리 (History)</div>
+            <button class="btn" id="btnClearHistory" style="font-size:12px; padding:4px 10px;">🗑️ 히스토리 초기화</button>
+        </div>
+        <div class="history-list" id="historyList">
+            <div style="color: var(--text-muted); font-size:13px; text-align:center; padding: 20px;">생성된 히스토리가 없습니다. 위에서 프롬프트를 생성해보세요!</div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <div class="footer">
+        🤠 Suno Country Song Generator Pro v2.0 — Powered by Gemini & DeepSeek for 1M YouTube Creators
+    </div>
+
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   PROVIDERS CONFIGURATION
+   ══════════════════════════════════════════════════════════════ */
+const PROVIDERS = {
+    gemini: {
+        name: 'Google Gemini',
+        model: 'gemini-3.6-flash',
+        badge: 'gemini',
+        hint: 'Gemini 키 발급: <a href="https://aistudio.google.com/apikey" target="_blank" style="color: var(--gold);">Google AI Studio</a>',
+        buildUrl(apiKey, model = 'gemini-3.6-flash') {
+            return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        },
+        buildHeaders() { return { 'Content-Type': 'application/json' }; },
+        buildBody(systemPrompt, userPrompt) {
+            return {
+                contents: [{ parts: [{ text: systemPrompt + '\n\n' + userPrompt }] }],
+                generationConfig: { temperature: 0.9, maxOutputTokens: 4096 }
+            };
+        },
+        extractText(response) { return response?.candidates?.[0]?.content?.parts?.[0]?.text || ''; },
+        async testConnection(apiKey) {
+            const modelsToTry = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+            let lastError = null;
+            for (const model of modelsToTry) {
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: 'Say "connected".' }] }],
+                            generationConfig: { maxOutputTokens: 10 }
+                        })
+                    });
+                    if (res.ok) return true;
+                    const errData = await res.json().catch(() => ({}));
+                    lastError = errData?.error?.message || `HTTP ${res.status}`;
+                } catch (e) {
+                    lastError = e.message;
+                }
+            }
+            throw new Error(lastError || '모든 Gemini 모델 테스트 실패');
+        }
+    },
+    deepseek: {
+        name: 'DeepSeek',
+        model: 'deepseek-chat',
+        badge: 'deepseek',
+        hint: 'DeepSeek 키 발급: <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: var(--gold);">DeepSeek Platform</a> (충전 필요)',
+        buildUrl() { return 'https://api.deepseek.com/chat/completions'; },
+        buildHeaders(apiKey) {
+            return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` };
+        },
+        buildBody(systemPrompt, userPrompt) {
+            return {
+                model: 'deepseek-chat',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt }
+                ],
+                temperature: 0.9, max_tokens: 4096
+            };
+        },
+        extractText(response) { return response?.choices?.[0]?.message?.content || ''; },
+        async testConnection(apiKey) {
+            const endpoints = [
+                'https://api.deepseek.com/chat/completions',
+                'https://api.deepseek.com/v1/chat/completions'
+            ];
+            let lastErr = null;
+            for (const ep of endpoints) {
+                try {
+                    const res = await fetch(ep, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                        body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: 'Say "connected".' }], max_tokens: 10 })
+                    });
+                    if (res.ok) return true;
+
+                    const errData = await res.json().catch(() => ({}));
+                    const rawMsg = errData?.error?.message || '';
+                    if (res.status === 402 || rawMsg.toLowerCase().includes('insufficient') || rawMsg.toLowerCase().includes('balance')) {
+                        throw new Error('잔액 부족 (DeepSeek 계정에 유효 잔액/크레딧 필요)');
+                    }
+                    if (res.status === 401 || rawMsg.toLowerCase().includes('invalid')) {
+                        throw new Error('유효하지 않은 API 키 (키 전체 복사 확인)');
+                    }
+                    lastErr = rawMsg || `HTTP ${res.status}`;
+                } catch (e) {
+                    if (e.message.includes('CORS') || e.message.includes('Failed to fetch')) {
+                        lastErr = '네트워크/CORS 오류 (브라우저 차단 해제 필요)';
+                    } else {
+                        lastErr = e.message;
+                    }
+                }
+            }
+            throw new Error(lastErr || 'DeepSeek 연결 실패');
+        }
+    }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   DATA DEFINITIONS
+   ══════════════════════════════════════════════════════════════ */
+const DATA = {
+    subgenre: [
+        { ko: '클래식 컨트리', en: 'Classic Country', emoji: '🤠' },
+        { ko: '모던 컨트리 팝', en: 'Modern Country Pop', emoji: '🎧' },
+        { ko: '컨트리 록', en: 'Country Rock', emoji: '🔥' },
+        { ko: '블루그래스', en: 'Bluegrass', emoji: '🪕' },
+        { ko: '아웃로 컨트리', en: 'Outlaw Country', emoji: '🏴‍☠️' },
+        { ko: '컨트리 발라드', en: 'Country Ballad', emoji: '💔' },
+        { ko: '홍키통크', en: 'Honky Tonk', emoji: '🍺' },
+        { ko: '어메리카나', en: 'Americana Folk Roots', emoji: '🇺🇸' },
+        { ko: '레드 더트', en: 'Red Dirt Country', emoji: '🌾' },
+        { ko: '서던 소울 컨트리', en: 'Southern Soul Country', emoji: '🎺' },
+        { ko: '벨보텀 컨트리 펑크', en: 'Bell-Bottom Country Funk', emoji: '👖' },
+        { ko: '애팔래치아 마운틴 포크', en: 'Appalachian Mountain Folk', emoji: '🏔️' },
+        { ko: '네오 트래디셔널 90s', en: '90s Neo-Traditional Country', emoji: '🌵' },
+        { ko: '텍사스 스윙', en: 'Texas Swing & Twang', emoji: '🤠' }
+    ],
+    theme: [
+        { ko: '사랑 & 로맨스', en: 'Love, Romance', emoji: '❤️' },
+        { ko: '이별 & 위스키', en: 'Heartbreak, Whiskey, Rain', emoji: '💔' },
+        { ko: '로드트립 & 자유', en: 'Road Trip, Dirt Highway, Freedom', emoji: '🛣️' },
+        { ko: '고향 & 석양', en: 'Hometown Nostalgia, Golden Sunset', emoji: '🏡' },
+        { ko: '금요일 밤 모닥불', en: 'Friday Night Bonfire, Tailgate Party', emoji: '🎉' },
+        { ko: '신앙 & 구원', en: 'Faith, Redemption, Grace', emoji: '🙏' },
+        { ko: '카우보이 & 목장', en: 'Cowboy Life, Ranch, Dusty Boots', emoji: '🐎' },
+        { ko: '가족 & 연대', en: 'Family Roots, Father & Son', emoji: '👨‍👩‍👧‍👦' },
+        { ko: '여름 강가', en: 'Summer River, Cool Beer, Fishing', emoji: '🌊' },
+        { ko: '바텐더 & 주말 맥주', en: 'Last Call Barstool & Cold Beer', emoji: '🍺' },
+        { ko: '거친 비바람 & 시련', en: 'Stormy Roads & Rough Times', emoji: '🌧️' },
+        { ko: '올드 픽업 트럭', en: 'Old Pickup Truck & Highway', emoji: '🛻' },
+        { ko: '시골 밤하늘 은하수', en: 'Starlight Country Night', emoji: '🌌' }
+    ],
+    mood: [
+        { ko: '밝고 신나는', en: 'Upbeat, High-Energy, Feel-Good', emoji: '☀️' },
+        { ko: '슬프고 감성적', en: 'Melancholic, Heartbreaking, Emotional', emoji: '🌧️' },
+        { ko: '향수 어린', en: 'Nostalgic, Bittersweet, Warm', emoji: '🌅' },
+        { ko: '거칠고 반항적', en: 'Gritty, Rebellious, Raw', emoji: '🤘' },
+        { ko: '로맨틱 달달한', en: 'Romantic, Tender, Moonlit', emoji: '🌹' },
+        { ko: '웅장한 스타디움', en: 'Epic, Stadium Anthem, Powerful', emoji: '🏟️' },
+        { ko: '리드미컬 펑키', en: 'Bouncy, Funky, Groovy Twang', emoji: '⚡' },
+        { ko: '담백한 어쿠스틱', en: 'Cozy, Intimate, Fireside', emoji: '🕯️' },
+        { ko: '거친 서부 시네마틱', en: 'Cinematic Western, Dusty & Gritty', emoji: '🏜️' }
+    ],
+    instrument: [
+        { ko: '어쿠스틱 기타', en: 'Acoustic Guitar', emoji: '🎸' },
+        { ko: '일렉트릭 기타', en: 'Electric Guitar', emoji: '🎸' },
+        { ko: '밴조', en: 'Banjo', emoji: '🪕' },
+        { ko: '피들/바이올린', en: 'Fiddle', emoji: '🎻' },
+        { ko: '페달 스틸 기타', en: 'Pedal Steel Guitar', emoji: '🎵' },
+        { ko: '하모니카', en: 'Harmonica', emoji: '🎶' },
+        { ko: '만돌린', en: 'Mandolin', emoji: '🎵' },
+        { ko: '드럼', en: 'Drums', emoji: '🥁' },
+        { ko: '베이스', en: 'Bass', emoji: '🎸' },
+        { ko: '피아노', en: 'Piano', emoji: '🎹' },
+        { ko: '도브로 슬라이드', en: 'Dobro Resonator Guitar', emoji: '🪗' },
+        { ko: '풋스톰프 & 클랩', en: 'Foot Stomp & Handclaps', emoji: '👏' }
+    ],
+    tempo: [
+        { ko: '느림 (~75 BPM)', en: 'Slow tempo, ~75 BPM', emoji: '🐢' },
+        { ko: '보통 (~110 BPM)', en: 'Medium tempo, ~110 BPM', emoji: '🚶' },
+        { ko: '빠름 (~140 BPM)', en: 'Fast tempo, ~140 BPM', emoji: '🏃' }
+    ],
+    vocal: [
+        { ko: '남성 솔로 (Male Lead)', en: 'Male Lead Vocals', emoji: '🧔' },
+        { ko: '여성 솔로 (Female Lead)', en: 'Female Lead Vocals', emoji: '👩' },
+        { ko: '남녀 듀엣 (Male/Female Duet)', en: 'Male and Female Duet Vocals', emoji: '👫' },
+        { ko: '풍성한 코러스 (Rich Harmonies)', en: 'Rich Country Vocal Harmonies', emoji: '🎤' },
+        { ko: '거친 허스키 (Gritty Raspy)', en: 'Gritty Raspy Country Vocal', emoji: '🎙️' },
+        { ko: '청아한 트왱 (Sweet Twang)', en: 'Sweet & Smoky Southern Twang', emoji: '🎶' },
+        { ko: '전통 바리톤 (Deep Baritone)', en: 'Deep Baritone & Traditional Twang', emoji: '🤠' }
+    ]
+};
+
+const ARTIST_PRESETS = {
+    wallen: {
+        subgenre: 'Modern Country Pop',
+        theme: 'Heartbreak, Whiskey, Rain',
+        mood: 'Upbeat, High-Energy, Feel-Good',
+        instruments: ['Acoustic Guitar', 'Electric Guitar', 'Drums', 'Bass'],
+        tempo: 'Medium tempo, ~110 BPM',
+        vocal: 'Male Lead Vocals',
+        custom: 'Morgan Wallen style, catchy pop chorus, raspy warm vocals, stadium production'
+    },
+    combs: {
+        subgenre: 'Country Rock',
+        theme: 'Friday Night Bonfire, Tailgate Party',
+        mood: 'Epic, Stadium Anthem, Powerful',
+        instruments: ['Electric Guitar', 'Drums', 'Pedal Steel Guitar', 'Bass'],
+        tempo: 'Fast tempo, ~140 BPM',
+        vocal: 'Male Lead Vocals',
+        custom: 'Luke Combs style, heavy rhythm, booming vocals, cold beer anthem'
+    },
+    bryan: {
+        subgenre: 'Americana Folk Roots',
+        theme: 'Hometown Nostalgia, Golden Sunset',
+        mood: 'Nostalgic, Bittersweet, Warm',
+        instruments: ['Acoustic Guitar', 'Harmonica', 'Fiddle'],
+        tempo: 'Slow tempo, ~75 BPM',
+        vocal: 'Male Lead Vocals',
+        custom: 'Zach Bryan style, raw unpolished acoustic, passionate emotional cracks, porch session'
+    },
+    stapleton: {
+        subgenre: 'Southern Soul Country',
+        theme: 'Heartbreak, Whiskey, Rain',
+        mood: 'Gritty, Rebellious, Raw',
+        instruments: ['Electric Guitar', 'Acoustic Guitar', 'Organ/Piano', 'Drums'],
+        tempo: 'Slow tempo, ~75 BPM',
+        vocal: 'Male Lead Vocals',
+        custom: 'Chris Stapleton style, bluesy soul vocals, gravelly tone, soaring emotional solos'
+    },
+    lainey: {
+        subgenre: 'Bell-Bottom Country Funk',
+        theme: 'Cowboy Life, Ranch, Dusty Boots',
+        mood: 'Bouncy, Funky, Groovy Twang',
+        instruments: ['Electric Guitar', 'Pedal Steel Guitar', 'Bass', 'Drums'],
+        tempo: 'Fast tempo, ~140 BPM',
+        vocal: 'Gritty Raspy Country Vocal',
+        custom: 'Lainey Wilson style, funky country groove, tough female attitude, bell-bottom twang'
+    },
+    cody: {
+        subgenre: '90s Neo-Traditional Country',
+        theme: 'Cowboy Life, Ranch, Dusty Boots',
+        mood: 'Gritty, Rebellious, Raw',
+        instruments: ['Fiddle', 'Pedal Steel Guitar', 'Acoustic Guitar', 'Drums'],
+        tempo: 'Medium tempo, ~110 BPM',
+        vocal: 'Deep Baritone & Traditional Twang',
+        custom: 'Cody Johnson style, real cowboy traditionalism, crying pedal steel, authentic rodeo country'
+    },
+    taylor: {
+        subgenre: 'Modern Country Pop',
+        theme: 'Love, Romance',
+        mood: 'Nostalgic, Bittersweet, Warm',
+        instruments: ['Banjo', 'Acoustic Guitar', 'Fiddle'],
+        tempo: 'Medium tempo, ~110 BPM',
+        vocal: 'Sweet & Smoky Southern Twang',
+        custom: 'Early Taylor Swift country style, sweet storytelling, acoustic banjo strumming, romantic hook'
+    },
+    aldean: {
+        subgenre: 'Country Rock',
+        theme: 'Old Pickup Truck & Highway',
+        mood: 'Epic, Stadium Anthem, Powerful',
+        instruments: ['Electric Guitar', 'Drums', 'Bass'],
+        tempo: 'Fast tempo, ~140 BPM',
+        vocal: 'Male Lead Vocals',
+        custom: 'Jason Aldean style, driving heavy riffs, high-octane rock country, loud crunch drums'
+    },
+    musgraves: {
+        subgenre: 'Modern Country Pop',
+        theme: 'Love, Romance',
+        mood: 'Romantic, Tender, Moonlit',
+        instruments: ['Acoustic Guitar', 'Pedal Steel Guitar', 'Bass'],
+        tempo: 'Medium tempo, ~110 BPM',
+        vocal: 'Female Lead Vocals',
+        custom: 'Kacey Musgraves style, dreamy pop-country, crystal clean vocals, spacey steel guitar'
+    },
+    dolly: {
+        subgenre: 'Bluegrass',
+        theme: 'Hometown Nostalgia, Golden Sunset',
+        mood: 'Upbeat, High-Energy, Feel-Good',
+        instruments: ['Banjo', 'Fiddle', 'Mandolin', 'Acoustic Guitar'],
+        tempo: 'Fast tempo, ~140 BPM',
+        vocal: 'Sweet & Smoky Southern Twang',
+        custom: 'Dolly Parton classic bluegrass style, fast banjo picking, high crisp acoustic harmonies'
+    },
+    childers: {
+        subgenre: 'Appalachian Mountain Folk',
+        theme: 'Faith, Redemption, Grace',
+        mood: 'Cozy, Intimate, Fireside',
+        instruments: ['Fiddle', 'Acoustic Guitar', 'Harmonica'],
+        tempo: 'Slow tempo, ~75 BPM',
+        vocal: 'Gritty Raspy Country Vocal',
+        custom: 'Tyler Childers mountain folk style, raw acoustic soul, mountain fiddle, gravelly vocal'
+    },
+    cash: {
+        subgenre: 'Classic Country',
+        theme: 'Cowboy Life, Ranch, Dusty Boots',
+        mood: 'Gritty, Rebellious, Raw',
+        instruments: ['Acoustic Guitar', 'Bass', 'Harmonica'],
+        tempo: 'Medium tempo, ~110 BPM',
+        vocal: 'Deep Baritone & Traditional Twang',
+        custom: 'Johnny Cash style boom-chicka-boom rhythm, deep baritone voice, outlaw storyteller'
+    }
+};
+
+const RANDOM_STORIES = [
+    "1987년 녹슨 쉐보레 트럭 안에서 발견한 아버지의 오래된 카세트 테이프와 비 내리는 내쉬빌 고속도로",
+    "금요일 밤 시골 미드나잇 다이너 바텐더가 들려주는 이별한 연인들의 위스키 이야기",
+    "오스틴 샌안토니오 모닥불 파티에서 달빛을 받으며 어쿠스틱 기타로 부르는 청춘의 고백",
+    "스물다섯 살 목수의 손때 묻은 망치와 텍사스 석양 속에서 꿈꾸는 가족의 미래",
+    "비 온 뒤 진흙길 픽업트럭 위에서 차가운 캔맥주를 마시며 맞이하는 토요일 새벽",
+    "어머니가 물려주신 오래된 성경책 속 말린 장미 꽃잎과 추억의 고향 강가",
+    "폭풍우 치는 오두막 난로 앞에서 피들 소리와 함께 나눈 비밀스런 카우보이의 사랑",
+    "로드아일랜드 해안 도로를 지나 멤피스까지 달리는 록 컨트리 히치하이커의 여행기",
+    "작은 시골 교회 마당에서 종소리와 함께 펼쳐지는 온 동네 사람들의 웃음꽃 파티",
+    "샌안토니오 로데오 경기장의 은빛 배지와 먼지 흩날리는 부츠 위 카우보이 영웅담"
+];
+
+/* ══════════════════════════════════════════════════════════════
+   PROMPT BUILDER
+   ══════════════════════════════════════════════════════════════ */
+const PromptBuilder = {
+    systemPrompt: `You are an elite Nashville Hitmaker Songwriter & 1M Subscriber YouTube Country Creator Assistant.
+
+CRITICAL LYRIC DIVERSITY DIRECTIVE:
+- Ensure generated lyrics are 100% unique, emotionally resonant, and completely avoid generic, repetitive clichés.
+- Use fresh, highly original metaphors, specific local references, unique item details, and unexpected narrative twists.
+- Never output predictable filler lines. Make every verse tell a distinct, vivid story.
+
+Given the user's song parameters, generate FIVE structured outputs:
+
+1. **SUNO PROMPT**: Concise, comma-separated music style description for Suno AI (under 200 chars). Include genre, subgenre, mood, instruments, tempo, vocal style, mixing texture, negative prompt. Do NOT put lyrics here.
+
+2. **LYRICS**: Full authentic English country lyrics formatted for Suno AI with tags:
+   - [Intro]
+   - [Verse 1] (4 vivid, story-driven lines)
+   - [Chorus] (4 catchy, unique hook lines)
+   - [Verse 2] (4 fresh narrative lines)
+   - [Chorus]
+   - {INSERT_SOLO_TAG_HERE} (e.g. [Guitar Solo] or [Fiddle Solo])
+   - [Bridge] (2-4 emotional climax lines)
+   - [Chorus]
+   - [Outro]
+   Use natural, conversational Southern English (y'all, ain't, gonna, darlin').
+
+3. **YOUTUBE TITLES**: 5 High-CTR YouTube Video Titles (Mix of English & Korean translations).
+
+4. **YOUTUBE THUMBNAIL PROMPT**: A detailed Midjourney / Flux prompt describing a cinematic, viral 4K country music video thumbnail matching the song's concept.
+
+5. **YOUTUBE DESCRIPTION & SEO**: Short song concept story for pinned comments + 10 viral YouTube hashtags.
+
+Format your response EXACTLY as:
+---SUNO_PROMPT---
+(prompt here)
+---LYRICS---
+(lyrics here)
+---YT_TITLES---
+(titles here)
+---YT_THUMBNAIL---
+(thumbnail prompt here)
+---YT_DESC---
+(description and hashtags here)
+---END---`,
+
+    buildUserPrompt(selections, proOptions) {
+        const randomSeed = Math.floor(Math.random() * 899999 + 100000);
+        let parts = [`User Song Parameters (Random Seed: #${randomSeed}):`];
+        if (proOptions.sunoVersion) parts.push(`- Target Suno AI Engine Version: ${proOptions.sunoVersion} (Note: For Suno AI v5.5, optimize style prompt up to 250 chars with ultra HD stereo mastering and add [Engine: Suno AI v5.5 High-Fidelity] header tag in lyrics)`);
+        if (selections.subgenre) parts.push(`- Sub-genre: ${selections.subgenre}`);
+        if (selections.theme) parts.push(`- Theme: ${selections.theme}`);
+        if (selections.mood) parts.push(`- Mood: ${selections.mood}`);
+        if (selections.instruments?.length) parts.push(`- Instruments: ${selections.instruments.join(', ')}`);
+        if (selections.tempo) parts.push(`- Tempo: ${selections.tempo}`);
+        if (selections.vocal) parts.push(`- Vocal: ${selections.vocal}`);
+        if (selections.custom) parts.push(`- Custom Vibe & Storyline: ${selections.custom}`);
+        if (proOptions.texture) parts.push(`- Pro Texture: ${proOptions.texture}`);
+        if (proOptions.negative) parts.push(`- Negative Prompt: ${proOptions.negative}`);
+        if (proOptions.solo) parts.push(`- Instrumental Break Tag: ${proOptions.solo}`);
+        if (proOptions.key) parts.push(`- Key & Scale Tone: ${proOptions.key}`);
+        if (proOptions.lyricStructure) parts.push(`- Lyric Structure Constraint: ${proOptions.lyricStructure}`);
+        if (proOptions.thumbStyle) parts.push(`- Midjourney Thumbnail Art Style: ${proOptions.thumbStyle}`);
+        parts.push(`- Uniqueness Constraint: Generate fresh metaphors and novel storytelling for Seed #${randomSeed}.`);
+        return parts.join('\n');
+    }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   HISTORY MANAGER
+   ══════════════════════════════════════════════════════════════ */
+const HistoryManager = {
+    STORAGE_KEY: 'suno_country_history_v1',
+    getHistory() {
+        try {
+            return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+        } catch { return []; }
+    },
+    saveHistory(list) {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(list.slice(0, 15)));
+        this.render();
+    },
+    addHistory(item, subgenre) {
+        const list = this.getHistory();
+        const firstTitle = item.titles ? item.titles.split('\n')[0].replace(/^[0-9.]+\s*/, '').trim() : 'Nashville Country Song';
+        list.unshift({
+            id: Date.now(),
+            date: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+            title: firstTitle,
+            subgenre: subgenre || 'Classic Country',
+            prompt: item.prompt,
+            lyrics: item.lyrics,
+            titles: item.titles,
+            thumbnail: item.thumbnail,
+            desc: item.desc
+        });
+        this.saveHistory(list);
+    },
+    clearHistory() {
+        localStorage.removeItem(this.STORAGE_KEY);
+        this.render();
+        UI.showToast('🗑️ 최근 히스토리가 초기화되었습니다', 'info');
+    },
+    render() {
+        const container = document.getElementById('historyList');
+        if (!container) return;
+        const list = this.getHistory();
+        if (!list.length) {
+            container.innerHTML = '<div style="color: var(--text-muted); font-size:13px; text-align:center; padding: 20px;">생성된 히스토리가 없습니다. 위에서 프롬프트를 생성해보세요!</div>';
+            return;
+        }
+        container.innerHTML = list.map(item => `
+            <div class="history-item">
+                <div class="history-info">
+                    <div class="history-title">🎵 ${UI.escapeHtml(item.title)}</div>
+                    <div class="history-meta">⏱️ ${item.date} | 장르: ${UI.escapeHtml(item.subgenre)}</div>
+                </div>
+                <div class="history-actions">
+                    <button class="btn" style="padding: 4px 10px; font-size:12px;" onclick="HistoryManager.restore(${item.id})">📂 불러오기</button>
+                </div>
+            </div>
+        `).join('');
+    },
+    restore(id) {
+        const list = this.getHistory();
+        const found = list.find(item => item.id == id);
+        if (!found) return;
+        document.getElementById('promptOutput').textContent = found.prompt;
+        document.getElementById('lyricsOutput').textContent = found.lyrics;
+        document.getElementById('ytTitleOutput').textContent = found.titles;
+        document.getElementById('ytThumbOutput').textContent = found.thumbnail;
+        document.getElementById('ytDescOutput').textContent = found.desc;
+        document.getElementById('outputSection').classList.add('visible');
+        document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+        UI.showToast('📂 선택한 프롬프트 히스토리를 불러왔습니다', 'success');
+    }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSE PARSER (ROBUST FLEXIBLE SECTION SLICER)
+   ══════════════════════════════════════════════════════════════ */
+const ResponseParser = {
+    parse(rawText) {
+        if (!rawText) return { success: false, raw: '' };
+        
+        // Remove codeblock markdown if present
+        let clean = rawText.replace(/```[a-z]*\n?/gi, '').replace(/```/g, '').trim();
+
+        const sections = { prompt: '', lyrics: '', titles: '', thumbnail: '', desc: '' };
+        const tags = [
+            { key: 'prompt', regex: /---SUNO[-_]?PROMPT---/i },
+            { key: 'lyrics', regex: /---LYRICS---/i },
+            { key: 'titles', regex: /---YT[-_]?TITLES---/i },
+            { key: 'thumbnail', regex: /---YT[-_]?THUMBNAIL---/i },
+            { key: 'desc', regex: /---YT[-_]?DESC---/i }
+        ];
+
+        // Locate tag positions
+        let matches = [];
+        tags.forEach(t => {
+            const m = clean.match(t.regex);
+            if (m && m.index !== undefined) {
+                matches.push({ key: t.key, tagStr: m[0], index: m.index });
+            }
+        });
+
+        // Sort by appearance in string
+        matches.sort((a, b) => a.index - b.index);
+
+        if (matches.length === 0) {
+            return { success: false, raw: rawText };
+        }
+
+        // Extract content between tags
+        for (let i = 0; i < matches.length; i++) {
+            const curr = matches[i];
+            const next = matches[i + 1];
+            const start = curr.index + curr.tagStr.length;
+            const end = next ? next.index : clean.length;
+
+            let sectionText = clean.substring(start, end).replace(/---END---/gi, '').trim();
+            sections[curr.key] = sectionText;
+        }
+
+        // If we found at least prompt or lyrics
+        if (sections.prompt || sections.lyrics) {
+            return {
+                success: true,
+                prompt: sections.prompt || '(Suno 프롬프트 자동 조율 중)',
+                lyrics: sections.lyrics || rawText,
+                titles: sections.titles || '1. Country Hits (Title 1)\n2. Nashville Vibe (Title 2)',
+                thumbnail: sections.thumbnail || 'Cinematic 4K Country Music Video Thumbnail, sunset dirt road, vintage truck',
+                desc: sections.desc || '#CountryMusic #SunoAI #CountryPop'
+            };
+        }
+
+        return { success: false, raw: rawText };
+    }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   API MANAGER
+   ══════════════════════════════════════════════════════════════ */
+const ApiManager = {
+    getProvider() { return document.getElementById('providerSelect').value; },
+    getApiKey() { return document.getElementById('apiKeyInput').value.trim(); },
+    saveKey() {
+        const provider = this.getProvider();
+        const key = this.getApiKey();
+        if (!key) { UI.showToast('API 키를 입력해주세요', 'error'); return; }
+        localStorage.setItem(`suno_country_${provider}_key`, key);
+        localStorage.setItem('suno_country_provider', provider);
+        UI.showToast(`${PROVIDERS[provider].name} API 키가 저장되었습니다`, 'success');
+    },
+    loadKey() {
+        const provider = this.getProvider();
+        const savedKey = localStorage.getItem(`suno_country_${provider}_key`) || '';
+        document.getElementById('apiKeyInput').value = savedKey;
+    },
+    loadProvider() {
+        const saved = localStorage.getItem('suno_country_provider');
+        if (saved && PROVIDERS[saved]) document.getElementById('providerSelect').value = saved;
+    },
+    updateHint() {
+        const provider = this.getProvider();
+        document.getElementById('providerHint').innerHTML = PROVIDERS[provider].hint;
+    },
+    async testConnection() {
+        const provider = this.getProvider();
+        const apiKey = this.getApiKey();
+        const statusEl = document.getElementById('apiStatus');
+        if (!apiKey) {
+            statusEl.className = 'api-status error';
+            statusEl.textContent = '❌ 키를 입력하세요';
+            return;
+        }
+        statusEl.className = 'api-status';
+        statusEl.style.display = 'inline-flex';
+        statusEl.textContent = '⏳ 테스트 중...';
+
+        try {
+            await PROVIDERS[provider].testConnection(apiKey);
+            statusEl.className = 'api-status success';
+            statusEl.textContent = '✅ 연결 성공';
+        } catch (e) {
+            statusEl.className = 'api-status error';
+            statusEl.textContent = `❌ 실패: ${e.message}`;
+        }
+    },
+    async generate(systemPrompt, userPrompt) {
+        const provider = this.getProvider();
+        const apiKey = this.getApiKey();
+        const config = PROVIDERS[provider];
+
+        if (provider === 'gemini') {
+            const modelsToTry = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+            let lastErr = null;
+            for (const model of modelsToTry) {
+                try {
+                    const url = config.buildUrl(apiKey, model);
+                    const headers = config.buildHeaders(apiKey);
+                    const body = config.buildBody(systemPrompt, userPrompt);
+                    const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+                    if (res.ok) {
+                        const data = await res.json();
+                        return config.extractText(data);
+                    }
+                    const errData = await res.json().catch(() => ({}));
+                    lastErr = errData?.error?.message || `HTTP ${res.status}`;
+                } catch (e) {
+                    lastErr = e.message;
+                }
+            }
+            throw new Error(lastErr || 'Gemini 생성 실패');
+        }
+
+        const url = config.buildUrl(apiKey);
+        const headers = config.buildHeaders(apiKey);
+        const body = config.buildBody(systemPrompt, userPrompt);
+
+        const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const rawMsg = errData?.error?.message || '';
+            if (res.status === 402 || rawMsg.toLowerCase().includes('insufficient') || rawMsg.toLowerCase().includes('balance')) {
+                throw new Error('DeepSeek 계정 잔액 부족 (크레딧 충전 필요)');
+            }
+            if (res.status === 401 || rawMsg.toLowerCase().includes('invalid')) {
+                throw new Error('유효하지 않은 DeepSeek API 키 (키 복사 확인)');
+            }
+            throw new Error(rawMsg || `HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        return config.extractText(data);
+    }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   UI CONTROLLER
+   ══════════════════════════════════════════════════════════════ */
+const UI = {
+    selections: { subgenre: null, theme: null, mood: null, instruments: [], tempo: null, vocal: null, custom: '' },
+
+    init() {
+        this.createStars();
+        this.renderOptions();
+        this.bindEvents();
+        ApiManager.loadProvider();
+        ApiManager.loadKey();
+        ApiManager.updateHint();
+        HistoryManager.render();
+    },
+
+    createStars() {
+        const container = document.getElementById('stars');
+        for (let i = 0; i < 90; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+            star.style.setProperty('--max-opacity', (0.3 + Math.random() * 0.7));
+            star.style.animationDelay = (Math.random() * 5) + 's';
+            star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+            container.appendChild(star);
+        }
+    },
+
+    renderOptions() {
+        ['subgenre', 'theme', 'mood', 'tempo', 'vocal'].forEach(cat => {
+            const container = document.getElementById(cat + 'Group');
+            DATA[cat].forEach((item, idx) => {
+                const chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.dataset.en = item.en;
+                chip.innerHTML = `<span class="emoji">${item.emoji}</span>${item.ko}`;
+                chip.addEventListener('click', () => this.toggleChip(cat, chip, item.en));
+                container.appendChild(chip);
+            });
+        });
+
+        const instrContainer = document.getElementById('instrumentGroup');
+        DATA.instrument.forEach((item) => {
+            const chip = document.createElement('div');
+            chip.className = 'checkbox-chip';
+            chip.dataset.en = item.en;
+            chip.innerHTML = `<span class="emoji">${item.emoji}</span>${item.ko}`;
+            chip.addEventListener('click', () => this.toggleInstrument(chip, item.en));
+            instrContainer.appendChild(chip);
+        });
+    },
+
+    toggleChip(category, chip, value) {
+        const group = chip.parentElement;
+        const wasSelected = chip.classList.contains('selected');
+        group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+        if (!wasSelected) {
+            chip.classList.add('selected');
+            this.selections[category] = value;
+        } else {
+            this.selections[category] = null;
+        }
+    },
+
+    toggleInstrument(chip, value) {
+        chip.classList.toggle('selected');
+        if (chip.classList.contains('selected')) {
+            this.selections.instruments.push(value);
+        } else {
+            this.selections.instruments = this.selections.instruments.filter(v => v !== value);
+        }
+    },
+
+    applyPreset(key) {
+        const preset = ARTIST_PRESETS[key];
+        if (!preset) return;
+
+        // Reset all selections
+        document.querySelectorAll('.chip, .checkbox-chip').forEach(c => c.classList.remove('selected'));
+        this.selections.instruments = [];
+
+        // Select chips
+        ['subgenre', 'theme', 'mood', 'tempo', 'vocal'].forEach(cat => {
+            const val = preset[cat];
+            if (val) {
+                this.selections[cat] = val;
+                const group = document.getElementById(cat + 'Group');
+                const chip = group.querySelector(`[data-en="${val}"]`);
+                if (chip) chip.classList.add('selected');
+            }
+        });
+
+        // Select instruments
+        if (preset.instruments) {
+            preset.instruments.forEach(inst => {
+                this.selections.instruments.push(inst);
+                const chip = document.querySelector(`#instrumentGroup [data-en="${inst}"]`);
+                if (chip) chip.classList.add('selected');
+            });
+        }
+
+        if (preset.custom) {
+            document.getElementById('customInput').value = preset.custom;
+        }
+
+        this.showToast(`🌟 ${key.toUpperCase()} 아티스트 스타일 프리셋이 적용되었습니다!`, 'success');
+    },
+
+    bindEvents() {
+        document.getElementById('providerSelect').addEventListener('change', () => {
+            ApiManager.loadKey();
+            ApiManager.updateHint();
+        });
+        document.getElementById('btnTestApi').addEventListener('click', () => ApiManager.testConnection());
+        document.getElementById('btnSaveApi').addEventListener('click', () => ApiManager.saveKey());
+        document.getElementById('toggleKey').addEventListener('click', () => {
+            const input = document.getElementById('apiKeyInput');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        });
+
+        // Pro Toggle
+        document.getElementById('proToggleHeader').addEventListener('click', () => {
+            const body = document.getElementById('proBody');
+            const icon = document.getElementById('proToggleIcon');
+            body.classList.toggle('open');
+            icon.textContent = body.classList.contains('open') ? '▲' : '▼';
+        });
+
+        // Random Story Generator Button
+        const btnStory = document.getElementById('btnRandomStory');
+        if (btnStory) {
+            btnStory.addEventListener('click', () => {
+                const randomStory = RANDOM_STORIES[Math.floor(Math.random() * RANDOM_STORIES.length)];
+                document.getElementById('customInput').value = randomStory;
+                this.showToast('🎲 독창적인 스토리 아이디어가 생성되었습니다!', 'success');
+            });
+        }
+
+        // History Clear Button
+        const btnClearHist = document.getElementById('btnClearHistory');
+        if (btnClearHist) {
+            btnClearHist.addEventListener('click', () => HistoryManager.clearHistory());
+        }
+
+        document.getElementById('btnGenerate').addEventListener('click', () => this.generate());
+        document.getElementById('btnRandom').addEventListener('click', () => this.randomGenerate());
+
+        document.getElementById('btnCopyPrompt').addEventListener('click', () => this.copyText('promptOutput', 'Suno 프롬프트 복사 완료!'));
+        document.getElementById('btnCopyLyrics').addEventListener('click', () => this.copyText('lyricsOutput', 'Suno 가사 복사 완료!'));
+        document.getElementById('btnCopyTitles').addEventListener('click', () => this.copyText('ytTitleOutput', '유튜브 제목 복사 완료!'));
+        document.getElementById('btnCopyThumb').addEventListener('click', () => this.copyText('ytThumbOutput', '썸네일 프롬프트 복사 완료!'));
+        document.getElementById('btnCopyDesc').addEventListener('click', () => this.copyText('ytDescOutput', '설명란/태그 복사 완료!'));
+
+        document.getElementById('btnDownload').addEventListener('click', () => this.downloadText());
+        document.getElementById('btnRegenerate').addEventListener('click', () => this.generate());
+    },
+
+    switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+        if (targetBtn) targetBtn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    },
+
+    async generate() {
+        const apiKey = ApiManager.getApiKey();
+        if (!apiKey) { this.showError('API 키를 입력하고 저장해주세요'); return; }
+
+        if (!this.selections.subgenre || !this.selections.theme) {
+            this.showError('최소 서브장르와 테마를 선택해주세요'); return;
+        }
+
+        this.selections.custom = document.getElementById('customInput').value.trim();
+        const proOptions = {
+            sunoVersion: document.getElementById('proSunoVersion').value,
+            texture: document.getElementById('proTexture').value,
+            negative: document.getElementById('proNegative').value,
+            solo: document.getElementById('proSolo').value,
+            key: document.getElementById('proKey').value,
+            lyricStructure: document.getElementById('proLyricStructure').value,
+            thumbStyle: document.getElementById('proThumbStyle').value
+        };
+
+        const userPrompt = PromptBuilder.buildUserPrompt(this.selections, proOptions);
+        const provider = ApiManager.getProvider();
+
+        this.hideError();
+        this.showLoading(provider);
+
+        try {
+            const rawText = await ApiManager.generate(PromptBuilder.systemPrompt, userPrompt);
+            const result = ResponseParser.parse(rawText);
+
+            this.hideLoading();
+
+            if (result.success) {
+                this.showOutput(result, provider);
+                HistoryManager.addHistory(result, this.selections.subgenre);
+            } else {
+                const fallbackResult = { prompt: '응답 파싱 완료', lyrics: rawText, titles: '1. Country Hits\n2. Nashville Vibe', thumbnail: 'Cinematic 4K Country Music Video', desc: '#CountryMusic #SunoAI' };
+                this.showOutput(fallbackResult, provider);
+                HistoryManager.addHistory(fallbackResult, this.selections.subgenre);
+                this.showToast('AI 응답이 완성되어 히스토리에 자동 저장되었습니다.', 'info');
+            }
+        } catch (err) {
+            this.hideLoading();
+            this.showError(`AI 생성 실패: ${err.message}`);
+        }
+    },
+
+    randomGenerate() {
+        const keys = Object.keys(ARTIST_PRESETS);
+        const randomKey = keys[Math.floor(Math.random() * keys.length)];
+        this.applyPreset(randomKey);
+        setTimeout(() => this.generate(), 400);
+    },
+
+    showLoading(provider) {
+        document.getElementById('loadingOverlay').classList.add('visible');
+        document.getElementById('outputSection').classList.remove('visible');
+        const badge = document.getElementById('loadingBadge');
+        badge.className = `provider-badge ${provider}`;
+        badge.textContent = PROVIDERS[provider].name;
+        document.getElementById('btnGenerate').disabled = true;
+    },
+
+    hideLoading() {
+        document.getElementById('loadingOverlay').classList.remove('visible');
+        document.getElementById('btnGenerate').disabled = false;
+    },
+
+    showOutput(data, provider) {
+        document.getElementById('promptOutput').innerHTML = `<span class="label">SUNO PROMPT</span>${this.escapeHtml(data.prompt)}`;
+        document.getElementById('lyricsOutput').innerHTML = `<span class="label">LYRICS</span>${this.escapeHtml(data.lyrics)}`;
+        document.getElementById('ytTitleOutput').innerHTML = `<span class="label">YOUTUBE TITLES</span>${this.escapeHtml(data.titles || 'N/A')}`;
+        document.getElementById('ytThumbOutput').innerHTML = `<span class="label">THUMBNAIL IMAGE PROMPT</span>${this.escapeHtml(data.thumbnail || 'N/A')}`;
+        document.getElementById('ytDescOutput').innerHTML = `<span class="label">DESCRIPTION & SEO TAGS</span>${this.escapeHtml(data.desc || 'N/A')}`;
+
+        const badge = document.getElementById('outputBadge');
+        if (badge) {
+            badge.className = `provider-badge ${provider}`;
+            badge.textContent = PROVIDERS[provider].name;
+        }
+
+        document.getElementById('outputSection').classList.add('visible');
+        this.switchTab('promptTab');
+
+        setTimeout(() => {
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    },
+
+    showError(msg) {
+        const el = document.getElementById('errorAlert');
+        document.getElementById('errorMessage').textContent = msg;
+        el.classList.add('visible');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    },
+    hideError() { document.getElementById('errorAlert').classList.remove('visible'); },
+
+    showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || ''}</span><span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    },
+
+    async copyText(elementId, successMsg) {
+        const el = document.getElementById(elementId);
+        let text = el.textContent.replace(/^(SUNO PROMPT|LYRICS|YOUTUBE TITLES|THUMBNAIL IMAGE PROMPT|DESCRIPTION & SEO TAGS)/, '').trim();
+        try {
+            await navigator.clipboard.writeText(text);
+            this.showToast(successMsg, 'success');
+        } catch {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+            this.showToast(successMsg, 'success');
+        }
+    },
+
+    downloadText() {
+        const p = document.getElementById('promptOutput').textContent.replace(/^SUNO PROMPT/, '').trim();
+        const l = document.getElementById('lyricsOutput').textContent.replace(/^LYRICS/, '').trim();
+        const t = document.getElementById('ytTitleOutput').textContent.replace(/^YOUTUBE TITLES/, '').trim();
+        const thumb = document.getElementById('ytThumbOutput').textContent.replace(/^THUMBNAIL IMAGE PROMPT/, '').trim();
+        const d = document.getElementById('ytDescOutput').textContent.replace(/^DESCRIPTION & SEO TAGS/, '').trim();
+        const provider = ApiManager.getProvider();
+
+        const content = `═══ SUNO COUNTRY HITMAKER & YOUTUBE CREATOR PACK ═══
+Generated by: ${PROVIDERS[provider].name}
+Date: ${new Date().toLocaleString('ko-KR')}
+
+═══ 1. SUNO PROMPT ═══
+${p}
+
+═══ 2. ENGLISH LYRICS ═══
+${l}
+
+═══ 3. YOUTUBE TITLES (TOP 5) ═══
+${t}
+
+═══ 4. MIDJOURNEY THUMBNAIL PROMPT ═══
+${thumb}
+
+═══ 5. YOUTUBE DESCRIPTION & SEO HASHTAGS ═══
+${d}
+`;
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `suno_country_youtube_pack_${Date.now()}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.showToast('📥 유튜브 크리에이터 전체 패키지가 다운로드되었습니다', 'success');
+    },
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => UI.init());
+</script>
+</body>
+</html>

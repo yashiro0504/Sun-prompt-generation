@@ -1,0 +1,1002 @@
+[
+  {
+    "id": 1,
+    "title": "High and Dry",
+    "artist": "Radiohead",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 76,
+    "key_mood": ["melancholic", "nostalgic", "raw", "bittersweet"],
+    "sound_tags": "acoustic guitar strumming, driven electric bass, brushed snare, ambient guitar feedback, warm tube saturation, deep baritone vocal, 76 BPM",
+    "story_structure": "starts with specific concrete object, conversational bridge, soaring emotional chorus"
+  },
+  {
+    "id": 2,
+    "title": "Yellow",
+    "artist": "Coldplay",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 87,
+    "key_mood": ["warm", "romantic", "soaring", "optimistic"],
+    "sound_tags": "bright acoustic guitar, shimmering distorted electric guitar, thumping bass, steady acoustic drums, warm rasp vocals, falsetto climax, 87 BPM",
+    "story_structure": "devotional declaration, repetitive rhythmic hook, cathartic distorted guitar crescendo"
+  },
+  {
+    "id": 3,
+    "title": "Wonderwall",
+    "artist": "Oasis",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 88,
+    "key_mood": ["raw", "yearning", "iconic", "bittersweet"],
+    "sound_tags": "strummed acoustic guitar with capo, cellos, steady tambourine beat, raspy nasal vocal, warm vinyl hiss, 88 BPM",
+    "story_structure": "direct address to lover, gradual addition of string section, anthemic chorus repetition"
+  },
+  {
+    "id": 4,
+    "title": "Sing",
+    "artist": "Travis",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 82,
+    "key_mood": ["gentle", "comforting", "melancholic", "hopeful"],
+    "sound_tags": "banjo picking, acoustic guitar, soft piano chords, warm thumping bass, soft falsetto backing, 82 BPM",
+    "story_structure": "intimate advice, uplifting melody rise, sing-along chorus"
+  },
+  {
+    "id": 5,
+    "title": "Bittersweet Symphony",
+    "artist": "The Verve",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 86,
+    "key_mood": ["hypnotic", "sweeping", "philosophical", "grand"],
+    "sound_tags": "orchestral string loop, repetitive acoustic guitar, heavy breakbeat drum, spoken-like expressive vocal, 86 BPM",
+    "story_structure": "existential observation, relentless driving rhythm, soaring orchestral climax"
+  },
+  {
+    "id": 6,
+    "title": "Somewhere Only We Know",
+    "artist": "Keane",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 87,
+    "key_mood": ["nostalgic", "yearning", "emotional", "soaring"],
+    "sound_tags": "distorted piano riff, driving bassline, crisp acoustic drums, clear passionate tenor vocals, reverb ambient pads, 87 BPM",
+    "story_structure": "revisiting secret place, emotional escalation, explosive vocal chorus"
+  },
+  {
+    "id": 7,
+    "title": "No Surprises",
+    "artist": "Radiohead",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 76,
+    "key_mood": ["lullaby", "weary", "peaceful", "melancholic"],
+    "sound_tags": "glockenspiel chime, clean arpeggiated electric guitar, soft bass, quiet brushed drums, gentle whispering vocal, 76 BPM",
+    "story_structure": "quiet resignation, sweet melody contrasting sad lyrics, peaceful fade out"
+  },
+  {
+    "id": 8,
+    "title": "Chasing Cars",
+    "artist": "Snow Patrol",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 104,
+    "key_mood": ["intimate", "building", "devotional", "soaring"],
+    "sound_tags": "minimalist clean guitar riff, steady kick drum, building distorted guitar wall, impassioned vocals, 104 BPM",
+    "story_structure": "minimalist start, gradual layer building, massive emotional climax"
+  },
+  {
+    "id": 9,
+    "title": "Don't Look Back in Anger",
+    "artist": "Oasis",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 84,
+    "key_mood": ["anthemic", "nostalgic", "defiant", "warm"],
+    "sound_tags": "piano chords, overdrive electric guitar solos, heavy rock bass, crashing cymbals, soaring raspy vocals, 84 BPM",
+    "story_structure": "storytelling verse, memorable pre-chorus, stadium sing-along chorus"
+  },
+  {
+    "id": 10,
+    "title": "Fix You",
+    "artist": "Coldplay",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 69,
+    "key_mood": ["sorrowful", "healing", "triumphant", "cathartic"],
+    "sound_tags": "church organ, quiet acoustic guitar, falsetto lead vocal, massive explosive rock drums, anthemic guitar solo, 69 BPM",
+    "story_structure": "fragile quiet verse, organ build, explosive cathartic guitar solo and group chant"
+  },
+  {
+    "id": 11,
+    "title": "Fake Plastic Trees",
+    "artist": "Radiohead",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 74,
+    "key_mood": ["vulnerable", "fragile", "devastating", "soaring"],
+    "sound_tags": "gentle acoustic guitar, subtle Hammond organ, soft cellos, soaring falsetto vocal, explosive drum drop climax, 74 BPM",
+    "story_structure": "fragile storytelling, gradual instrument entry, heartbreaking emotional outburst"
+  },
+  {
+    "id": 12,
+    "title": "Tender",
+    "artist": "Blur",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 78,
+    "key_mood": ["gospel-like", "healing", "warm", "soothing"],
+    "sound_tags": "acoustic fingerpicking, gospel choir harmony, laid-back acoustic drums, warm deep vocal, acoustic slide guitar, 78 BPM",
+    "story_structure": "sing-along chant, communal choir response, hypnotic warm groove"
+  },
+  {
+    "id": 13,
+    "title": "505",
+    "artist": "Arctic Monkeys",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 140,
+    "key_mood": ["tense", "obsessive", "explosive", "cinematic"],
+    "sound_tags": "organ loop, minimal muted guitar, tense bassline, sudden explosive distorted guitar explosion, passionate baritone vocal, 140 BPM",
+    "story_structure": "simmering tension, repeating organ motif, dramatic explosive burst"
+  },
+  {
+    "id": 14,
+    "title": "Why Does It Always Rain on Me?",
+    "artist": "Travis",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 94,
+    "key_mood": ["melancholic", "ironic", "warm", "sing-along"],
+    "sound_tags": "melodic cello lines, acoustic rhythm guitar, subtle synth pads, clear melodic vocals, 94 BPM",
+    "story_structure": "self-deprecating question, melodic verse, uplifting melodic chorus"
+  },
+  {
+    "id": 15,
+    "title": "The Scientist",
+    "artist": "Coldplay",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 73,
+    "key_mood": ["regretful", "haunting", "tender", "piano-led"],
+    "sound_tags": "upright acoustic piano chords, warm bass guitar, subtle string arrangement, falsetto vocal hooks, steady drums, 73 BPM",
+    "story_structure": "apologetic confession, steady piano march, soaring emotional vocal hook"
+  },
+  {
+    "id": 16,
+    "title": "Stop Crying Your Heart Out",
+    "artist": "Oasis",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 76,
+    "key_mood": ["comforting", "sweeping", "emotional", "epic"],
+    "sound_tags": "grand piano, sweeping orchestral strings, acoustic guitar, heavy drum fills, high soaring vocals, 76 BPM",
+    "story_structure": "reassuring message, dramatic string swell, anthemic emotional chorus"
+  },
+  {
+    "id": 17,
+    "title": "Karma Police",
+    "artist": "Radiohead",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 75,
+    "key_mood": ["dystopian", "piano-driven", "surreal", "cathartic"],
+    "sound_tags": "acoustic guitar strum, rhythmic grand piano, thumping bass, melting analog delay feedback, haunting falsetto, 75 BPM",
+    "story_structure": "droll observation, rising tension, distorted psychedelic breakdown ending"
+  },
+  {
+    "id": 18,
+    "title": "Starlight",
+    "artist": "Muse",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 122,
+    "key_mood": ["driving", "euphoric", "romantic", "cosmic"],
+    "sound_tags": "driving piano octaves, fuzz bass, crisp disco-rock drum beat, soaring operatic vocals, synth arpeggios, 122 BPM",
+    "story_structure": "rhythmic piano intro, driving bass groove, anthemic cosmic hook"
+  },
+  {
+    "id": 19,
+    "title": "There Is a Light That Never Goes Out",
+    "artist": "The Smiths",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 136,
+    "key_mood": ["melancholic", "romantic", "witty", "jangle-pop"],
+    "sound_tags": "jangly electric guitar, synth string section, driving melodic bass, crooning baritone vocal, 136 BPM",
+    "story_structure": "darkly romantic tale, jangly verse, iconic dramatic chorus"
+  },
+  {
+    "id": 20,
+    "title": "Champagne Supernova",
+    "artist": "Oasis",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 75,
+    "key_mood": ["psychedelic", "dreamy", "epic", "nostalgic"],
+    "sound_tags": "ocean waves ambience, acoustic guitar, bluesy electric solos, mellotron flutes, long soaring vocals, 75 BPM",
+    "story_structure": "gentle acoustic start, gradual buildup, 7-minute epic guitar solo climax"
+  },
+  {
+    "id": 21,
+    "title": "K2",
+    "artist": "Elbow",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 70,
+    "key_mood": ["warm", "atmospheric", "cinematic", "soulful"],
+    "sound_tags": "ambient electric piano, warm brass section, deep resonant bass, intimate crooning vocals, 70 BPM",
+    "story_structure": "poetic imagery, slow atmospheric build, lush brass conclusion"
+  },
+  {
+    "id": 22,
+    "title": "Creep",
+    "artist": "Radiohead",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 92,
+    "key_mood": ["alienated", "raw", "explosive", "vulnerable"],
+    "sound_tags": "clean electric guitar arpeggios, sudden dead-note guitar crunch, thumping bass, soaring falsetto to scream, 92 BPM",
+    "story_structure": "quiet vulnerable verse, brutal guitar distortion interruption, soaring vocal climax"
+  },
+  {
+    "id": 23,
+    "title": "Golden Touch",
+    "artist": "Razorlight",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 112,
+    "key_mood": ["catchy", "indie-rock", "upbeat", "nostalgic"],
+    "sound_tags": "bright indie guitar riff, snappy acoustic drums, energetic bass, raw melodic vocals, 112 BPM",
+    "story_structure": "bouncy riff intro, storytelling verse, catchy sing-along chorus"
+  },
+  {
+    "id": 24,
+    "title": "I Bet You Look Good on the Dancefloor",
+    "artist": "Arctic Monkeys",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 152,
+    "key_mood": ["frantic", "energetic", "witty", "raw"],
+    "sound_tags": "fast distorted guitar riffs, furious punk drumming, gritty bass, rapid-fire northern English vocals, 152 BPM",
+    "story_structure": "explosive guitar opening, rapid conversational verses, high-octane chorus"
+  },
+  {
+    "id": 25,
+    "title": "She's So High",
+    "artist": "Blur",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 128,
+    "key_mood": ["shoegaze", "psychedelic", "dreamy", "ethereal"],
+    "sound_tags": "swirling tremolo guitar, lush chorus pedal, deep bass groove, distant floating vocal, 128 BPM",
+    "story_structure": "hypnotic guitar riff, dreamy verse, soaring shoegaze chorus"
+  },
+  {
+    "id": 26,
+    "title": "Apocalypse",
+    "artist": "Cigarettes After Sex",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 80,
+    "key_mood": ["sensual", "dreamy", "melancholic", "hazy"],
+    "sound_tags": "slow reverb guitar, minimal bass, soft brushed snare, whispery androgynous vocal, tape warmth, 80 BPM",
+    "story_structure": "intimate memory confession, consistent dreamy groove, hypnotic slow chorus"
+  },
+  {
+    "id": 27,
+    "title": "Show Me How",
+    "artist": "Men I Trust",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 82,
+    "key_mood": ["warm", "chill", "lo-fi", "grooveless-smooth"],
+    "sound_tags": "warm muffle bass guitar, jangly chorus electric guitar, soft muted drums, whispery female vocals, vinyl crackle, 82 BPM",
+    "story_structure": "laid-back groove, intimate dialogue, soothing repetitive chorus"
+  },
+  {
+    "id": 28,
+    "title": "Space Song",
+    "artist": "Beach House",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 147,
+    "key_mood": ["ethereal", "nostalgic", "cosmic", "bittersweet"],
+    "sound_tags": "slide guitar hook, retro analog organ synth, arpeggiated synth bass, floating reverb vocals, 147 BPM",
+    "story_structure": "iconic slide guitar intro, hypnotic verse, overwhelming emotional synth swell"
+  },
+  {
+    "id": 29,
+    "title": "Dreams Tonite",
+    "artist": "Alvvays",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 110,
+    "key_mood": ["romantic", "nostalgic", "yearning", "shimmering"],
+    "sound_tags": "vintage synth pads, jangly guitar, driving bassline, clear melancholic female vocals, reverb ambience, 110 BPM",
+    "story_structure": "shimmering intro, romantic question in verse, bittersweet soaring chorus"
+  },
+  {
+    "id": 30,
+    "title": "Chamber of Reflection",
+    "artist": "Mac DeMarco",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 134,
+    "key_mood": ["lonely", "hypnotic", "warped", "retro-chill"],
+    "sound_tags": "warped tape-pitch synth, slacker bassline, simple electronic drum machine beat, relaxed lazy vocal, 134 BPM",
+    "story_structure": "hypnotic synth loop, reflective verse, mantras of isolation in chorus"
+  },
+  {
+    "id": 31,
+    "title": "Sofia",
+    "artist": "Clairo",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 114,
+    "key_mood": ["youthful", "fuzzy", "vulnerable", "upbeat"],
+    "sound_tags": "fuzzy distorted guitar, vocoder backing vocals, warm indie bass, intimate soft lead vocal, acoustic drums, 114 BPM",
+    "story_structure": "confessional start, steady pulse, fuzzy shoegaze-pop climax"
+  },
+  {
+    "id": 32,
+    "title": "Every Summer",
+    "artist": "San Scout",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 92,
+    "key_mood": ["warm", "summery", "hazy", "nostalgic"],
+    "sound_tags": "sun-drenched acoustic guitar, vocal chops, mellow electric piano, lo-fi drum groove, 92 BPM",
+    "story_structure": "summer memory imagery, gentle verse, vocal chop hook chorus"
+  },
+  {
+    "id": 33,
+    "title": "K.",
+    "artist": "Cigarettes After Sex",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 74,
+    "key_mood": ["romantic", "intimate", "slow-burn", "wistful"],
+    "sound_tags": "reverb-drenched fender guitar, quiet brushed cymbal, soft bass tone, whispered vocal, 74 BPM",
+    "story_structure": "personal story of romance, slow gentle pace, lingering emotional outro"
+  },
+  {
+    "id": 34,
+    "title": "Out of My League",
+    "artist": "Fitz and the Tantrums",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 125,
+    "key_mood": ["upbeat", "bouncy", "fun", "indie-pop"],
+    "sound_tags": "driving indie synth, organ hook, handclaps, energetic vocals, saxophone accents, 125 BPM",
+    "story_structure": "bouncy synth intro, romantic admiration, explosive chorus"
+  },
+  {
+    "id": 35,
+    "title": "Nausea",
+    "artist": "Craft Spells",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 120,
+    "key_mood": ["jangly", "melancholic", "driving", "post-punk"],
+    "sound_tags": "glistening jangly guitar, melodic bassline, drum machine, airy reverb vocal, 120 BPM",
+    "story_structure": "fast guitar intro, introverted lyrics, bright uplifting guitar solo"
+  },
+  {
+    "id": 36,
+    "title": "Myth",
+    "artist": "Beach House",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 136,
+    "key_mood": ["epic", "hypnotic", "mystical", "soaring"],
+    "sound_tags": "arpeggiated synth chime, heavy reverbed drums, warm bass, soaring ethereal female vocal, 136 BPM",
+    "story_structure": "chime intro, slow gathering intensity, monumental emotional peak"
+  },
+  {
+    "id": 37,
+    "title": "Out Like a Light",
+    "artist": "The Honeysticks",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 96,
+    "key_mood": ["cozy", "romantic", "retro", "sweet"],
+    "sound_tags": "vintage electric piano, warm electric guitar chords, soft drums, crooning vocal, 96 BPM",
+    "story_structure": "bedroom recording vibe, gentle declaration, warm guitar outro"
+  },
+  {
+    "id": 38,
+    "title": "Tailwhip",
+    "artist": "Men I Trust",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 108,
+    "key_mood": ["groovy", "chill", "sunny", "funky"],
+    "sound_tags": "bouncy disco bassline, clean rhythm guitar, soft synth pads, whispery vocals, 108 BPM",
+    "story_structure": "funky bass intro, laid-back storytelling, infectious smooth hook"
+  },
+  {
+    "id": 39,
+    "title": "Heaven or Las Vegas",
+    "artist": "Cocteau Twins",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 120,
+    "key_mood": ["lush", "ethereal", "ecstatic", "glistening"],
+    "sound_tags": "glistening chorus guitar, rich synth textures, driving drums, glossolalia vocal acrobatics, 120 BPM",
+    "story_structure": "sparkling instrument entry, incomprehensible heavenly vocals, lush wall of sound"
+  },
+  {
+    "id": 40,
+    "title": "Alison",
+    "artist": "Slowdive",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 98,
+    "key_mood": ["shoegaze", "hazy", "warm", "submerged"],
+    "sound_tags": "wall of reverbed guitars, gentle acoustic strum, deep bass, soft duet vocals, 98 BPM",
+    "story_structure": "submerged guitar intro, dreamy verse, washing wave of distortion chorus"
+  },
+  {
+    "id": 41,
+    "title": "Freaking Out the Neighborhood",
+    "artist": "Mac DeMarco",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 122,
+    "key_mood": ["playful", "jangly", "slacker", "upbeat"],
+    "sound_tags": "chorus-heavy guitar lick, bouncy bass, crisp acoustic drums, casual apologized vocals, 122 BPM",
+    "story_structure": "iconic guitar riff, apologetic storytelling verse, cheerful guitar solo"
+  },
+  {
+    "id": 42,
+    "title": "Archie, Marry Me",
+    "artist": "Alvvays",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 132,
+    "key_mood": ["fuzzy", "romantic", "defiant", "catchy"],
+    "sound_tags": "fuzzy distorted guitar strum, bright synth lead, punchy drums, passionate female vocals, 132 BPM",
+    "story_structure": "fuzzy guitar intro, satirical yet sweet verse, explosive romantic proposal chorus"
+  },
+  {
+    "id": 43,
+    "title": "Sunset Rollercoaster",
+    "artist": "My Jinji",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 95,
+    "key_mood": ["city-pop", "romantic", "groovy", "retro"],
+    "sound_tags": "sax synth, jazzy guitar chords, smooth bassline, vintage drum machine, falsetto croon, 95 BPM",
+    "story_structure": "groovy city-pop intro, romantic yearning verse, saxophone solo climax"
+  },
+  {
+    "id": 44,
+    "title": "Lovers Rock",
+    "artist": "TV Girl",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 90,
+    "key_mood": ["sampled", "cynical", "hypnotic", "vintage"],
+    "sound_tags": "60s vocal sample loop, hip-hop drum beat, warm synth bass, detached spoken-singing vocals, 90 BPM",
+    "story_structure": "sample loop hook, storytelling verse, hypnotic repetitive chorus"
+  },
+  {
+    "id": 45,
+    "title": "New Flesh",
+    "artist": "Current Joys",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 118,
+    "key_mood": ["lo-fi", "raw", "melancholic", "cathartic"],
+    "sound_tags": "repetitive electric guitar chord, simple drum machine, raw emotional vocals, bedroom reverb, 118 BPM",
+    "story_structure": "hypnotic single chord loop, rising emotional intensity, desperate emotional vocal peak"
+  },
+  {
+    "id": 46,
+    "title": "Shuggie",
+    "artist": "Foxygen",
+    "category": "Classic Retro Pop",
+    "bpm": 115,
+    "key_mood": ["quirky", "retro", "psychedelic", "playful"],
+    "sound_tags": "70s electric piano, orchestral strings, horn section, Motown bass, raspy 60s vocals, 115 BPM",
+    "story_structure": "abrupt section changes, orchestral pop transitions, joyful sing-along hook"
+  },
+  {
+    "id": 47,
+    "title": "In My Life",
+    "artist": "The Beatles",
+    "category": "Classic Retro Pop",
+    "bpm": 103,
+    "key_mood": ["nostalgic", "tender", "timeless", "poignant"],
+    "sound_tags": "clean electric guitar, sped-up piano solo (harpsichord sound), gentle bass, warm dual harmonies, 103 BPM",
+    "story_structure": "reflective verse, famous baroque piano solo, warm tender conclusion"
+  },
+  {
+    "id": 48,
+    "title": "Dreams",
+    "artist": "Fleetwood Mac",
+    "category": "Classic Retro Pop",
+    "bpm": 120,
+    "key_mood": ["hypnotic", "mystical", "smooth", "bittersweet"],
+    "sound_tags": "Fender Rhodes piano, iconic two-note bassline, steady acoustic drum beat, Stevie Nicks vocals, 120 BPM",
+    "story_structure": "hypnotic two-chord groove, bitter reflection, lush multi-tracked chorus"
+  },
+  {
+    "id": 49,
+    "title": "God Only Knows",
+    "artist": "The Beach Boys",
+    "category": "Classic Retro Pop",
+    "bpm": 116,
+    "key_mood": ["baroque-pop", "transcendent", "devotional", "lush"],
+    "sound_tags": "french horn, harpsichord, sleigh bells, bass accordion, polyphonic vocal harmonies, 116 BPM",
+    "story_structure": "french horn intro, delicate emotional verse, complex round vocal counterpoint"
+  },
+  {
+    "id": 50,
+    "title": "Tiny Dancer",
+    "artist": "Elton John",
+    "category": "Classic Retro Pop",
+    "bpm": 145,
+    "key_mood": ["storytelling", "cinematic", "warm", "soaring"],
+    "sound_tags": "acoustic grand piano, steel pedal guitar, orchestral strings, soaring lead vocals, rock drums, 145 BPM",
+    "story_structure": "long intimate storytelling verse, gradual instrument addition, legendary chorus explosion"
+  },
+  {
+    "id": 51,
+    "title": "Heroes",
+    "artist": "David Bowie",
+    "category": "Classic Retro Pop",
+    "bpm": 112,
+    "key_mood": ["triumphant", "defiant", "epic", "art-rock"],
+    "sound_tags": "sustained guitar feedback loop (Robert Fripp), synth pads, driving percussion, heroic vocal delivery, 112 BPM",
+    "story_structure": "relentless driving pulse, building vocal intensity from whisper to passionate shout"
+  },
+  {
+    "id": 52,
+    "title": "Waterloo Sunset",
+    "artist": "The Kinks",
+    "category": "Classic Retro Pop",
+    "bpm": 104,
+    "key_mood": ["tender", "wistful", "picturesque", "melodic"],
+    "sound_tags": "descending bassline, gentle electric guitar chords, 'sha-la-la' backing vocal harmonies, warm lead vocal, 104 BPM",
+    "story_structure": "observational storytelling, serene melody, comforting backing harmonies"
+  },
+  {
+    "id": 53,
+    "title": "Bridge Over Troubled Water",
+    "artist": "Simon & Garfunkel",
+    "category": "Classic Retro Pop",
+    "bpm": 82,
+    "key_mood": ["gospel", "comforting", "monumental", "tender"],
+    "sound_tags": "gospel acoustic piano, subtle string section, angelic tenor vocal, massive orchestral and drum finale, 82 BPM",
+    "story_structure": "quiet piano intro, gradual orchestra build, triumphant emotional third verse"
+  },
+  {
+    "id": 54,
+    "title": "Go Your Own Way",
+    "artist": "Fleetwood Mac",
+    "category": "Classic Retro Pop",
+    "bpm": 136,
+    "key_mood": ["driving", "defiant", "raw", "energetic"],
+    "sound_tags": "pounding tom-tom drums, acoustic strum, acoustic-electric guitar layering, fiery guitar solo, 136 BPM",
+    "story_structure": "unusual drum pattern intro, bitter breakup verses, explosive guitar solo finish"
+  },
+  {
+    "id": 55,
+    "title": "Mr. Blue Sky",
+    "artist": "Electric Light Orchestra",
+    "category": "Classic Retro Pop",
+    "bpm": 178,
+    "key_mood": ["joyful", "orchestral", "quirky", "sunshine"],
+    "sound_tags": "staccato piano, cowbell beat, vocoder robot voice, operatic choir, soaring string section, 178 BPM",
+    "story_structure": "pounding piano intro, sunny pop melody, grand classical operatic outro"
+  },
+  {
+    "id": 56,
+    "title": "Space Oddity",
+    "artist": "David Bowie",
+    "category": "Classic Retro Pop",
+    "bpm": 68,
+    "key_mood": ["dramatic", "cosmic", "lonely", "cinematic"],
+    "sound_tags": "stylophone synth, acoustic 12-string guitar, handclaps, dramatic orchestral swells, countdown voice, 68 BPM",
+    "story_structure": "dialogue intro, rocket liftoff orchestra swell, floating space acoustic section"
+  },
+  {
+    "id": 57,
+    "title": "Don't Go Breaking My Heart",
+    "artist": "Elton John & Kiki Dee",
+    "category": "Classic Retro Pop",
+    "bpm": 131,
+    "key_mood": ["bouncy", "duet", "joyful", "70s-disco"],
+    "sound_tags": "rhodes piano, disco strings, energetic bassline, playful duet vocals, brass hits, 131 BPM",
+    "story_structure": "playful vocal back-and-forth, upbeat rhythm, catchy romantic chorus"
+  },
+  {
+    "id": 58,
+    "title": "You Make Loving Fun",
+    "artist": "Fleetwood Mac",
+    "category": "Classic Retro Pop",
+    "bpm": 125,
+    "key_mood": ["funky", "sensual", "warm", "bouncy"],
+    "sound_tags": "clavinet groove, smooth electric guitar, warm bassline, soulful lead vocal, harmony stack, 125 BPM",
+    "story_structure": "funky clavinet intro, seductive verse, euphoric harmony-filled chorus"
+  },
+  {
+    "id": 59,
+    "title": "A Day in the Life",
+    "artist": "The Beatles",
+    "category": "Classic Retro Pop",
+    "bpm": 76,
+    "key_mood": ["psychedelic", "surreal", "epic", "haunting"],
+    "sound_tags": "acoustic guitar, piano chords, 40-piece orchestra chromatic crescendo, alarm clock, final piano E chord, 76 BPM",
+    "story_structure": "news story acoustic verse, chaotic orchestral build, upbeat middle section, massive final piano crash"
+  },
+  {
+    "id": 60,
+    "title": "Hotel California",
+    "artist": "Eagles",
+    "category": "Classic Retro Pop",
+    "bpm": 75,
+    "key_mood": ["mysterious", "narrative", "iconic", "spanish-tinted"],
+    "sound_tags": "12-string acoustic arpeggios, reggae-influenced bassline, dual electric guitar harmony solos, 75 BPM",
+    "story_structure": "mysterious acoustic intro, narrative story verses, legendary dual guitar battle outro"
+  },
+  {
+    "id": 61,
+    "title": "Dancing in the Moonlight",
+    "artist": "King Harvest",
+    "category": "Classic Retro Pop",
+    "bpm": 134,
+    "key_mood": ["carefree", "groovy", "warm", "feel-good"],
+    "sound_tags": "Wurlitzer electric piano riff, walking bassline, handclaps, cheerful vocal harmonies, 134 BPM",
+    "story_structure": "Wurlitzer intro, feel-good storytelling, uplifting chorus"
+  },
+  {
+    "id": 62,
+    "title": "You've Got a Friend",
+    "artist": "Carole King",
+    "category": "Classic Retro Pop",
+    "bpm": 86,
+    "key_mood": ["intimate", "tender", "soulful", "acoustic"],
+    "sound_tags": "warm acoustic piano, soft acoustic guitar, gentle bass, intimate expressive vocals, string quartet, 86 BPM",
+    "story_structure": "reassuring intro, personal message verse, heartwarming soaring chorus"
+  },
+  {
+    "id": 63,
+    "title": "Rhiannon",
+    "artist": "Fleetwood Mac",
+    "category": "Classic Retro Pop",
+    "bpm": 128,
+    "key_mood": ["witchy", "mystical", "driving", "passionate"],
+    "sound_tags": "iconic guitar riff, driving bass beat, haunting vocals, soaring high note climaxes, 128 BPM",
+    "story_structure": "mystical character introduction, hypnotic rhythm, dramatic vocal breakdown"
+  },
+  {
+    "id": 64,
+    "title": "Peg",
+    "artist": "Steely Dan",
+    "category": "Classic Retro Pop",
+    "bpm": 118,
+    "key_mood": ["sophisticated", "jazzy", "funky", "slick"],
+    "sound_tags": "slap bass, jazzy chord extensions, Michael McDonald backing vocal stacks, crisp rhythm guitar, 118 BPM",
+    "story_structure": "slick jazz-pop groove, cynical Hollywood lyrics, incredible backing vocal hooks"
+  },
+  {
+    "id": 65,
+    "title": "Rich Girl",
+    "artist": "Daryl Hall & John Oates",
+    "category": "Classic Retro Pop",
+    "bpm": 86,
+    "key_mood": ["blue-eyed-soul", "catchy", "upbeat", "bouncy"],
+    "sound_tags": "Fender Rhodes piano, groovy bassline, lush string section, soulful lead vocals, 86 BPM",
+    "story_structure": "instant chorus hook opening, rhythmic verses, infectious soul pop chorus"
+  },
+  {
+    "id": 66,
+    "title": "Somebody Else",
+    "artist": "The 1975",
+    "category": "Modern Indie Pop",
+    "bpm": 101,
+    "key_mood": ["synthy", "heartbroken", "atmospheric", "groovin"],
+    "sound_tags": "deep synth bassline, 80s gate-reverb drums, funk rhythm guitar chops, breathy vocoder vocals, 101 BPM",
+    "story_structure": "atmospheric synth intro, conversational heartbreak verse, melancholic danceable chorus"
+  },
+  {
+    "id": 67,
+    "title": "ILYSB",
+    "artist": "LANY",
+    "category": "Modern Indie Pop",
+    "bpm": 120,
+    "key_mood": ["romantic", "smooth", "chill", "dreamy"],
+    "sound_tags": "clean electric guitar chords, electronic snap beat, deep sub bass, falsetto backing vocals, 120 BPM",
+    "story_structure": "chill guitar intro, intense devotion lyrics, memorable abbreviation chorus"
+  },
+  {
+    "id": 68,
+    "title": "1901",
+    "artist": "Phoenix",
+    "category": "Modern Indie Pop",
+    "bpm": 144,
+    "key_mood": ["explosive", "electronic", "upbeat", "euphoric"],
+    "sound_tags": "distorted analog synth riff, driving disco drums, energetic bass, punchy French-indie vocals, 144 BPM",
+    "story_structure": "instant explosive synth lead, fast-paced verse, euphoric sing-along hook"
+  },
+  {
+    "id": 69,
+    "title": "Pumped Up Kicks",
+    "artist": "Foster The People",
+    "category": "Modern Indie Pop",
+    "bpm": 128,
+    "key_mood": ["dark-pop", "groovy", "whistling", "catchy"],
+    "sound_tags": "vintage synth bassline, lo-fi drum beat, iconic whistle hook, distorted megaphone vocal effect, 128 BPM",
+    "story_structure": "bassline & whistle intro, dark storytelling verse, infectious pop chorus"
+  },
+  {
+    "id": 70,
+    "title": "What You Know",
+    "artist": "Two Door Cinema Club",
+    "category": "Modern Indie Pop",
+    "bpm": 139,
+    "key_mood": ["energetic", "jangly", "dance-punk", "driving"],
+    "sound_tags": "high-pitched lead guitar riff, four-on-the-floor disco drums, punchy bass, energetic indie vocals, 139 BPM",
+    "story_structure": "unforgettable guitar lead intro, relentless energy verse, soaring chorus"
+  },
+  {
+    "id": 71,
+    "title": "Can I Call You Tonight?",
+    "artist": "Dayglow",
+    "category": "Modern Indie Pop",
+    "bpm": 124,
+    "key_mood": ["bedroom-indie", "bouncy", "cheerful", "sunny"],
+    "sound_tags": "clean chorus electric guitar, bright synth keys, catchy drum machine beat, upbeat youthful vocals, 124 BPM",
+    "story_structure": "bright guitar riff, relatable awkward conversation verse, bouncy memorable hook"
+  },
+  {
+    "id": 72,
+    "title": "Are You Bored Yet?",
+    "artist": "Wallows (feat. Clairo)",
+    "category": "Modern Indie Pop",
+    "bpm": 120,
+    "key_mood": ["indie-pop", "bittersweet", "smooth", "duet"],
+    "sound_tags": "subtle synth arp, warm rhythm guitar, steady drum groove, smooth male-female vocal contrast, 120 BPM",
+    "story_structure": "chill synth intro, honest relationship concern verse, seamless duet chorus"
+  },
+  {
+    "id": 73,
+    "title": "Talk Fast",
+    "artist": "5 Seconds of Summer",
+    "category": "Modern Indie Pop",
+    "bpm": 126,
+    "key_mood": ["80s-pop", "bouncy", "retro", "fun"],
+    "sound_tags": "funky rhythm guitar, slap bass, 80s electronic drum pads, punchy vocal harmonies, 126 BPM",
+    "story_structure": "80s synth-funk intro, fast conversational verse, explosive danceable chorus"
+  },
+  {
+    "id": 74,
+    "title": "Heat Waves",
+    "artist": "Glass Animals",
+    "category": "Modern Indie Pop",
+    "bpm": 81,
+    "key_mood": ["hypnotic", "trap-infused", "melancholic", "summer"],
+    "sound_tags": "pitch-bent vocal sample loop, 808 trap hi-hats, deep sub bass, lazy soulful lead vocal, 81 BPM",
+    "story_structure": "vocal sample hook intro, slow nostalgic verse, massive viral chorus release"
+  },
+  {
+    "id": 75,
+    "title": "Rollercoaster",
+    "artist": "Bleachers",
+    "category": "Modern Indie Pop",
+    "bpm": 160,
+    "key_mood": ["euphoric", "nostalgic", "stadium-indie", "driving"],
+    "sound_tags": "80s synth brass, thumping acoustic drums, driving bassline, passionate shouted vocals, 160 BPM",
+    "story_structure": "pulsing synth intro, nostalgic youth story, explosive anthem chorus"
+  },
+  {
+    "id": 76,
+    "title": "Talk Too Much",
+    "artist": "COIN",
+    "category": "Modern Indie Pop",
+    "bpm": 118,
+    "key_mood": ["funky", "witty", "upbeat", "indie-disco"],
+    "sound_tags": "staccato funk guitar, bouncy bass, tight acoustic drums, energetic lead vocals with vocal hiccups, 118 BPM",
+    "story_structure": "funk guitar lick intro, witty fast-paced verse, explosive pop hook"
+  },
+  {
+    "id": 77,
+    "title": "A-Punk",
+    "artist": "Vampire Weekend",
+    "category": "Modern Indie Pop",
+    "bpm": 174,
+    "key_mood": ["afrobeat-pop", "frantic", "cheerful", "quirky"],
+    "sound_tags": "bright clean electric guitar riff, upbeat ska drum beat, bouncy bass, joyful vocal chants, 174 BPM",
+    "story_structure": "instant iconic guitar intro, short frantic verse, cheerful chorus chant"
+  },
+  {
+    "id": 78,
+    "title": "Seventeen",
+    "artist": "Sharon Van Etten",
+    "category": "Modern Indie Pop",
+    "bpm": 130,
+    "key_mood": ["cinematic", "building", "nostalgic", "raw"],
+    "sound_tags": "pulsing synth bass, steady motorik drum beat, building electric guitar, raw powerful vocal delivery, 130 BPM",
+    "story_structure": "brooding pulse intro, reflective youth story, explosive emotional vocal climax"
+  },
+  {
+    "id": 79,
+    "title": "Superposition",
+    "artist": "Young the Giant",
+    "category": "Modern Indie Pop",
+    "bpm": 110,
+    "key_mood": ["atmospheric", "grooveless", "cosmic", "smooth"],
+    "sound_tags": "pizzicato string synth, ukulele chords, deep sub bass, smooth soaring lead vocal, 110 BPM",
+    "story_structure": "exotic string intro, philosophical love verse, soaring atmospheric chorus"
+  },
+  {
+    "id": 80,
+    "title": "Heavy, California",
+    "artist": "Jungle",
+    "category": "Modern Indie Pop",
+    "bpm": 120,
+    "key_mood": ["neo-soul", "falsetto", "groovy", "sunny"],
+    "sound_tags": "funky rhythm guitar, group falsetto vocals, bongo percussion, vintage bassline, 120 BPM",
+    "story_structure": "percussion & bass intro, collective falsetto chant, summer soul groove"
+  },
+  {
+    "id": 81,
+    "title": "It's Not Living (If It's Not With You)",
+    "artist": "The 1975",
+    "category": "Modern Indie Pop",
+    "bpm": 122,
+    "key_mood": ["80s-jangle", "addictive", "upbeat", "bittersweet"],
+    "sound_tags": "jangly chorus guitar riff, gospel backing singers, 80s pop snare, smooth bass groove, 122 BPM",
+    "story_structure": "shimmering 80s guitar intro, upbeat verse contrasting dark theme, euphoric gospel-pop chorus"
+  },
+  {
+    "id": 82,
+    "title": "Like Real People Do",
+    "artist": "Hozier",
+    "category": "Modern Indie Pop",
+    "bpm": 74,
+    "key_mood": ["folk", "earthy", "intimate", "tender"],
+    "sound_tags": "fingerpicked acoustic guitar, subtle cello, deep warm vocals, gentle brushed snare, 74 BPM",
+    "story_structure": "quiet fingerpicking intro, poetic dark-romance verse, soothing gentle chorus"
+  },
+  {
+    "id": 83,
+    "title": "Midnight City",
+    "artist": "M83",
+    "category": "Modern Indie Pop",
+    "bpm": 105,
+    "key_mood": ["epic", "synthwave", "nighttime", "triumphant"],
+    "sound_tags": "iconic vocal synth hook, electronic electronic drums, soaring saxophone solo ending, epic synth pads, 105 BPM",
+    "story_structure": "famous vocal synth intro, driving nighttime verse, legendary saxophone solo finale"
+  },
+  {
+    "id": 84,
+    "title": "Tongue Tied",
+    "artist": "GROUPLOVE",
+    "category": "Modern Indie Pop",
+    "bpm": 112,
+    "key_mood": ["indie-sleaze", "euphoric", "wild", "catchy"],
+    "sound_tags": "fuzzy synth bass, shouting group vocals, acoustic guitar layer, punchy acoustic drums, 112 BPM",
+    "story_structure": "spontaneous synth intro, wild party verse, anthemic screaming chorus"
+  },
+  {
+    "id": 85,
+    "title": "Electric Feel",
+    "artist": "MGMT",
+    "category": "Modern Indie Pop",
+    "bpm": 103,
+    "key_mood": ["psychedelic-pop", "funky", "groovy", "retro-futuristic"],
+    "sound_tags": "6/4 time signature groove, slinky bassline, smooth falsetto, funky wah-wah guitar, 103 BPM",
+    "story_structure": "funky bass intro, surreal colorful lyrics, infectious psychedelic hook"
+  },
+  {
+    "id": 86,
+    "title": "Greek God",
+    "artist": "Conan Gray",
+    "category": "Modern Indie Pop",
+    "bpm": 128,
+    "key_mood": ["dramatic", "brooding", "acoustic-pop", "vulnerable"],
+    "sound_tags": "heavy acoustic guitar strum, subtle orchestral strings, passionate lead vocals, sub bass drops, 128 BPM",
+    "story_structure": "acoustic brooding verse, building tension, dramatic emotional explosion"
+  },
+  {
+    "id": 87,
+    "title": "San Francisco",
+    "artist": "The Mowgli's",
+    "category": "Modern Indie Pop",
+    "bpm": 120,
+    "key_mood": ["folk-pop", "joyful", "communal", "sunny"],
+    "sound_tags": "strummed acoustic guitar, group sing-along harmonies, bright piano, stomping beat, 120 BPM",
+    "story_structure": "sunny acoustic intro, joyful communal verse, explosive love chorus"
+  },
+  {
+    "id": 88,
+    "title": "Bambi",
+    "artist": "Hippo Campus",
+    "category": "Modern Indie Pop",
+    "bpm": 92,
+    "key_mood": ["chill", "ambient", "indie-R&B", "vulnerable"],
+    "sound_tags": "horn samples, clean staccato guitar, soft electronic beat, delicate lead vocals, 92 BPM",
+    "story_structure": "minimalist intro, introspective verse, delicate falsetto chorus"
+  },
+  {
+    "id": 89,
+    "title": "Peach Pit",
+    "artist": "Peach Pit",
+    "category": "Modern Indie Pop",
+    "bpm": 115,
+    "key_mood": ["chewed-bubblegum", "melancholic", "jangly", "smooth"],
+    "sound_tags": "noodly electric guitar solos, warm laid-back bass, crisp drums, relaxed crooning vocals, 115 BPM",
+    "story_structure": "iconic guitar lick intro, self-deprecating story verse, soaring guitar solo ending"
+  },
+  {
+    "id": 90,
+    "title": "Hypotheticals",
+    "artist": "Frankie Cosmos",
+    "category": "Modern Indie Pop",
+    "bpm": 108,
+    "key_mood": ["twee", "intimate", "bedroom", "sweet"],
+    "sound_tags": "clean minimal electric guitar, simple bass, soft drum machine, quiet intimate female voice, 108 BPM",
+    "story_structure": "short intro, diary-like lyric verse, cute melodic refrain"
+  },
+  {
+    "id": 91,
+    "title": "Seventeen Going Under",
+    "artist": "Sam Fender",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 118,
+    "key_mood": ["raw", "heartland", "emotional", "soaring"],
+    "sound_tags": "driving indie guitar, saxophone lead lines, thumping drums, raw Geordie accent vocal, 118 BPM",
+    "story_structure": "guitar pulse, vivid youth story verse, massive emotional sax & vocal climax"
+  },
+  {
+    "id": 92,
+    "title": "Where's My Love",
+    "artist": "SYML",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 70,
+    "key_mood": ["haunting", "sorrowful", "cinematic", "fragile"],
+    "sound_tags": "reverberating acoustic piano, delicate cellos, whispery falsetto lead vocal, atmospheric ambient pad, 70 BPM",
+    "story_structure": "fragile piano intro, heartbreaking plea verse, haunting vocal echo chorus"
+  },
+  {
+    "id": 93,
+    "title": "Make It With You",
+    "artist": "Bread",
+    "category": "Classic Retro Pop",
+    "bpm": 84,
+    "key_mood": ["soft-rock", "gentle", "romantic", "warm"],
+    "sound_tags": "acoustic 12-string guitar, soft electric piano, smooth bass, gentle vocal harmonies, 84 BPM",
+    "story_structure": "sweet guitar fingerpicking, romantic invitation verse, soothing chorus"
+  },
+  {
+    "id": 94,
+    "title": "As It Was",
+    "artist": "Harry Styles",
+    "category": "Modern Indie Pop",
+    "bpm": 174,
+    "key_mood": ["synth-pop", "bittersweet", "driving", "catchy"],
+    "sound_tags": "80s Tubular Bell synth riff, fast indie drum beat, driving bassline, relaxed vocal delivery, 174 BPM",
+    "story_structure": "child voice intro, fast driving synth beat, catchy melancholic chorus"
+  },
+  {
+    "id": 95,
+    "title": "Cigarette Daydreams",
+    "artist": "Cage the Elephant",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 116,
+    "key_mood": ["acoustic", "nostalgic", "bittersweet", "tender"],
+    "sound_tags": "strummed acoustic guitar, piano accents, gentle bass, raspy vulnerable lead vocals, string section, 116 BPM",
+    "story_structure": "acoustic guitar intro, reflective memory verse, soaring melancholy chorus"
+  },
+  {
+    "id": 96,
+    "title": "Softly",
+    "artist": "Clairo",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 105,
+    "key_mood": ["bedroom-R&B", "sweet", "cozy", "smooth"],
+    "sound_tags": "chill electric piano, soft R&B drum pattern, muted bass, hushed intimate vocals, 105 BPM",
+    "story_structure": "cozy key intro, crush confession verse, sweet hypnotic chorus"
+  },
+  {
+    "id": 97,
+    "title": "Don't Dream It's Over",
+    "artist": "Crowded House",
+    "category": "Classic Retro Pop",
+    "bpm": 82,
+    "key_mood": ["timeless", "hopeful", "melancholic", "warm"],
+    "sound_tags": "organ intro, subtle electric guitar fills, walking bassline, warm baritone vocal, Hammond organ solo, 82 BPM",
+    "story_structure": "organ swell intro, observational verse, comforting resilient chorus"
+  },
+  {
+    "id": 98,
+    "title": "Spit Off a Balcony",
+    "artist": "Pavement",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 108,
+    "key_mood": ["slacker-rock", "melancholic", "raw", "loose"],
+    "sound_tags": "crooked guitar tuning, loose drum beat, warm organ, lazy expressive vocal, 108 BPM",
+    "story_structure": "loose guitar riff, witty nonchalant verse, surprisingly emotional chorus"
+  },
+  {
+    "id": 99,
+    "title": "Heat Waves (Acoustic)",
+    "artist": "Glass Animals",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 82,
+    "key_mood": ["intimate", "vulnerable", "warm", "sad"],
+    "sound_tags": "warm fingerpicked acoustic guitar, subtle vocal reverb, raw intimate vocals, 82 BPM",
+    "story_structure": "stripped-down acoustic intro, vulnerable verse, emotional raw chorus"
+  },
+  {
+    "id": 100,
+    "title": "Line Without a Hook",
+    "artist": "Ricky Montgomery",
+    "category": "Modern Indie Pop",
+    "bpm": 138,
+    "key_mood": ["indie-pop", "theatrical", "heartfelt", "catchy"],
+    "sound_tags": "bright acoustic guitar, driving indie drums, expressive vocal flips, explosive string climax, 138 BPM",
+    "story_structure": "acoustic storytelling verse, theatrical vocal delivery, explosive emotional chorus"
+  }
+]

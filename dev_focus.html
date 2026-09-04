@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="개발자 & 트레이더 전용 초집중 BGM AI 음악 프롬프트 생성기 - 핑크노이즈, 기계식 키보드 타건음, 78BPM 알파파 Deep Focus 라디오">
+    <title>💻⚡ Developer & Trader Deep Focus Prompt Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           DESIGN SYSTEM — IDE Code Dark Mode Theme
+           ═══════════════════════════════════════════ */
+        :root {
+            --bg-dark: #0d1117;
+            --bg-card: rgba(22, 27, 34, 0.85);
+            --bg-card-hover: rgba(33, 38, 45, 0.9);
+            --border-color: rgba(48, 54, 61, 0.8);
+            --border-active: #58a6ff;
+
+            --code-green: #3fb950;
+            --code-blue: #58a6ff;
+            --code-purple: #bc8cff;
+            --code-orange: #d29922;
+            --code-red: #ff7b72;
+            --glow-blue: rgba(88, 166, 255, 0.25);
+            --glow-green: rgba(63, 185, 80, 0.25);
+
+            --text-main: #c9d1d9;
+            --text-sub: #8b949e;
+            --text-bright: #f0f6fc;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+
+            --font-code: 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+
+            --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.6);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── Code Matrix Grid Effect ── */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(48, 54, 61, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(48, 54, 61, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 20px 20px 80px;
+        }
+
+        /* ═══════════════════════════════════════════
+           GLOBAL UNIFIED HEADER NAVIGATION BAR
+           ═══════════════════════════════════════════ */
+        .global-header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(88, 166, 255, 0.2);
+            padding: 12px 24px;
+            margin-bottom: 24px;
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .brand-icon { font-size: 24px; }
+        .brand-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .brand-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--code-green);
+            border: 1px solid rgba(63, 185, 80, 0.4);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .nav-link.active {
+            color: #0d1117;
+            background: linear-gradient(135deg, var(--code-green), var(--code-blue));
+            font-weight: 700;
+            box-shadow: 0 0 16px var(--glow-green);
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-suno {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-suno:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        @media (max-width: 860px) {
+            .nav-container { flex-direction: column; align-items: stretch; }
+            .nav-links { overflow-x: auto; white-space: nowrap; justify-content: start; }
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: rgba(88, 166, 255, 0.12);
+            border: 1px solid var(--code-blue);
+            color: var(--code-blue);
+            font-family: var(--font-code);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            box-shadow: 0 0 12px var(--glow-blue);
+        }
+
+        .header h1 {
+            font-family: var(--font-code);
+            font-size: clamp(26px, 4vw, 42px);
+            font-weight: 700;
+            color: var(--text-bright);
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 span.hl {
+            color: var(--code-green);
+        }
+
+        .header p {
+            color: var(--text-sub);
+            font-size: 14.5px;
+            margin-top: 8px;
+        }
+
+        /* ── Layout ── */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+
+        .card-title {
+            font-family: var(--font-code);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--code-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-code);
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--code-purple);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .opt-btn:hover {
+            border-color: var(--code-blue);
+            color: var(--text-bright);
+        }
+
+        .opt-btn.active {
+            background: rgba(88, 166, 255, 0.15);
+            border-color: var(--code-blue);
+            color: var(--code-blue);
+            font-weight: 700;
+            box-shadow: 0 0 10px var(--glow-blue);
+        }
+
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-chip {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 12.5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-code);
+        }
+
+        .tag-chip:hover {
+            border-color: var(--code-green);
+            color: var(--text-bright);
+        }
+
+        .tag-chip.selected {
+            background: rgba(63, 185, 80, 0.15);
+            border-color: var(--code-green);
+            color: var(--code-green);
+            font-weight: 700;
+            box-shadow: 0 0 8px var(--glow-green);
+        }
+
+        /* Output Code Box */
+        .output-box {
+            background: #090d13;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            font-family: var(--font-code);
+            font-size: 13px;
+            color: var(--code-green);
+            min-height: 110px;
+            max-height: 230px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-code);
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            flex: 2;
+            background: var(--code-blue);
+            color: #0d1117;
+            box-shadow: 0 0 15px var(--glow-blue);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-bright);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #161b22;
+            border: 1px solid var(--code-green);
+            color: var(--code-green);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-family: var(--font-code);
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <div class="app-wrapper">
+        <nav class="global-header">
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">
+                    <span class="brand-icon">🎵</span>
+                    <div>
+                        <span class="brand-title">SUNO AI PROMPT STUDIO</span>
+                        <span class="brand-badge">PRO v2.5</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <span>🤠</span> Country Pro
+                    </a>
+                    <a href="cyber_lofi.html" class="nav-link">
+                        <span>🌧️</span> Cyber Rain Lofi
+                    </a>
+                    <a href="dev_focus.html" class="nav-link active">
+                        <span>💻</span> Dev Deep Focus
+                    </a>
+                    <a href="phonk_walker.html" class="nav-link">
+                        <span>🏎️</span> Drift Phonk & EDM
+                    </a>
+                </div>
+                <div class="nav-actions">
+                    <a href="https://suno.com" target="_blank" rel="noopener" class="btn-suno">
+                        <span>🚀 Launch Suno AI</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="badge-tag">💎 1순위 마이크로 틈새 : 개발자 & 트레이더 초집중 라디오</div>
+            <h1>Developer & Trader <span class="hl">Deep Focus</span> Prompt Engine</h1>
+            <p>핑크노이즈 + 기계식 키보드 타건음 + 78 BPM 알파파 Lofi로 유튜브 수익화 및 시청지속시간 극대화</p>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="grid-layout">
+            <!-- Left Column: Controls -->
+            <div class="card">
+                <div class="card-title">
+                    <span>const config = { sound_profile }</span>
+                </div>
+
+                <!-- Focus Vibe Preset -->
+                <div class="form-group">
+                    <label class="form-label">// 1. 몰입 환경 세팅 (Focus Mode)</label>
+                    <div class="option-grid" id="modeGrid">
+                        <div class="opt-btn active" data-val="IDE Terminal & Heavy Rain Ambient">💻 IDE 터미널 & 장대비</div>
+                        <div class="opt-btn" data-val="TradingView Charts & Pink Noise">📈 차트 분석 & 핑크노이즈</div>
+                        <div class="opt-btn" data-val="Late Night 4-Hour Code Sprint">🚀 새벽 4시간 코드 스프린트</div>
+                        <div class="opt-btn" data-val="Cyber Security & Alpha Wave Focus">🛡️ 사이버 보안 & 알파파</div>
+                        <div class="opt-btn" data-val="Cozy Tech Coffee Shop">☕ 테크 스타트업 카페</div>
+                    </div>
+                </div>
+
+                <!-- BPM / Rhythm -->
+                <div class="form-group">
+                    <label class="form-label">// 2. BPM & 템포 (Concentration Tempo)</label>
+                    <div class="option-grid" id="bpmGrid">
+                        <div class="opt-btn active" data-val="78 BPM steady flow beat">🧠 78 BPM (몰입 알파파)</div>
+                        <div class="opt-btn" data-val="84 BPM downtempo lo-fi groove">💻 84 BPM (코딩 루틴)</div>
+                        <div class="opt-btn" data-val="68 BPM deep ambient minimal space">💤 68 BPM (딥 워크 수면/휴식)</div>
+                    </div>
+                </div>
+
+                <!-- Sound Layering Tags -->
+                <div class="form-group">
+                    <label class="form-label">// 3. 특수 음향 레이어 (유튜브 재탕 회피 핵심)</label>
+                    <div class="tag-group" id="layerTags">
+                        <span class="tag-chip selected" data-val="mechanical keyboard typing sfx">⌨️ 기계식 키보드 타건음</span>
+                        <span class="tag-chip selected" data-val="pink noise & binaural alpha waves">🧠 핑크노이즈+알파파</span>
+                        <span class="tag-chip selected" data-val="soft rain on office window">🌧️ 창문 빗소리 SFX</span>
+                        <span class="tag-chip" data-val="tape warmth & muted rhodes piano">🎹 따뜻한 아날로그 로즈</span>
+                        <span class="tag-chip" data-val="subtle ambient coffee shop hum">☕ 잔잔한 카페 백그라운드</span>
+                        <span class="tag-chip" data-val="deep sub bass resonance">🔊 딥 서브 베이스 앰비언트</span>
+                    </div>
+                </div>
+
+                <!-- Vocal Setting -->
+                <div class="form-group">
+                    <label class="form-label">// 4. 보컬 여부</label>
+                    <div class="option-grid" id="vocalGrid">
+                        <div class="opt-btn active" data-val="Instrumental, No vocals, Pure Deep Concentration BGM">📵 순수 연주곡 (자사 및 보컬 없음)</div>
+                        <div class="opt-btn" data-val="Ethereal whispering vocal chops">🗣️ 극도로 잔잔한 몽환 보컬찹</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Outputs -->
+            <div class="card">
+                <div class="card-title">
+                    <span>// OUTPUT_GENERATE_RESULT</span>
+                </div>
+
+                <!-- Suno Style Prompt -->
+                <div class="form-group">
+                    <label class="form-label">1. Suno / Udio 음악 스타일 프롬프트 (Style Prompt)</label>
+                    <div class="output-box" id="stylePromptBox"></div>
+                    <button class="btn btn-secondary" onclick="copyText('stylePromptBox')">📋 Style 프롬프트 복사</button>
+                </div>
+
+                <!-- Youtube Title, Tags & Midjourney -->
+                <div class="form-group">
+                    <label class="form-label">2. 개발자 타깃 유튜브 제목, 태그 & Midjourney 썸네일</label>
+                    <div class="output-box" id="ytPackageBox"></div>
+                    <button class="btn btn-secondary" onclick="copyText('ytPackageBox')">📋 유튜브 패키지 전체 복사</button>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateAllPrompts()">⚡ 프롬프트 새로 빌드하기 (Rebuild)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Code Copied to Clipboard!</div>
+
+    <script>
+        function getActiveVal(containerId) {
+            const active = document.querySelector(`#${containerId} .opt-btn.active`);
+            return active ? active.dataset.val : '';
+        }
+
+        function getSelectedTags(containerId) {
+            const tags = document.querySelectorAll(`#${containerId} .tag-chip.selected`);
+            return Array.from(tags).map(t => t.dataset.val);
+        }
+
+        document.querySelectorAll('.opt-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                generateAllPrompts();
+            });
+        });
+
+        document.querySelectorAll('.tag-chip').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                generateAllPrompts();
+            });
+        });
+
+        function generateAllPrompts() {
+            const mode = getActiveVal('modeGrid');
+            const bpm = getActiveVal('bpmGrid');
+            const layers = getSelectedTags('layerTags').join(', ');
+            const vocal = getActiveVal('vocalGrid');
+
+            // Style Prompt
+            const stylePrompt = `lo-fi hip hop, chillhop, ${mode.toLowerCase()}, ${bpm}, ${layers}, ${vocal}, deep focus flow state, 4k ultra clean production, high concentration audio engineering`;
+            document.getElementById('stylePromptBox').innerText = stylePrompt;
+
+            // Youtube Title & Midjourney Prompt
+            const ytTitle = `[4 Hours Deep Focus] ${mode} 💻 | 개발자·트레이더 초집중 코딩 BGM (Pink Noise + Mechanical Keyboard SFX)`;
+            const mjPrompt = `/imagine prompt: A programmer workspace at midnight, dual curved monitors displaying glowing code, mechanical keyboard on desk, rain drops on dark window overlooking neon city, dark academia meets cyberpunk aesthetic, unreal engine 5 render, cinematic lighting --ar 16:9 --v 6.0`;
+            const tags = `#DeepFocus #CodingBGM #개발자음악 #핑크노이즈 #LofiStudy #SunoAI #FlowState`;
+
+            const ytPackage = `📌 [유튜브 추천 제목]\n${ytTitle}\n\n🖼️ [Midjourney 썸네일 프롬프트]\n${mjPrompt}\n\n🏷️ [개발자 타깃 추천 태그]\n${tags}`;
+            document.getElementById('ytPackageBox').innerText = ytPackage;
+        }
+
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2200);
+            });
+        }
+
+        // Init
+        generateAllPrompts();
+    </script>
+</body>
+</html>
