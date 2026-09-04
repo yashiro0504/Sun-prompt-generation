@@ -1129,9 +1129,9 @@
     <!-- HEADER -->
     <header>
       <div class="header-left">
-        <div class="logo-badge">🎸 전득필 (Jeon Deuk-pil) OAC STUDIO v5.0</div>
+        <div class="logo-badge">🎸 전득필 (Jeon Deuk-pil) OAC STUDIO v6.0</div>
         <h1>전득필 공식 1일 1곡 스튜디오</h1>
-        <p>중저음 바리톤 보컬 + 脫(탈)AI 감성 일기 + OAC 발매 & 3000px 앨범커버 원스톱 패키지</p>
+        <p>중저음 바리톤 보컬 + 1990s~2010s 한국 인디 모던록 감성 + OAC 발매 패키지</p>
       </div>
       <div class="header-actions">
         <!-- DeepSeek API status button -->
@@ -1539,7 +1539,7 @@
   };
 
   const THEME_NAMES = {
-    'regret': '이별과 미련 (서툰 마지막 말, 찢어진 영수증, 잊지 못하는 미련과 회한)',
+    'regret': '이별과 미련 (서툰 마지막 말, 지우지 못한 통화 기록, 잊지 못하는 미련과 회한)',
     'nocturnal': '심야의 독백 (골목길 가로등, 식어버린 캔커피, 깊은 고독과 자아 성찰)',
     'seasonal': '계절의 기억 (물기 젖은 스니커즈, 마른 잎, 지나간 계절의 쌉싸름한 잔상)',
     'solace': '소소한 위로 (지친 퇴근길, 낡은 선풍기 소리, 덤덤한 공간에서 전하는 따뜻한 위안)'
@@ -1553,13 +1553,13 @@
     "낡은 세탁소 골목에서 풍기는 스팀 다리미 냄새",
     "오래된 공중전화 부스 유리창에 맺힌 빗물",
     "고장 난 보일러 소리와 방안에 맴도는 찬 공기",
-    "주머니 속 구겨진 채 발견된 찢어진 버스 영수증",
+    "주머니 속 손때 묻은 접힌 지하철 노선도",
     "지하 단칸방 환기창 틈으로 올려다본 사람들의 발자국",
     "막차 버스 맨 뒷자리 차창에 기댄 이마의 차가움",
     "새벽 3시 10분, 꺼지지 않는 신호등의 노란 점멸등",
     "낡은 옥상 난간에 기대어 피워 올린 담배 연기",
     "비 내리는 일요일 오후, 멈춰버린 괘종시계 소리",
-    "문 닫힌 동네 LP판 카페의 희미한 쇼윈도 불빛",
+    "불 꺼진 동네 헌책방 골목의 낡은 가로등 불빛",
     "다 마신 캔맥주 캔을 발로 차며 걷는 둑방길",
     "너와 마지막으로 헤어졌던 붉은 우체통 앞 골목길",
     "식어버린 보온병에서 흘러나오는 미지근한 보리차",
@@ -1869,12 +1869,12 @@
             {
               role: 'system',
               content: `당신은 대한민국 인디 씬의 독보적인 싱어송라이터 '전득필(Jeon Deuk-pil)'입니다.
-전득필은 70~90년대 빈티지 아날로그 록/포크의 묵직한 감수성으로, 현대 도시를 살아가는 청춘의 고단함과 쓸쓸한 일상을 덤덤하게 노래하는 중저음 바리톤 보컬리스트입니다.
+전득필은 1990년대~2010년대 한국 인디 모던록/포크(언니네이발관, 델리스파이스, 브로콜리너마저, 넬, 검정치마 감성)의 묵직하고 서정적인 감수성으로, 현대 도시를 살아가는 청춘의 고단함과 쓸쓸한 일상을 덤덤하게 노래하는 중저음 바리톤 보컬리스트입니다.
 당신의 임무는 영미권 레퍼런스 명곡의 사운드 질감을 흡수하여, 전득필 명의의 수준 높은 한국어 인디 가사와 OAC(공식 아티스트 채널) 발매 패키지를 완성하는 것입니다.
 
 [🔥 절대 원칙 1: 탈(脫)AI 일상 사물 언어 - 상투어 원천 배제]
-- 🚫 금지 어휘: "찬란한 빛/별/미래", "어둠을 헤치고/뚫고", "영원한 사랑/약속", "시간의 강/바다", "마음의 미로", "영혼의 울림", "희망의 날개", "꿈을 향해 달려", "운명의 장난", "가슴속 깊은 상처" 등 뻔하고 오글거리는 AI 특유의 추상적인 미사여구는 절대 쓰지 마세요.
-- ✅ 전득필의 언어: 손에 만져지는 구체적인 일상 사물(찢어진 영수증, 식은 캔커피, 젖은 스니커즈, 편의점 파라솔, 자판기 불빛, 새벽 3시 10분, 낡은 가디건, 덜컹거리는 버스 손잡이 등)과 쌉싸름한 1인칭 독백체(~했잖아, ~겠지, ~인 걸까, ~스민다, ~밤)로 작성하세요.
+- 🚫 금지 어휘: "영수증"(영수증 관련 묘사 일체 금지), "LP판/레코드/턴테이블"(진부한 옛날 레트로 흉내 금지), "찬란한 빛/별/미래", "어둠을 헤치고/뚫고", "영원한 사랑/약속", "시간의 강/바다", "마음의 미로", "영혼의 울림", "희망의 날개", "꿈을 향해 달려", "운명의 장난", "가슴속 깊은 상처" 등 뻔하고 오글거리는 AI 특유의 추상적인 미사여구는 절대 쓰지 마세요.
+- ✅ 전득필의 언어: 1990년대~2010년대 한국 인디의 정서가 묻어나는 손에 만져지는 구체적인 일상 사물(손때 묻은 버스카드, 식은 캔커피, 젖은 스니커즈, 편의점 파라솔, 자판기 불빛, 새벽 3시 10분, 낡은 가디건, 덜컹거리는 버스 손잡이, 번진 볼펜 자국, 이어폰 줄 등)과 쌉싸름한 1인칭 독백체(~했잖아, ~겠지, ~인 걸까, ~스민다, ~밤)로 작성하세요.
 
 [🎵 절대 원칙 2: 전득필 특유의 음수율 & 라임(Rhyme)]
 1. 한 줄당 글자 수(음수율)를 8자~14자 내외로 균일하게 맞추어, 노래를 부를 때 박자가 밀리거나 혀가 꼬이지 않고 입에 착 감기도록 작성하세요 (3-4조, 4-4조, 7-5조 호흡).
@@ -1892,7 +1892,7 @@
 TITLES: 한글제목 (영문부제) 5개를 쉼표로 구분하여 출력
 YT_TITLES: [전득필 OAC 발매형] | [플레이리스트형] | [서사형]
 LINER_NOTES: 전득필 명의의 앨범 소개글 (멜론/스포티파이/유튜브 설명란에 들어갈 쌉싸름한 2~3줄 작가의 말)
-COVER_PROMPT: Midjourney v6 전용 1:1 정방형 앨범 커버 영문 프롬프트 (35mm candid film photograph, vintage Korean indie aesthetic, [소재 시각 묘사], 1990s retro film grain, moody street lighting, square aspect ratio --ar 1:1 --v 6.0)
+COVER_PROMPT: Midjourney v6 전용 1:1 정방형 앨범 커버 영문 프롬프트 (35mm candid film photograph, 1990s-2010s Korean indie rock album cover aesthetic, [소재 시각 묘사], natural nostalgic film grain, moody cinematic street lighting, square aspect ratio --ar 1:1 --v 6.0)
 LYRICS:
 [Verse 1]
 ...
@@ -1984,7 +1984,7 @@ LYRICS:
 
     currentYtTitles = ytTitles.length > 0 ? ytTitles : getFallbackYtTitles(topic);
     currentLinerNotes = linerNotes || `어느 차가운 새벽, ${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다. - 전득필`;
-    currentCoverPrompt = coverPrompt || `Album cover art, 35mm candid film photography, vintage Korean indie aesthetic, a lonely scene at ${topic}, 1990s retro film grain, moody street lighting, melancholic analog tone, vinyl record texture, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
+    currentCoverPrompt = coverPrompt || `Album cover art, 35mm candid film photography, 1990s-2010s Korean indie rock album aesthetic, a lonely scene at ${topic}, natural nostalgic film grain, moody street lighting, melancholic analog tone, cinematic city color grade, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
 
     // 수노(Suno) 이상 동작 방지를 위해 [Intro] 섹션 및 태그 완벽 필터링
     let rawLyricsText = lyricsLines.join('\n').trim() || content;
@@ -2009,7 +2009,7 @@ LYRICS:
 
     const themeLyrics = {
       'regret': {
-        verse1: `주머니 속 구겨진 영수증 하나\n너와 마시던 캔커피 날짜가 남아\n지우지 못한 마지막 그 한마디가\n물기 젖은 신발처럼 무겁게 스민다`,
+        verse1: `주머니 속 손때 묻은 버스 카드\n너와 나란히 걷던 정류장 앞에 서서\n끝내 전하지 못한 마지막 그 한마디가\n물기 젖은 신발처럼 무겁게 스민다`,
         pre: `돌아서던 뒷모습이 자꾸만 밟혀\n끝내 하지 못했던 말이 목에 걸려`,
         chorus: `우린 왜 그리 서툴게 스쳐갔을까\n사소했던 오해 속에 너를 놓치고\n${topic} 위로 흩어지는 찬 한숨\n되돌릴 수 없는 시간만 자꾸 세어본다`,
         verse2: `어둑해진 골목길 자판기 불빛\n너와 나란히 서서 웃던 그 자리\n괜찮다고 혼잣말을 읊조려 봐도\n시린 바람결에 네 향기만 묻어온다`,
@@ -2060,7 +2060,7 @@ LYRICS:
 
     currentYtTitles = getFallbackYtTitles(topic);
     currentLinerNotes = `어느 차가운 새벽, ${topic}에서 홀로 마주했던 쌉싸름한 계절의 기록입니다. - 전득필`;
-    currentCoverPrompt = `Album cover art, 35mm candid film photography, vintage Korean indie aesthetic, a lonely scene at ${topic}, 1990s retro film grain, moody street lighting, melancholic analog tone, vinyl record texture, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
+    currentCoverPrompt = `Album cover art, 35mm candid film photography, 1990s-2010s Korean indie rock album aesthetic, a lonely scene at ${topic}, natural nostalgic film grain, moody street lighting, melancholic analog tone, cinematic city color grade, square 1:1 aspect ratio --ar 1:1 --v 6.0`;
 
     renderLyricsDisplay();
     renderYouTubeKit();
@@ -2144,6 +2144,7 @@ LYRICS:
 
   // v6.0: Anti-AI Cliché & Quality Score Scanner
   const BANNED_CLICHES = [
+    "영수증", "LP판", "LP", "턴테이블",
     "찬란한", "영원한 사랑", "시간의 강", "마음의 미로", "영혼의 울림",
     "희망의 날개", "꿈을 향해", "운명의 장난", "가슴속 깊은", "어둠을 뚫고",
     "어둠을 헤치고", "아픔의 눈물", "세상의 끝에서", "빛나는 별"
@@ -2216,8 +2217,8 @@ LYRICS:
       </div>
       <div class="quality-items">
         <div class="quality-item ${q.cliches.length === 0 ? 'pass' : 'fail'}">
-          <span>🚫 AI 상투어/클리셰 검출</span>
-          <span>${q.cliches.length === 0 ? '✅ 0개 (순수 일상 오브제 언어)' : `⚠️ ${q.cliches.length}개 감지: ${q.cliches.join(', ')}`}</span>
+          <span>🚫 AI 상투어/클리셰 검출 (영수증/LP판 차단)</span>
+          <span>${q.cliches.length === 0 ? '✅ 0개 (90s-2010s 순수 일상 언어)' : `⚠️ ${q.cliches.length}개 감지: ${q.cliches.join(', ')}`}</span>
         </div>
         <div class="quality-item ${q.meterAdherence >= 80 ? 'pass' : 'warn'}">
           <span>📏 한국어 음수율(8~14자) 준수율</span>
@@ -2225,7 +2226,7 @@ LYRICS:
         </div>
         <div class="quality-item pass">
           <span>🎙️ 보컬 페르소나 최적화</span>
-          <span>✅ 중저음 바리톤 + 어휘 독백체 검증 완료</span>
+          <span>✅ 1990s-2010s 인디 감성 + 중저음 바리톤</span>
         </div>
       </div>
     `;
@@ -2241,9 +2242,9 @@ LYRICS:
 
     if (apiKey && apiKey.startsWith('sk-')) {
       try {
-        const prompt = `당신은 인디 싱어송라이터 '전득필'입니다.
+        const prompt = `당신은 1990년대~2010년대 한국 인디 모던록 싱어송라이터 '전득필'입니다.
 신곡 소재: "${topic}"
-현재 노래의 [${sectionTag}] 섹션만 전득필의 감성(손에 잡히는 일상 사물, 쌉싸름한 독백체, 8~14자 음수율, AI 상투어 금지)으로 4줄 내외로 새롭게 작성해 주세요.
+현재 노래의 [${sectionTag}] 섹션만 전득필의 감성(손에 잡히는 1990s-2010s 일상 사물, 쌉싸름한 독백체, 8~14자 음수율, AI 상투어 금지, 영수증/LP판 일체 금지)으로 4줄 내외로 새롭게 작성해 주세요.
 출력 형식은 다른 설명 없이 오직 가사 내용만 4줄 출력하세요.`;
 
         const res = await fetch('https://api.deepseek.com/chat/completions', {
@@ -2266,7 +2267,7 @@ LYRICS:
       }
     } else {
       const fallbacks = {
-        'Verse 1': `길모퉁이 편의점 파라솔 아래\n지갑 속 구겨진 영수증 날짜를 세어보네\n차가운 캔커피 손에 쥐고 멍하니\n어제와 다를 바 없는 밤을 걷는다`,
+        'Verse 1': `길모퉁이 편의점 파라솔 아래\n지갑 속 접어둔 메모지 글씨를 보네\n차가운 캔커피 손에 쥐고 멍하니\n어제와 다를 바 없는 밤을 걷는다`,
         'Chorus': `우린 왜 그리 서툴게 스쳐갔을까\n사소했던 오해 속에 너를 놓치고\n${topic} 위로 흩어지는 찬 한숨\n되돌릴 수 없는 시간만 자꾸 세어본다`,
         'Verse 2': `어둑해진 골목길 자판기 불빛\n너와 나란히 서서 웃던 그 자리\n괜찮다고 혼잣말을 읊조려 봐도\n시린 바람결에 네 향기만 묻어온다`,
         'Bridge': `(Whisper) 정말로 너 없이도 괜찮아질 수 있을까\n차갑게 식어버린 밤의 무게를 견디며`,
