@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>전득필 (Jeon Deuk-pil) OAC Daily Studio v5.0</title>
+  <title>전득필 (Jeon Deuk-pil) OAC Daily Studio v6.1</title>
   <meta name="description" content="싱어송라이터 전득필(Jeon Deuk-pil) 공식 유튜브 아티스트 채널(OAC) 1일 1곡 발매 올인원 제작 스튜디오">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -525,12 +525,7 @@
     /* Prompt Box */
     .prompt-box-wrapper { position: relative; }
 
-    .prompt-controls-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+
 
     .mode-switch {
       display: inline-flex;
@@ -1523,7 +1518,7 @@
 
   <script>
   /* ================================================================
-     전득필 (Jeon Deuk-pil) OAC Daily Studio v5.0 Engine
+     전득필 (Jeon Deuk-pil) OAC Daily Studio v6.1 Engine
      ================================================================ */
 
   let POP_REFERENCES = [];
@@ -1611,6 +1606,17 @@
   // Fixed Vocal Profile for 전득필 (Jeon Deuk-pil)
   const FIXED_VOCAL_SIGNATURE = 'deep baritone male vocals, solo male singer, intimate low baritone, articulate Korean diction';
 
+  // === Utility Functions ===
+  function sampleArray(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function syncBpmUI(bpm, refBpm) {
+    document.getElementById('bpm-slider').value = bpm;
+    document.getElementById('bpm-val').textContent = `${bpm} BPM`;
+    document.getElementById('bpm-ref-hint').textContent = `원곡: ${refBpm || bpm} BPM`;
+  }
+
   // Load Reference DB
   async function loadDatabase() {
     try {
@@ -1633,13 +1639,13 @@
     renderDB();
     updateSavedCount();
     updateStreakUI();
-    // 사이트 열자마자 고정된 곡 대신 무조건 랜덤 원클릭 데일리 조합으로 신선하게 시작!
+    // 사이트 열자마자 랜덤 원클릭 데일리 조합으로 시작 (API 토큰 절약: 초기 로드는 항상 오프라인 템플릿)
     dailyAutoGenerate(true);
   }
 
   // Random Diary Roll
   function rollDailyDiaryTopic() {
-    const randomTopic = DIARY_TOPIC_POOL[Math.floor(Math.random() * DIARY_TOPIC_POOL.length)];
+    const randomTopic = sampleArray(DIARY_TOPIC_POOL);
     document.getElementById('topic-input').value = randomTopic;
     showToast(`🎲 오늘의 일기 소재: "${randomTopic}"`);
     generateAll();
@@ -1647,26 +1653,38 @@
 
   // v6.0: One-Click Daily Auto Generator (소재 + 테마 + 레퍼런스 일괄 자동 매칭)
   function dailyAutoGenerate(isInitial = false) {
-    const randomTopic = DIARY_TOPIC_POOL[Math.floor(Math.random() * DIARY_TOPIC_POOL.length)];
+    const randomTopic = sampleArray(DIARY_TOPIC_POOL);
     document.getElementById('topic-input').value = randomTopic;
 
-    const themes = ['regret', 'nocturnal', 'seasonal', 'solace'];
-    const pickedTheme = themes[Math.floor(Math.random() * themes.length)];
+    const themeKeys = Object.keys(THEME_NAMES);
+    const pickedTheme = sampleArray(themeKeys);
     selectedTheme = pickedTheme;
     document.querySelectorAll('.theme-chip').forEach(c => {
       c.classList.toggle('active', c.dataset.theme === pickedTheme);
     });
 
-    const cats = ['britpop', 'dreampop', 'retropop', 'modernindie'];
-    const pickedCat = cats[Math.floor(Math.random() * cats.length)];
+    const catKeys = Object.keys(CATEGORY_MAP);
+    const pickedCat = sampleArray(catKeys);
     selectCategory(pickedCat);
 
     if (isInitial) {
+      // 초기 로드 시: API 토큰 절약을 위해 항상 오프라인 템플릿으로 시작
+      const activeMoods = getActiveMoods();
+      if (!activeRefTrack) {
+        const catFull = CATEGORY_MAP[selectedCategory];
+        const pool = POP_REFERENCES.filter(r => r.category === catFull);
+        activeRefTrack = pool[0] || POP_REFERENCES[0];
+        currentBpm = activeRefTrack.bpm;
+        syncBpmUI(currentBpm, activeRefTrack.bpm);
+      }
+      renderSummaryBox();
+      generateSunoPrompt(activeRefTrack, activeMoods);
+      generateProcedural(randomTopic, activeRefTrack, activeMoods, selectedTheme);
       showToast(`🎲 오늘의 데일리 랜덤 곡: "${randomTopic}" 자동 매칭 완료!`);
     } else {
       showToast(`🎰 [오늘의 전득필] "${randomTopic}" 데일리 세트 자동 조합 완료!`);
+      generateAll();
     }
-    generateAll();
   }
 
   // API Key Management
@@ -1825,7 +1843,7 @@
     const topicInput = document.getElementById('topic-input');
     let topic = topicInput.value.trim();
     if (!topic) {
-      topic = DIARY_TOPIC_POOL[Math.floor(Math.random() * DIARY_TOPIC_POOL.length)];
+      topic = sampleArray(DIARY_TOPIC_POOL);
       topicInput.value = topic;
     }
     const activeMoods = getActiveMoods();
@@ -1835,9 +1853,7 @@
       const pool = POP_REFERENCES.filter(r => r.category === catFull);
       activeRefTrack = pool[0] || POP_REFERENCES[0];
       currentBpm = activeRefTrack.bpm;
-      document.getElementById('bpm-slider').value = currentBpm;
-      document.getElementById('bpm-val').textContent = `${currentBpm} BPM`;
-      document.getElementById('bpm-ref-hint').textContent = `원곡: ${activeRefTrack.bpm} BPM`;
+      syncBpmUI(currentBpm, activeRefTrack.bpm);
     }
 
     renderSummaryBox();
@@ -1983,18 +1999,29 @@ LYRICS:
     let mode = '';
 
     for (let line of lines) {
-      if (line.startsWith('TITLES:')) {
-        titles = line.replace('TITLES:', '').split(',').map(s => s.trim()).filter(Boolean);
-      } else if (line.startsWith('YT_TITLES:')) {
-        ytTitles = line.replace('YT_TITLES:', '').split('|').map(s => s.trim()).filter(Boolean);
-      } else if (line.startsWith('LINER_NOTES:')) {
-        linerNotes = line.replace('LINER_NOTES:', '').trim();
-      } else if (line.startsWith('COVER_PROMPT:')) {
-        coverPrompt = line.replace('COVER_PROMPT:', '').trim();
-      } else if (line.startsWith('LYRICS:')) {
+      // 마크다운 볼드(**TITLES:** 등) 전처리
+      const cleaned = line.replace(/^\*{1,3}\s*/, '').replace(/\s*\*{1,3}$/, '');
+
+      if (cleaned.startsWith('TITLES:')) {
+        titles = cleaned.replace('TITLES:', '').split(',').map(s => s.trim()).filter(Boolean);
+        mode = '';
+      } else if (cleaned.startsWith('YT_TITLES:')) {
+        ytTitles = cleaned.replace('YT_TITLES:', '').split('|').map(s => s.trim()).filter(Boolean);
+        mode = '';
+      } else if (cleaned.startsWith('LINER_NOTES:')) {
+        linerNotes = cleaned.replace('LINER_NOTES:', '').trim();
+        mode = 'liner';
+      } else if (cleaned.startsWith('COVER_PROMPT:')) {
+        coverPrompt = cleaned.replace('COVER_PROMPT:', '').trim();
+        mode = 'cover';
+      } else if (cleaned.startsWith('LYRICS:')) {
         mode = 'lyrics';
       } else if (mode === 'lyrics') {
         lyricsLines.push(line);
+      } else if (mode === 'liner' && cleaned.trim() && !cleaned.startsWith('COVER_PROMPT') && !cleaned.startsWith('LYRICS')) {
+        linerNotes += ' ' + cleaned.trim();
+      } else if (mode === 'cover' && cleaned.trim() && !cleaned.startsWith('LYRICS')) {
+        coverPrompt += ' ' + cleaned.trim();
       }
     }
 
@@ -2210,7 +2237,7 @@ LYRICS:
 
   // v6.0: Anti-AI Cliché & Quality Score Scanner
   const BANNED_CLICHES = [
-    "가디건", "캔커피", "스니커즈", "영수증", "LP판", "LP", "턴테이블",
+    "가디건", "캔커피", "스니커즈", "영수증", "LP판", "턴테이블",
     "찬란한", "영원한 사랑", "시간의 강", "마음의 미로", "영혼의 울림",
     "희망의 날개", "꿈을 향해", "운명의 장난", "가슴속 깊은", "어둠을 뚫고",
     "어둠을 헤치고", "아픔의 눈물", "세상의 끝에서", "빛나는 별"
@@ -2241,14 +2268,20 @@ LYRICS:
     }
     const meterRate = lines.length > 0 ? Math.round((goodMeterCount / lines.length) * 100) : 100;
 
-    // 3. Word repetition check
-    const words = currentRawLyrics.replace(/\[[^\]]*\]/g, '').replace(/[\(\)\,\.\?\!]/g, ' ')
+    // 3. Word repetition check (코러스 반복 구간 제외)
+    // 코러스 내용은 반복이 정상이므로 첫 번째 코러스만 카운트
+    const lyricsForRepCheck = currentRawLyrics.replace(/\[Chorus[^\]]*\][\s\S]*?(?=\n\[|$)/gi, (match, offset) => {
+      // 첫 번째 코러스만 유지, 나머지 코러스는 빈 문자열로 제거
+      if (offset === currentRawLyrics.indexOf(match)) return match;
+      return '';
+    });
+    const words = lyricsForRepCheck.replace(/\[[^\]]*\]/g, '').replace(/[\(\)\,\.\?\!]/g, ' ')
       .split(/\s+/).filter(w => w.length >= 2);
     const wordFreq = {};
     for (const w of words) {
       wordFreq[w] = (wordFreq[w] || 0) + 1;
     }
-    const overusedWords = Object.keys(wordFreq).filter(w => wordFreq[w] >= 4 && !['전득필', '처럼', '그대', '우리', '오늘', '내일'].includes(w));
+    const overusedWords = Object.keys(wordFreq).filter(w => wordFreq[w] >= 4 && !['전득필', '처럼', '그대', '우리', '오늘', '내일', '너의', '나의', '그런', '하나'].includes(w));
 
     // Score calculate
     let score = 100;
@@ -2299,6 +2332,10 @@ LYRICS:
           <span>🎙️ 보컬 페르소나 최적화</span>
           <span>✅ 1990s-2010s 인디 감성 + 중저음 바리톤</span>
         </div>
+        <div class="quality-item ${q.repetition.length === 0 ? 'pass' : 'warn'}">
+          <span>🔁 어휘 반복도 (4회 이상 반복 단어)</span>
+          <span>${q.repetition.length === 0 ? '✅ 양호' : `⚠️ ${q.repetition.length}개 과다 반복: ${q.repetition.join(', ')}`}</span>
+        </div>
         ${q.score < 92 ? `
           <div class="quality-item warn" style="cursor:pointer; background:rgba(239, 68, 68, 0.15); border:1px dashed rgba(239,68,68,0.4); padding:8px 12px;" onclick="regenerateFullLyrics()">
             <span>⚡ 점수가 마음에 안 드시나요? 클릭하면 가사를 통째로 다시 씁니다.</span>
@@ -2315,7 +2352,7 @@ LYRICS:
     const topicInput = document.getElementById('topic-input');
     let topic = topicInput.value.trim();
     if (!topic) {
-      topic = DIARY_TOPIC_POOL[Math.floor(Math.random() * DIARY_TOPIC_POOL.length)];
+      topic = sampleArray(DIARY_TOPIC_POOL);
       topicInput.value = topic;
     }
     const activeMoods = getActiveMoods();
@@ -2340,19 +2377,20 @@ LYRICS:
 
   // v6.0: Section Regeneration (마음에 안 드는 특정 절만 재작사)
   async function regenerateSection(sectionTag) {
-    if (!currentRawLyrics) return;
+    if (!currentRawLyrics || isGenerating) return;
+    isGenerating = true;
     const apiKey = getApiKey();
     const topicInput = document.getElementById('topic-input');
     const topic = topicInput.value.trim() || '비 내리는 정류장';
 
     showToast(`🔄 [${sectionTag}] 섹션만 재작사 진행 중...`);
 
-    if (apiKey && apiKey.startsWith('sk-')) {
-      try {
+    try {
+      if (apiKey && apiKey.startsWith('sk-')) {
         const prompt = `당신은 1990년대~2010년대 한국 인디 모던록 싱어송라이터 '전득필'입니다.
 신곡 소재: "${topic}"
 현재 노래의 [${sectionTag}] 섹션만 전득필의 감성(입력된 소재 "${topic}"에 직결된 공간/상황 묘사, 쌉싸름한 독백체, 8~14자 음수율, 가디건/캔커피/스니커즈/영수증/LP판 등 낡은 클리셰 및 AI 상투어 절대 금지)으로 4줄 내외로 새롭게 작성해 주세요.
-출력 형식은 다른 설명 없이 오직 가사 내용만 4줄 출력하세요.`;
+[${sectionTag}] 태그는 출력하지 마세요. 다른 설명 없이 오직 가사 내용만 4줄 출력하세요.`;
 
         const res = await fetch('https://api.deepseek.com/chat/completions', {
           method: 'POST',
@@ -2364,32 +2402,51 @@ LYRICS:
             max_tokens: 300
           })
         });
-        const data = await res.json();
-        const newContent = data.choices[0]?.message?.content?.trim() || '';
 
-        replaceSectionInLyrics(sectionTag, newContent);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData?.error?.message || `API 오류 (${res.status})`);
+        }
+
+        const data = await res.json();
+        const newContent = data.choices?.[0]?.message?.content?.trim() || '';
+
+        if (!newContent || newContent.length < 5) {
+          throw new Error('AI 응답이 비어있습니다. 다시 시도해 주세요.');
+        }
+
+        // AI가 태그를 포함해서 출력한 경우 중복 태그 제거
+        const cleaned = newContent.replace(/^\s*\[.*?\]\s*/i, '').trim();
+        replaceSectionInLyrics(sectionTag, cleaned);
         showToast(`✨ [${sectionTag}] 섹션 재작사 완료!`);
-      } catch (err) {
-        showToast(`⚠️ 재작사 실패: ${err.message}`);
+      } else {
+        const fallbacks = {
+          'Verse 1': `길모퉁이 편의점 불빛 아래\n지갑 속 접어둔 메모지 글씨를 보네\n차가운 밤공기 들이마시며 멍하니\n어제와 다를 바 없는 밤을 걷는다`,
+          'Chorus': `우린 왜 그리 서툴게 스쳐갔을까\n사소했던 오해 속에 너를 놓치고\n${topic} 위로 흩어지는 찬 한숨\n되돌릴 수 없는 시간만 자꾸 세어본다`,
+          'Verse 2': `어둑해진 골목길 자판기 불빛\n너와 나란히 서서 웃던 그 자리\n괜찮다고 혼잣말을 읊조려 봐도\n시린 바람결에 네 향기만 묻어온다`,
+          'Bridge': `(Whisper) 정말로 너 없이도 괜찮아질 수 있을까\n차갑게 식어버린 밤의 무게를 견디며`,
+          'Outro': `지평선 너머로 번지는 희미한 푸른빛\n잘 지내라는 혼잣말만 허공에 날리네`
+        };
+        const fallbackText = fallbacks[sectionTag] || `새롭게 마주하는 ${topic}의 차가운 새벽빛\n남겨진 온기 속에 조용히 걸음을 옮긴다`;
+        replaceSectionInLyrics(sectionTag, fallbackText);
+        showToast(`✨ [${sectionTag}] 템플릿으로 갱신 완료!`);
       }
-    } else {
-      const fallbacks = {
-        'Verse 1': `길모퉁이 편의점 불빛 아래\n지갑 속 접어둔 메모지 글씨를 보네\n차가운 밤공기 들이마시며 멍하니\n어제와 다를 바 없는 밤을 걷는다`,
-        'Chorus': `우린 왜 그리 서툴게 스쳐갔을까\n사소했던 오해 속에 너를 놓치고\n${topic} 위로 흩어지는 찬 한숨\n되돌릴 수 없는 시간만 자꾸 세어본다`,
-        'Verse 2': `어둑해진 골목길 자판기 불빛\n너와 나란히 서서 웃던 그 자리\n괜찮다고 혼잣말을 읊조려 봐도\n시린 바람결에 네 향기만 묻어온다`,
-        'Bridge': `(Whisper) 정말로 너 없이도 괜찮아질 수 있을까\n차갑게 식어버린 밤의 무게를 견디며`,
-        'Outro': `지평선 너머로 번지는 희미한 푸른빛\n잘 지내라는 혼잣말만 허공에 날리네`
-      };
-      const fallbackText = fallbacks[sectionTag] || `새롭게 마주하는 ${topic}의 차가운 새벽빛\n남겨진 온기 속에 조용히 걸음을 옮긴다`;
-      replaceSectionInLyrics(sectionTag, fallbackText);
-      showToast(`✨ [${sectionTag}] 템플릿으로 갱신 완료!`);
+    } catch (err) {
+      showToast(`⚠️ 재작사 실패: ${err.message}`);
+    } finally {
+      isGenerating = false;
     }
   }
 
   function replaceSectionInLyrics(sectionTag, newText) {
-    const tagRegex = new RegExp(`\\[${sectionTag}[^\\]]*\\]([\\s\\S]*?)(?=\\n\\[|$)`, 'i');
+    // 글로벌 플래그로 동일 태그(Chorus 등) 복수 매칭 지원
+    const tagRegex = new RegExp(`(\\[${sectionTag}[^\\]]*\\])([\\s\\S]*?)(?=\\n\\[|$)`, 'gi');
     if (tagRegex.test(currentRawLyrics)) {
-      currentRawLyrics = currentRawLyrics.replace(tagRegex, `[${sectionTag}]\n${newText}\n`);
+      // 원본 태그(BPM, 악기 지시어 포함)를 보존하며 내용만 교체
+      // 함수 치환자를 사용하여 $ 특수문자 문제 방지
+      currentRawLyrics = currentRawLyrics.replace(tagRegex, (match, origTag) => {
+        return `${origTag}\n${newText}\n`;
+      });
     } else {
       currentRawLyrics += `\n\n[${sectionTag}]\n${newText}`;
     }
@@ -2538,9 +2595,9 @@ LYRICS:
     const moodStr = moods.length > 0 ? moods.join(', ') : track.key_mood.join(', ');
 
     if (promptMode === 'compact') {
-      // 🚨 Suno 최적화 핵심: 남성 보컬(deep baritone male vocals)을 무조건 맨 앞에 배치!
+      // 🚨 Suno 최적화 핵심: 남성 보컬(FIXED_VOCAL_SIGNATURE)을 무조건 맨 앞에 배치!
       // 드림팝/인디팝 특유의 여성 보컬 기본 편향을 완벽하게 누르고 묵직한 전득필 바리톤으로 고정.
-      const compactPrompt = `deep baritone male vocals, solo male singer, ${genreTag}, ${currentBpm} BPM, ${cleanSoundTags}, articulate Korean diction, ${moodStr}`;
+      const compactPrompt = `${FIXED_VOCAL_SIGNATURE}, ${genreTag}, ${currentBpm} BPM, ${cleanSoundTags}, ${moodStr}`;
       document.getElementById('suno-prompt-output').textContent = compactPrompt;
     } else {
       const detailedPrompt =
@@ -2604,9 +2661,7 @@ LYRICS:
     if (!track) return;
     activeRefTrack = track;
     currentBpm = track.bpm;
-    document.getElementById('bpm-slider').value = currentBpm;
-    document.getElementById('bpm-val').textContent = `${currentBpm} BPM`;
-    document.getElementById('bpm-ref-hint').textContent = `원곡: ${track.bpm} BPM`;
+    syncBpmUI(currentBpm, track.bpm);
 
     for (const [key, full] of Object.entries(CATEGORY_MAP)) {
       if (full === track.category) {
@@ -2619,23 +2674,47 @@ LYRICS:
     }
 
     updateSelectedRefUI();
-    generateAll();
-    showToast(`🎯 레퍼런스 선택: "${track.title} - ${track.artist}"`);
+    renderSummaryBox();
+    generateSunoPrompt(activeRefTrack, getActiveMoods());
+    showToast(`🎯 레퍼런스 선택: "${track.title} - ${track.artist}" — [🚀 생성하기] 버튼으로 가사를 만드세요!`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // Copy helper
   function copyToClipboard(elemId, toastText) {
-    const text = document.getElementById(elemId).textContent;
+    // 가사 복사 시 음수율 배지(12자 등)가 포함되지 않도록 원본 텍스트 사용
+    const text = (elemId === 'korean-lyrics-output' && currentRawLyrics)
+      ? currentRawLyrics
+      : document.getElementById(elemId).textContent;
     copyText(text, toastText);
   }
 
   function copyText(text, toastText) {
-    navigator.clipboard.writeText(text).then(() => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(toastText);
+      }).catch(() => {
+        _fallbackCopy(text, toastText);
+      });
+    } else {
+      _fallbackCopy(text, toastText);
+    }
+  }
+
+  function _fallbackCopy(text, toastText) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
       showToast(toastText);
-    }).catch(err => {
+    } catch (e) {
       showToast('복사 실패');
-    });
+    }
+    document.body.removeChild(ta);
   }
 
   // Copy Full Suno Set
@@ -2679,7 +2758,7 @@ LYRICS:
       lyrics: currentRawLyrics,
       coverPrompt: currentCoverPrompt,
       ytDesc: document.getElementById('yt-desc-output').textContent,
-      date: new Date().toLocaleDateString('ko-KR')
+      date: toISODateStr(new Date())
     };
     sets.unshift(newEntry);
     localStorage.setItem('jeon_deukpil_discography', JSON.stringify(sets));
@@ -2751,8 +2830,30 @@ LYRICS:
   function calculateStreak(sets) {
     if (!sets || sets.length === 0) return 0;
     const dates = sets.map(s => s.date).filter(Boolean);
-    const uniqueDates = Array.from(new Set(dates));
-    return uniqueDates.length;
+    const uniqueDates = Array.from(new Set(dates)).sort().reverse();
+    if (uniqueDates.length === 0) return 0;
+
+    // 실제 연속 일자를 역순으로 검증
+    const toISO = (d) => {
+      // ko-KR 레거시 포맷("2026. 9. 5.") 및 ISO 포맷 모두 지원
+      if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+      const nums = d.replace(/\./g, '').trim().split(/\s+/);
+      if (nums.length >= 3) return `${nums[0]}-${nums[1].padStart(2,'0')}-${nums[2].padStart(2,'0')}`;
+      return d;
+    };
+    const isoDates = uniqueDates.map(toISO).sort().reverse();
+    let streak = 1;
+    for (let i = 1; i < isoDates.length; i++) {
+      const curr = new Date(isoDates[i - 1]);
+      const prev = new Date(isoDates[i]);
+      const diffMs = curr - prev;
+      if (diffMs === 86400000) { // exactly 1 day
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
   }
 
   function updateStreakUI() {
@@ -2760,6 +2861,23 @@ LYRICS:
     const streak = calculateStreak(sets);
     const streakEl = document.getElementById('streak-count');
     if (streakEl) streakEl.textContent = streak;
+  }
+
+  // ISO 날짜 포맷 헬퍼 (환경 독립적)
+  function toISODateStr(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  // ko-KR 레거시 날짜를 ISO로 변환
+  function normalizeDateStr(d) {
+    if (!d) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    const nums = d.replace(/\./g, '').trim().split(/\s+/);
+    if (nums.length >= 3) return `${nums[0]}-${nums[1].padStart(2,'0')}-${nums[2].padStart(2,'0')}`;
+    return d;
   }
 
   function renderCalendar() {
@@ -2784,10 +2902,13 @@ LYRICS:
     const firstDay = new Date(year, month, 1).getDay();
     const lastDate = new Date(year, month + 1, 0).getDate();
 
+    // 같은 날짜에 여러 곡 지원 (배열로 수집)
     const releaseMap = {};
     sets.forEach(s => {
       if (s.date) {
-        releaseMap[s.date] = s;
+        const key = normalizeDateStr(s.date);
+        if (!releaseMap[key]) releaseMap[key] = [];
+        releaseMap[key].push(s);
       }
     });
 
@@ -2800,16 +2921,21 @@ LYRICS:
       html += `<div class="calendar-cell empty"></div>`;
     }
 
-    const todayStr = new Date().toLocaleDateString('ko-KR');
+    const todayStr = toISODateStr(new Date());
 
     for (let day = 1; day <= lastDate; day++) {
       const cellDate = new Date(year, month, day);
-      const dateStr = cellDate.toLocaleDateString('ko-KR');
+      const dateStr = toISODateStr(cellDate);
       const isToday = dateStr === todayStr;
-      const release = releaseMap[dateStr];
+      const releases = releaseMap[dateStr];
 
-      if (release) {
-        html += `<div class="calendar-cell has-release ${isToday ? 'today' : ''}" onclick="showCalendarReleaseDetail(decodeURIComponent('${encodeURIComponent(release.vol)}'), decodeURIComponent('${encodeURIComponent(release.title)}'), '${dateStr}')" title="${release.vol}: ${release.title}">${day}</div>`;
+      if (releases && releases.length > 0) {
+        const release = releases[0];
+        const count = releases.length;
+        const titleAttr = count > 1
+          ? `${release.vol}: ${release.title} 외 ${count - 1}곡`
+          : `${release.vol}: ${release.title}`;
+        html += `<div class="calendar-cell has-release ${isToday ? 'today' : ''}" onclick="showCalendarReleaseDetail(decodeURIComponent('${encodeURIComponent(release.vol)}'), decodeURIComponent('${encodeURIComponent(release.title)}'), '${dateStr}')" title="${escapeHtml(titleAttr)}">${day}${count > 1 ? '<span style="font-size:0.6rem;color:#fbbf24;"> +' + (count-1) + '</span>' : ''}</div>`;
       } else {
         html += `<div class="calendar-cell ${isToday ? 'today' : ''}">${day}</div>`;
       }
@@ -2832,13 +2958,15 @@ LYRICS:
       showToast('⚠️ 내보낼 디스코그래피 데이터가 없습니다.');
       return;
     }
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sets, null, 2));
+    const blob = new Blob([JSON.stringify(sets, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
     const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("href", url);
     dlAnchor.setAttribute("download", `jeon_deukpil_discography_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(dlAnchor);
     dlAnchor.click();
     dlAnchor.remove();
+    URL.revokeObjectURL(url);
     showToast('📤 디스코그래피 JSON 백업 파일이 다운로드되었습니다!');
   }
 
@@ -2855,14 +2983,32 @@ LYRICS:
         const current = getSavedSets();
         const map = new Map();
         current.forEach(item => map.set(item.id, item));
-        imported.forEach(item => map.set(item.id || Date.now() + Math.random(), item));
+        let validCount = 0;
+        imported.forEach(item => {
+          if (item && typeof item === 'object' && item.title) {
+            const sanitized = {
+              id: Number(item.id) || (Date.now() + Math.floor(Math.random() * 10000)),
+              vol: String(item.vol || 'Vol.00').substring(0, 20),
+              title: String(item.title || '무제').substring(0, 100),
+              refTrack: String(item.refTrack || '').substring(0, 100),
+              bpm: Number(item.bpm) || 76,
+              style: String(item.style || '').substring(0, 1000),
+              lyrics: String(item.lyrics || '').substring(0, 5000),
+              coverPrompt: String(item.coverPrompt || '').substring(0, 1000),
+              ytDesc: String(item.ytDesc || '').substring(0, 3000),
+              date: normalizeDateStr(String(item.date || toISODateStr(new Date())))
+            };
+            map.set(sanitized.id, sanitized);
+            validCount++;
+          }
+        });
 
         const merged = Array.from(map.values());
         localStorage.setItem('jeon_deukpil_discography', JSON.stringify(merged));
         updateSavedCount();
         updateStreakUI();
         openSavedModal();
-        showToast(`📥 ${imported.length}곡의 디스코그래피를 성공적으로 복원했습니다!`);
+        showToast(`📥 ${validCount}곡의 디스코그래피를 성공적으로 복원했습니다!`);
       } catch (err) {
         showToast(`❌ 가져오기 실패: ${err.message}`);
       }
@@ -2889,6 +3035,7 @@ LYRICS:
   }
 
   function deleteSavedSet(id) {
+    if (!confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
     let sets = getSavedSets();
     sets = sets.filter(s => s.id !== id);
     localStorage.setItem('jeon_deukpil_discography', JSON.stringify(sets));
@@ -2898,11 +3045,13 @@ LYRICS:
     showToast('삭제되었습니다');
   }
 
+  let _toastTimer = null;
   function showToast(msg) {
     const toast = document.getElementById('toast-msg');
     toast.textContent = msg;
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
   }
 
   function escapeHtml(str) {
