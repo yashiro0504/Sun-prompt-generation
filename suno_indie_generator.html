@@ -1609,7 +1609,7 @@
   ];
 
   // Fixed Vocal Profile for 전득필 (Jeon Deuk-pil)
-  const FIXED_VOCAL_SIGNATURE = 'deep baritone male vocals, clear Korean diction, intimate baritone vocal, articulate Korean, percussive consonants';
+  const FIXED_VOCAL_SIGNATURE = 'deep baritone male vocals, solo male singer, intimate low baritone, articulate Korean diction';
 
   // Load Reference DB
   async function loadDatabase() {
@@ -2520,21 +2520,33 @@ LYRICS:
     ytBtn.title = `${activeRefTrack.title} 원곡을 YouTube에서 검색하여 청취합니다`;
   }
 
+  function sanitizeInstrumentTags(tags) {
+    if (!tags) return '';
+    return tags
+      .replace(/\b(female|women|woman|girl|soprano|whispery female|androgynous|male-female|stevie nicks)\b[^\,]*/gi, '')
+      .replace(/\b[^\,]*\b(vocal|vocals|voice|voices|singing)\b[^\,]*/gi, '')
+      .replace(/,\s*,/g, ',')
+      .replace(/^[\s,]+|[\s,]+$/g, '')
+      .trim();
+  }
+
   // Step 1: Suno Style Prompt Generator
   function generateSunoPrompt(track, moods) {
     const genreTag = `Korean indie rock, ${track.category.toLowerCase().replace(' / ', ', ')}`;
-    const soundTags = track.sound_tags;
+    const cleanSoundTags = sanitizeInstrumentTags(track.sound_tags);
     const moodStr = moods.length > 0 ? moods.join(', ') : track.key_mood.join(', ');
 
     if (promptMode === 'compact') {
-      const compactPrompt = `${genreTag}, ${currentBpm} BPM, ${soundTags}, ${FIXED_VOCAL_SIGNATURE}, ${moodStr}`;
+      // 🚨 Suno 최적화 핵심: 남성 보컬(deep baritone male vocals)을 무조건 맨 앞에 배치!
+      // 드림팝/인디팝 특유의 여성 보컬 기본 편향을 완벽하게 누르고 묵직한 전득필 바리톤으로 고정.
+      const compactPrompt = `deep baritone male vocals, solo male singer, ${genreTag}, ${currentBpm} BPM, ${cleanSoundTags}, articulate Korean diction, ${moodStr}`;
       document.getElementById('suno-prompt-output').textContent = compactPrompt;
     } else {
       const detailedPrompt =
+        `[Vocal: Deep Baritone Male Vocals, Solo Male Singer, Articulate Low Voice]\n` +
         `[Genre & Vibe: ${genreTag}, ${moodStr}]\n` +
         `[Tempo & Groove: ${currentBpm} BPM, steady dynamic backbeat]\n` +
-        `[Instrumentation: ${soundTags}]\n` +
-        `[Vocal: ${FIXED_VOCAL_SIGNATURE}]\n` +
+        `[Instrumentation: ${cleanSoundTags}]\n` +
         `[Atmosphere: cinematic build, warm analog saturation, cavernous plate reverb, half-volume chorus lift]`;
       document.getElementById('suno-prompt-output').textContent = detailedPrompt;
     }
@@ -2906,11 +2918,11 @@ LYRICS:
       {"id":3,"title":"Wonderwall","artist":"Oasis","category":"Britpop / Alternative Rock","bpm":88,"key_mood":["raw","yearning"],"sound_tags":"strummed acoustic guitar with capo, cellos, steady tambourine beat, raspy nasal vocal, warm vinyl hiss, 88 BPM","story_structure":"direct address to lover, gradual addition of string section, anthemic chorus repetition"},
       {"id":4,"title":"Sing","artist":"Travis","category":"Britpop / Alternative Rock","bpm":82,"key_mood":["gentle","comforting"],"sound_tags":"banjo picking, acoustic guitar, soft piano chords, warm thumping bass, soft falsetto backing, 82 BPM","story_structure":"intimate advice, uplifting melody rise, sing-along chorus"},
       {"id":5,"title":"Bittersweet Symphony","artist":"The Verve","category":"Britpop / Alternative Rock","bpm":86,"key_mood":["hypnotic","sweeping"],"sound_tags":"orchestral string loop, repetitive acoustic guitar, heavy breakbeat drum, spoken-like expressive vocal, 86 BPM","story_structure":"existential observation, relentless driving rhythm, soaring orchestral climax"},
-      {"id":26,"title":"Apocalypse","artist":"Cigarettes After Sex","category":"Dream Pop / Bedroom Pop","bpm":80,"key_mood":["sensual","dreamy"],"sound_tags":"slow reverb guitar, minimal bass, soft brushed snare, whispery androgynous vocal, tape warmth, 80 BPM","story_structure":"intimate memory confession, consistent dreamy groove, hypnotic slow chorus"},
-      {"id":27,"title":"Show Me How","artist":"Men I Trust","category":"Dream Pop / Bedroom Pop","bpm":82,"key_mood":["warm","chill"],"sound_tags":"warm muffle bass guitar, jangly chorus electric guitar, soft muted drums, whispery female vocals, vinyl crackle, 82 BPM","story_structure":"laid-back groove, intimate dialogue, soothing repetitive chorus"},
+      {"id":26,"title":"Apocalypse","artist":"Cigarettes After Sex","category":"Dream Pop / Bedroom Pop","bpm":80,"key_mood":["sensual","dreamy"],"sound_tags":"slow reverb guitar, minimal bass, soft brushed snare, tape warmth, 80 BPM","story_structure":"intimate memory confession, consistent dreamy groove, hypnotic slow chorus"},
+      {"id":27,"title":"Show Me How","artist":"Men I Trust","category":"Dream Pop / Bedroom Pop","bpm":82,"key_mood":["warm","chill"],"sound_tags":"warm muffle bass guitar, jangly chorus electric guitar, soft muted drums, tape warmth, 82 BPM","story_structure":"laid-back groove, intimate dialogue, soothing repetitive chorus"},
       {"id":28,"title":"Space Song","artist":"Beach House","category":"Dream Pop / Bedroom Pop","bpm":147,"key_mood":["ethereal","nostalgic"],"sound_tags":"slide guitar hook, retro analog organ synth, arpeggiated synth bass, floating reverb vocals, 147 BPM","story_structure":"iconic slide guitar intro, hypnotic verse, overwhelming emotional synth swell"},
       {"id":47,"title":"In My Life","artist":"The Beatles","category":"Classic Retro Pop","bpm":103,"key_mood":["nostalgic","tender"],"sound_tags":"clean electric guitar, sped-up piano solo (harpsichord sound), gentle bass, warm dual harmonies, 103 BPM","story_structure":"reflective verse, famous baroque piano solo, warm tender conclusion"},
-      {"id":48,"title":"Dreams","artist":"Fleetwood Mac","category":"Classic Retro Pop","bpm":120,"key_mood":["hypnotic","smooth"],"sound_tags":"Fender Rhodes piano, iconic two-note bassline, steady acoustic drum beat, Stevie Nicks vocals, 120 BPM","story_structure":"hypnotic two-chord groove, bitter reflection, lush multi-tracked chorus"},
+      {"id":48,"title":"Dreams","artist":"Fleetwood Mac","category":"Classic Retro Pop","bpm":120,"key_mood":["hypnotic","smooth"],"sound_tags":"Fender Rhodes piano, iconic two-note bassline, steady acoustic drum beat, smooth groove, 120 BPM","story_structure":"hypnotic two-chord groove, bitter reflection, lush multi-tracked chorus"},
       {"id":66,"title":"Somebody Else","artist":"The 1975","category":"Modern Indie Pop","bpm":101,"key_mood":["synthy","heartbroken"],"sound_tags":"deep synth bassline, 80s gate-reverb drums, funk rhythm guitar chops, breathy vocoder vocals, 101 BPM","story_structure":"atmospheric synth intro, conversational heartbreak verse, melancholic danceable chorus"},
       {"id":67,"title":"ILYSB","artist":"LANY","category":"Modern Indie Pop","bpm":120,"key_mood":["romantic","smooth"],"sound_tags":"clean electric guitar chords, electronic snap beat, deep sub bass, falsetto backing vocals, 120 BPM","story_structure":"chill guitar intro, intense devotion lyrics, memorable abbreviation chorus"},
       {"id":68,"title":"1901","artist":"Phoenix","category":"Modern Indie Pop","bpm":144,"key_mood":["explosive","electronic"],"sound_tags":"distorted analog synth riff, driving disco drums, energetic bass, punchy French-indie vocals, 144 BPM","story_structure":"instant explosive synth lead, fast-paced verse, euphoric sing-along hook"}
