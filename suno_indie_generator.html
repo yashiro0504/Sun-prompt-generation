@@ -1281,6 +1281,7 @@
             <div class="ref-actions">
               <a href="#" target="_blank" class="btn-youtube" id="out-youtube-link">▶ 원곡 사운드 듣기</a>
               <span class="ref-badge" id="out-ref-bpm">76 BPM</span>
+              <span class="ref-badge" id="out-ref-energy" style="margin-left:4px; font-weight:600;">☕ 76 BPM 서정 발라드</span>
             </div>
           </div>
           <div class="ref-tags-box" id="out-ref-tags">
@@ -1477,9 +1478,11 @@
         <label class="form-label">DeepSeek API Key</label>
         <input type="password" id="deepseek-key-input" class="form-input" placeholder="sk-...">
       </div>
+      <div id="api-balance-display" style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary); background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:8px; border:1px solid var(--glass-border); display:none;"></div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
         <button class="btn-sm" style="color:#f87171;" onclick="clearApiKey()">키 삭제 (템플릿 모드로 복귀)</button>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-action-outline" onclick="checkDeepSeekBalance()">💳 잔액 조회</button>
           <button class="btn-action-outline" onclick="testApiKey()">연결 테스트</button>
           <button class="btn-action-primary" onclick="saveApiKey()">저장하기</button>
         </div>
@@ -1780,13 +1783,26 @@
     const randomTopic = sampleTopicDiversified();
     document.getElementById('topic-input').value = randomTopic;
 
-    const themeKeys = Object.keys(THEME_NAMES);
-    const pickedTheme = sampleArray(themeKeys);
-    selectTheme(pickedTheme, true);
-
+    // 1. 레퍼런스 장르 카테고리 먼저 선택
     const catKeys = Object.keys(CATEGORY_MAP);
     const pickedCat = sampleArray(catKeys);
     selectCategory(pickedCat);
+
+    // 2. 선택된 레퍼런스 트랙의 템포(BPM)에 맞춰 테마를 지능적으로 스마트 페어링!
+    const trackBpm = activeRefTrack ? activeRefTrack.bpm : 90;
+    let suitableThemes;
+    if (trackBpm >= 120) {
+      // 120+ BPM 고속 록/드라이브: 질주, 냉소, 여름밤, 풋사랑 등 에너지 있는 테마 우선
+      suitableThemes = ['drive', 'cynical', 'summer', 'flutter'];
+    } else if (trackBpm <= 90) {
+      // 90 이하 슬로우 포크/발라드: 미련, 심야, 계절, 위로 등 감정선 깊은 테마 우선
+      suitableThemes = ['regret', 'nocturnal', 'seasonal', 'solace'];
+    } else {
+      // 미드 템포: 전 테마 조화 가능
+      suitableThemes = Object.keys(THEME_NAMES);
+    }
+    const pickedTheme = sampleArray(suitableThemes);
+    selectTheme(pickedTheme, true);
 
     if (isInitial) {
       // 초기 로드 시: API 토큰 절약을 위해 항상 오프라인 템플릿으로 시작
@@ -1894,6 +1910,45 @@
     }
   }
 
+  async function checkDeepSeekBalance() {
+    const key = document.getElementById('deepseek-key-input').value.trim() || getApiKey();
+    if (!key) {
+      showToast('⚠️ API 키를 입력 후 조회해 주세요');
+      return;
+    }
+    showToast('📡 DeepSeek 잔여 크레딧 조회 중...');
+    const balEl = document.getElementById('api-balance-display');
+
+    try {
+      const res = await fetch('https://api.deepseek.com/user/balance', {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${key}` }
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error?.message || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      if (data && data.balance_infos && data.balance_infos.length > 0) {
+        const info = data.balance_infos[0];
+        const bal = parseFloat(info.total_balance || 0).toFixed(2);
+        showToast(`💳 잔여 크레딧: ${bal} ${info.currency}`);
+        if (balEl) {
+          balEl.style.display = 'block';
+          balEl.innerHTML = `💳 <strong>실시간 잔액:</strong> <span style="color:#34d399; font-weight:700; font-size:1.05rem;">${bal} ${info.currency}</span> (충전금: ${info.topped_up_balance || '0.00'})`;
+        }
+      } else {
+        showToast('잔액 정보를 조회할 수 없습니다.');
+      }
+    } catch(e) {
+      showToast(`❌ 잔액 조회 실패: ${e.message}`);
+      if (balEl) {
+        balEl.style.display = 'block';
+        balEl.innerHTML = `<span style="color:#f87171;">❌ 잔액 조회 실패: ${escapeHtml(e.message)}</span>`;
+      }
+    }
+  }
+
   // 테마별 어울리는 대표 무드 매핑 (다채로운 감정선 자동 연출)
   const THEME_MOOD_MAP = {
     'regret': ['melancholic', 'nostalgic', 'raw'],
@@ -1949,6 +2004,7 @@
     currentBpm = parseInt(val);
     document.getElementById('bpm-val').textContent = `${currentBpm} BPM`;
     if (activeRefTrack) {
+      renderSummaryBox();
       generateSunoPrompt(activeRefTrack, getActiveMoods());
       renderYouTubeKit();
     }
@@ -1965,6 +2021,97 @@
 
   function getActiveMoods() {
     return Array.from(document.querySelectorAll('.mood-tag.active')).map(t => t.dataset.mood);
+  }
+
+  // ⚡ 템포(BPM) & 레퍼런스 사운드 기반 작사 스타일 & 에너지 분석 엔진
+  function getTempoEnergyGuide(track, bpm) {
+    const bpmNum = parseInt(bpm) || (track ? track.bpm : 90);
+
+    if (bpmNum >= 120) {
+      return {
+        tier: 'fast',
+        bpm: bpmNum,
+        badgeText: `🔥 ${bpmNum} BPM 고속 록·질주`,
+        badgeColor: '#ef4444',
+        badgeBg: 'rgba(239, 68, 68, 0.18)',
+        styleName: `고속 업템포 드라이빙 록/인디 (${bpmNum} BPM)`,
+        vocalTone: `신해철, 언니네이발관, 크라잉넛, 델리스파이스 업템포 록처럼 거침없고 폭발적인 록 스피릿 & 직설 화법`,
+        lyricRules: [
+          `🚫 [신파/발라드 절대 금지]: ${bpmNum} BPM의 빠른 비트에 축축 처지는 눈물, 질질 끄는 후회, 슬픈 옛사랑 타령은 100% 엇박자 불협화음입니다! 슬프고 늘어지는 신파는 절대 쓰지 마세요.`,
+          `⚡ [스피드 & 비트 밀착]: 드럼 킥과 스네어 비트에 맞춰 4~8자의 짧고 타격감 있는 문장으로 박자를 날렵하게 쪼개세요. 문장이 길면 발음이 뭉개집니다.`,
+          `🎸 [정서 & 태도]: 꽉 막힌 일상을 깨부수는 탈출감, 위선적인 세상에 대한 날선 냉소와 록 스피릿, 심야 고속도로를 질주하는 해방감, 혹은 뒤돌아보지 않고 쿨하게 털어버리는 거침없는 태도로 작성하세요.`
+        ],
+        sampleChorus: `더 빠르게 달려, 뒤돌아보지 마\n먼지 쌓인 어제는 다 던져버려\n심장이 터질 듯 소리쳐 불러본다`
+      };
+    } else if (bpmNum >= 95) {
+      return {
+        tier: 'mid',
+        bpm: bpmNum,
+        badgeText: `🎧 ${bpmNum} BPM 모던 그루브`,
+        badgeColor: '#3b82f6',
+        badgeBg: 'rgba(59, 130, 246, 0.18)',
+        styleName: `미드 템포 모던 인디/시티팝 그루브 (${bpmNum} BPM)`,
+        vocalTone: `김현철, 검정치마, 잔나비, 페퍼톤스처럼 담담하면서도 리듬을 타는 감각적인 인디팝 보컬`,
+        lyricRules: [
+          `🚫 [과격한 샤우팅이나 질질 끄는 탄식 지양]: 미드 템포(${bpmNum} BPM)의 자연스러운 리듬 그루브를 살려야 합니다.`,
+          `⚡ [스피드 & 비트 밀착]: 6~10자 내외의 유려하고 리드미컬한 줄글 호흡으로, 어깨가 절로 들썩이는 자연스러운 말맛을 살리세요.`,
+          `🎸 [정서 & 태도]: 일상을 관조하는 덤덤하고 위트 있는 시선, 도시의 밤거리를 걸으며 읊조리는 감각적이고 세련된 독백으로 작성하세요.`
+        ],
+        sampleChorus: `밤은 깊어가고 음악은 흐르네\n너와 나 사이 맴도는 작은 침묵\n이대로 조금만 더 걷고 싶은 밤`
+      };
+    } else {
+      return {
+        tier: 'slow',
+        bpm: bpmNum,
+        badgeText: `☕ ${bpmNum} BPM 서정 발라드`,
+        badgeColor: '#10b981',
+        badgeBg: 'rgba(16, 185, 129, 0.18)',
+        styleName: `슬로우 템포 정통 서정 포크·발라드 (${bpmNum} BPM)`,
+        vocalTone: `김광석, 유재하, 이문세, 넬, 이소라처럼 묵직하고 서정적인 아련한 저음 바리톤`,
+        lyricRules: [
+          `🚫 [가벼운 말장난이나 빠른 비트감 금지]: ${bpmNum} BPM의 느린 호흡에 맞춰 깊은 여운을 남겨야 합니다.`,
+          `⚡ [스피드 & 비트 밀착]: 7~13자 내외의 정갈한 4-4조/7-5조 시적 운율로, 쉼표와 숨소리가 느껴지는 긴 여운을 담으세요.`,
+          `🎸 [정서 & 태도]: 세월의 무게, 가슴을 먹먹하게 적시는 인생의 회한과 그리움, 소소하고 덤덤한 위로로 작성하세요.`
+        ],
+        sampleChorus: `우린 무엇을 찾아 이토록 바쁘게 걸어왔나\n흘러간 청춘은 아득하고, 남겨진 계절은 시린데\n오늘 하루도 참 잘 버텨냈다고, 가만히 등을 토닥인다`
+      };
+    }
+  }
+
+  // 🪙 DeepSeek 토큰 사용량 실시간 트래커 & 상태 표시기
+  let lastTokenUsage = null;
+  let sessionTotalTokens = 0;
+
+  function recordTokenUsage(usage) {
+    if (!usage) return;
+    lastTokenUsage = usage;
+    sessionTotalTokens += (usage.total_tokens || 0);
+    renderTokenUsageUI();
+  }
+
+  function renderTokenUsageUI(isOffline = false, errorMsg = '') {
+    const indicator = document.getElementById('lyric-engine-indicator');
+    if (!indicator) return;
+
+    if (errorMsg) {
+      indicator.innerHTML = `<span style="color:#f87171; font-weight:600;" title="${escapeHtml(errorMsg)}">⚠️ DeepSeek 오류 (템플릿 대체)</span>`;
+      return;
+    }
+
+    if (isOffline) {
+      indicator.innerHTML = `<span style="color:var(--text-muted); font-size:0.75rem;">⚪ 오프라인 템플릿 (DeepSeek 미호출 · 0 토큰)</span>`;
+      return;
+    }
+
+    if (lastTokenUsage) {
+      indicator.innerHTML = `
+        <span style="color:#34d399; font-weight:600; background:rgba(52,211,153,0.12); padding:3px 8px; border-radius:6px; border:1px solid rgba(52,211,153,0.3); font-size:0.75rem;">
+          ⚡ 이번 생성: ${lastTokenUsage.total_tokens.toLocaleString()} 토큰 (프롬프트 ${lastTokenUsage.prompt_tokens} / 가사 ${lastTokenUsage.completion_tokens}) · 누적: ${sessionTotalTokens.toLocaleString()}
+        </span>
+      `;
+    } else {
+      indicator.innerHTML = `<span style="color:#34d399; font-weight:600;">🤖 DeepSeek AI 연동됨</span>`;
+    }
   }
 
   function updateSelectedRefUI() {
@@ -2037,6 +2184,7 @@
     try {
       const themeKorean = THEME_NAMES[theme] || theme;
       const moodStr = moods.join(', ') || track.key_mood.join(', ');
+      const tempoGuide = getTempoEnergyGuide(track, currentBpm);
 
       const response = await fetch('https://api.deepseek.com/chat/completions', {
         method: 'POST',
@@ -2113,12 +2261,17 @@ LYRICS:
               role: 'user',
               content: `[전득필 신곡 작업 의뢰]
 - 사운드 레퍼런스: "${track.title}" by ${track.artist} (${track.category})
+- 템포 및 에너지: ${tempoGuide.styleName} (${currentBpm} BPM)
+- 지향 보컬 톤 & 호흡: ${tempoGuide.vocalTone}
 - 사운드 특징: ${track.sound_tags}
 - 레퍼런스 서사 지침: ${track.story_structure} (※주의: 가사는 인트로 없이 바로 [Verse 1]부터 시작할 것)
 - 오늘의 일기 소재: "${topic}"
 - 서사 테마: ${themeKorean}
 - 분위기/무드: ${moodStr}
-- 템포: ${currentBpm} BPM
+
+[🚨 최우선 필수 규칙: 템포(${currentBpm} BPM) & 레퍼런스 사운드 일체화 작사 지침]
+${tempoGuide.lyricRules.map(r => '* ' + r).join('\n')}
+* 주의: 가사가 레퍼런스 곡의 템포(${currentBpm} BPM) 및 편곡 에너지와 절대 겉돌지 않아야 합니다. (예: 120+ BPM 빠른 록인데 느린 눈물/회한 신파 발라드 가사를 쓰면 곡이 망가집니다. 템포의 스피드와 에너지에 철저히 밀착하여 작사하세요!)
 
 전득필의 목소리와 감성으로 신곡 가사와 OAC 발매 패키지를 완성해 주세요.`
             }
@@ -2135,13 +2288,23 @@ LYRICS:
 
       const data = await response.json();
       const content = data.choices[0]?.message?.content || '';
+      const usage = data.usage || null;
+
+      if (usage) {
+        recordTokenUsage(usage);
+      }
 
       parseAndApplyAIOutput(content, topic, theme);
-      showToast('✨ 전득필 신곡 패키지 생성 완료!');
+      if (usage) {
+        showToast(`✨ 전득필 AI 작사 완료! (${usage.total_tokens.toLocaleString()} 토큰 소모)`);
+      } else {
+        showToast('✨ 전득필 신곡 패키지 생성 완료!');
+      }
 
     } catch (err) {
       console.error('DeepSeek generation failed:', err);
       showToast(`⚠️ DeepSeek 호출 실패: ${err.message}. 템플릿으로 대체합니다.`);
+      renderTokenUsageUI(false, err.message);
       generateProcedural(topic, track, moods, theme);
     } finally {
       isGenerating = false;
@@ -2215,7 +2378,13 @@ LYRICS:
 
   // Procedural Fallback Engine
   function generateProcedural(topic, track, moods, theme) {
-    generateTitleSuggestionsProcedural(topic, theme);
+    renderTokenUsageUI(true);
+    let effectiveTheme = theme;
+    const bpmNum = parseInt(currentBpm) || (track ? track.bpm : 90);
+    if (bpmNum >= 120 && ['regret', 'solace'].includes(theme)) {
+      effectiveTheme = 'drive';
+    }
+    generateTitleSuggestionsProcedural(topic, effectiveTheme);
 
     const themeLyricsVariations = {
       'regret': [
@@ -2744,11 +2913,15 @@ LYRICS:
 
     try {
       if (apiKey && apiKey.startsWith('sk-')) {
+        const tempoGuide = getTempoEnergyGuide(activeRefTrack, currentBpm);
         const prompt = `당신은 35~55세의 가슴을 울리는 대한민국 정통 포크/모던록 싱어송라이터 '전득필'입니다.
 신곡 소재: "${topic}"
-현재 노래의 [${sectionTag}] 섹션만 전득필의 감성(김광석·유재하·이문세처럼 정갈한 4-4조/7-5조 호흡, 삶의 무게와 여운을 담은 노랫말, 7~13자 내외)으로 4줄 내외로 새롭게 작성해 주세요.
+현재 곡 템포 & 사운드: ${currentBpm} BPM (${tempoGuide.styleName})
+지향 보컬 톤 & 호흡: ${tempoGuide.vocalTone}
+[템포 맞춤 작사 규칙]:
+${tempoGuide.lyricRules.join('\n')}
 절대 금지: 영어 추임새(Yeah, Baby, Run 등), 1020 틴에이저 감성(스케이트, 썸, 틱톡), 낡은 인디 클리셰(가디건, 캔커피, 선풍기, 영수증, 가로등, 골목).
-삶의 피로를 묵묵히 버텨온 어른들의 가슴을 먹먹하게 적시는 깊은 한글 가사를 출력하세요.
+위 템포(${currentBpm} BPM)의 비트와 에너지에 완벽히 밀착하여, [${sectionTag}] 섹션 가사 4줄만 작성해 주세요.
 [${sectionTag}] 태그는 출력하지 마세요. 다른 설명 없이 오직 가사 내용만 4줄 출력하세요.`;
 
         const res = await fetch('https://api.deepseek.com/chat/completions', {
@@ -2768,6 +2941,9 @@ LYRICS:
         }
 
         const data = await res.json();
+        if (data.usage) {
+          recordTokenUsage(data.usage);
+        }
         const newContent = data.choices?.[0]?.message?.content?.trim() || '';
 
         if (!newContent || newContent.length < 5) {
@@ -2777,7 +2953,7 @@ LYRICS:
         // AI가 태그를 포함해서 출력한 경우 중복 태그 제거
         const cleaned = newContent.replace(/^\s*\[.*?\]\s*/i, '').trim();
         replaceSectionInLyrics(sectionTag, cleaned);
-        showToast(`✨ [${sectionTag}] 섹션 재작사 완료!`);
+        showToast(`✨ [${sectionTag}] 섹션 재작사 완료!${data.usage ? ' (' + data.usage.total_tokens + ' 토큰)' : ''}`);
       } else {
         const fallbacks = {
           'Verse 1': `불 꺼진 편의점 앞\n접어둔 메모지 한 장\n밤공기 깊이 마시며\n혼자서 길을 걷는다`,
@@ -2959,6 +3135,15 @@ LYRICS:
     document.getElementById('out-ref-bpm').textContent = `${currentBpm} BPM`;
     document.getElementById('out-ref-tags').textContent = activeRefTrack.sound_tags;
 
+    const tempoGuide = getTempoEnergyGuide(activeRefTrack, currentBpm);
+    const energyEl = document.getElementById('out-ref-energy');
+    if (energyEl) {
+      energyEl.textContent = tempoGuide.badgeText;
+      energyEl.style.color = tempoGuide.badgeColor;
+      energyEl.style.borderColor = tempoGuide.badgeColor;
+      energyEl.style.background = tempoGuide.badgeBg;
+    }
+
     const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(activeRefTrack.artist + ' ' + activeRefTrack.title)}`;
     const ytBtn = document.getElementById('out-youtube-link');
     ytBtn.href = ytUrl;
@@ -3050,6 +3235,19 @@ LYRICS:
     currentBpm = track.bpm;
     syncBpmUI(currentBpm, track.bpm);
 
+    // ⚡ 템포-테마 불협화음 방지 스마트 페어링: 고속 록인데 슬픈 신파 테마면 에너지가 어울리는 테마로 지능적 추천/전환
+    if (track.bpm >= 120 && ['regret', 'solace', 'seasonal'].includes(selectedTheme)) {
+      const rockThemes = ['drive', 'cynical', 'summer'];
+      const autoTheme = sampleArray(rockThemes);
+      selectTheme(autoTheme, true);
+      showToast(`⚡ [${track.bpm} BPM 록 비트] 감성에 맞춰 테마가 [${THEME_NAMES[autoTheme].split(' ')[0]}]로 자동 최적화되었습니다!`);
+    } else if (track.bpm < 95 && ['drive', 'cynical'].includes(selectedTheme)) {
+      const slowThemes = ['nocturnal', 'regret', 'seasonal', 'solace'];
+      const autoTheme = sampleArray(slowThemes);
+      selectTheme(autoTheme, true);
+      showToast(`🌙 [${track.bpm} BPM 서정 템포] 감성에 맞춰 테마가 [${THEME_NAMES[autoTheme].split(' ')[0]}]로 자동 최적화되었습니다!`);
+    }
+
     for (const [key, full] of Object.entries(CATEGORY_MAP)) {
       if (full === track.category) {
         selectedCategory = key;
@@ -3063,7 +3261,7 @@ LYRICS:
     updateSelectedRefUI();
     renderSummaryBox();
     generateSunoPrompt(activeRefTrack, getActiveMoods());
-    showToast(`🎯 레퍼런스 선택: "${track.title} - ${track.artist}" — [🚀 생성하기] 버튼으로 가사를 만드세요!`);
+    showToast(`🎯 레퍼런스 선택: "${track.title} - ${track.artist}" (${track.bpm} BPM)`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
