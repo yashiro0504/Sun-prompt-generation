@@ -1498,5 +1498,380 @@
     ],
     "sound_tags": "bright acoustic guitar, driving indie drums, expressive vocal flips, explosive string climax, 138 BPM",
     "story_structure": "acoustic storytelling verse, theatrical vocal delivery, explosive emotional chorus"
+  },
+  {
+    "id": 101,
+    "title": "아름다운 것",
+    "artist": "언니네이발관 (Sister's Barbershop)",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 110,
+    "key_mood": [
+      "melancholic",
+      "nostalgic",
+      "soaring",
+      "bittersweet"
+    ],
+    "sound_tags": "jangly electric guitar arpeggios, warm precision bass, steady punchy drums, melancholic indie rock, deep baritone vocals, 110 BPM",
+    "story_structure": "쓸쓸하지만 찬란한 모던록 전개: [Verse 1] 담담한 방 안 독백 -> [Chorus] 영롱한 기타 톤과 함께 벅차오르는 감정의 고조"
+  },
+  {
+    "id": 102,
+    "title": "챠우챠우 (Chau Chau)",
+    "artist": "델리스파이스 (Deli Spice)",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 126,
+    "key_mood": [
+      "explosive",
+      "raw",
+      "obsessive",
+      "tense"
+    ],
+    "sound_tags": "driving fuzz guitar riffs, repeating bass groove, fast dynamic rock drums, 90s Korean indie modern rock, intense baritone vocals, 126 BPM",
+    "story_structure": "질주하는 얼터너티브 록: [Verse 1] 귓가에 맴도는 강박적 독백 -> [Chorus] 디스토션 기타 폭발과 울부짖는 절규"
+  },
+  {
+    "id": 103,
+    "title": "기억을 걷는 시간 (Time Walking On Memory)",
+    "artist": "넬 (NELL)",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 75,
+    "key_mood": [
+      "dreamy",
+      "melancholic",
+      "ethereal",
+      "bittersweet"
+    ],
+    "sound_tags": "ambient electric guitar delay, intimate acoustic piano, soft brush snare, cavernous reverb, melancholic indie ballad, 75 BPM",
+    "story_structure": "서서히 차오르는 감정의 파도: [Verse 1] 나직한 피아노 독백 -> [Chorus] 웅장한 리버브와 함께 가슴을 때리는 서정적 클라이맥스"
+  },
+  {
+    "id": 104,
+    "title": "EVERYTHING",
+    "artist": "검정치마 (The Black Skirts)",
+    "category": "Dream Pop / Bedroom Pop",
+    "bpm": 68,
+    "key_mood": [
+      "dreamy",
+      "warm",
+      "romantic",
+      "nostalgic"
+    ],
+    "sound_tags": "lo-fi vintage electric guitar, tape saturated bass, slow waltz sway, dreamy plate reverb, intimate whispering baritone, 68 BPM",
+    "story_structure": "꿈속을 부유하는 몽환적 로맨스: [Verse 1] 느릿하고 아득한 공간 묘사 -> [Chorus] 전부를 건네는 따스하고 나른한 사랑의 고백"
+  },
+  {
+    "id": 105,
+    "title": "주저하는 연인들을 위해 (For Lovers Who Hesitate)",
+    "artist": "잔나비 (JANNABI)",
+    "category": "Classic Retro Pop",
+    "bpm": 78,
+    "key_mood": [
+      "nostalgic",
+      "romantic",
+      "warm",
+      "bittersweet"
+    ],
+    "sound_tags": "vintage 70s chamber pop, mellotron strings, warm acoustic strumming, gentle dynamic drums, nostalgic baritone warmth, 78 BPM",
+    "story_structure": "빛바랜 옛 흑백 영화의 온기: [Verse 1] 서툴고 조심스러운 시작 -> [Chorus] 풍성한 빈티지 현악기와 함께 터지는 애틋한 포옹"
+  },
+  {
+    "id": 106,
+    "title": "샴푸의 요정 (Fairy of Shampoo)",
+    "artist": "빛과 소금 (Light & Salt)",
+    "category": "Classic Retro Pop",
+    "bpm": 98,
+    "key_mood": [
+      "groovy",
+      "breezy",
+      "romantic",
+      "dreamy"
+    ],
+    "sound_tags": "80s Korean city pop, Fender Rhodes electric piano, slap bass groove, breezy jazz-fusion guitar, articulate velvety vocals, 98 BPM",
+    "story_structure": "도시의 야경을 수놓는 세련된 시티팝: [Verse 1] 감각적인 도시 풍경 -> [Chorus] 부드럽고 리드미컬하게 흐르는 낭만적 멜로디"
+  },
+  {
+    "id": 107,
+    "title": "춘천가는 기차 (Train to Chuncheon)",
+    "artist": "김현철 (Kim Hyun-chul)",
+    "category": "Classic Retro Pop",
+    "bpm": 102,
+    "key_mood": [
+      "breezy",
+      "nostalgic",
+      "groovy",
+      "warm"
+    ],
+    "sound_tags": "smooth 90s city pop groove, acoustic nylon guitar, syncopated electric bass, soft brass accents, understated baritone delivery, 102 BPM",
+    "story_structure": "기차 차창 밖을 내다보는 여유와 낭만: [Verse 1] 덜컹이는 기차와 쌉싸름한 추억 -> [Chorus] 싱그러운 리듬감과 함께 펼쳐지는 계절의 풍경"
+  },
+  {
+    "id": 108,
+    "title": "옛사랑 (Old Love)",
+    "artist": "이문세 (Lee Moon-sae)",
+    "category": "Classic Retro Pop",
+    "bpm": 72,
+    "key_mood": [
+      "melancholic",
+      "nostalgic",
+      "raw",
+      "bittersweet"
+    ],
+    "sound_tags": "solitary acoustic nylon guitar, poignant oboe melody, intimate analog room reverb, timeless Korean folk ballad, resonant baritone, 72 BPM",
+    "story_structure": "인생의 무게를 삼키는 정통 서정 포크: [Verse 1] 적막한 방 안 홀로 떠올리는 이름 -> [Chorus] 눈시울을 붉히는 담담한 삶의 회한과 감사"
+  },
+  {
+    "id": 109,
+    "title": "잊어야 한다는 마음으로 (With the Heart to Forget)",
+    "artist": "김광석 (Kim Kwang-seok)",
+    "category": "Classic Retro Pop",
+    "bpm": 68,
+    "key_mood": [
+      "melancholic",
+      "raw",
+      "nostalgic",
+      "bittersweet"
+    ],
+    "sound_tags": "poignant acoustic guitar fingerpicking, lonely harmonica lead, warm natural room acoustic, authentic folk storytelling, deep baritone voice, 68 BPM",
+    "story_structure": "시대를 관통하는 서글픈 영혼의 울림: [Verse 1] 깊어가는 밤 꺼지지 않는 불빛 -> [Chorus] 끝내 삼켜야만 하는 처연하고 묵직한 고백"
+  },
+  {
+    "id": 110,
+    "title": "회상 (Reminiscence)",
+    "artist": "산울림 (Sanullim)",
+    "category": "Classic Retro Pop",
+    "bpm": 70,
+    "key_mood": [
+      "melancholic",
+      "dreamy",
+      "raw",
+      "nostalgic"
+    ],
+    "sound_tags": "vintage tape delay, minimalist electric guitar chords, understated bass walk, melancholic psychedelic ballad, dusty analog warmth, 70 BPM",
+    "story_structure": "길모퉁이 찻집에서 홀로 회상하는 청춘: [Verse 1] 무심하게 읊조리는 지나간 나날 -> [Chorus] 가슴을 저미는 쓸쓸한 독백"
+  },
+  {
+    "id": 111,
+    "title": "TOMBOY",
+    "artist": "혁오 (HYUKOH)",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 84,
+    "key_mood": [
+      "explosive",
+      "raw",
+      "nostalgic",
+      "soaring"
+    ],
+    "sound_tags": "raw overdriven electric guitar, booming dynamic rock drums, aggressive dynamic swell, youth anthemic crescendo, textured baritone vocals, 84 BPM",
+    "story_structure": "불안한 청춘의 거대한 폭발: [Verse 1] 서툴고 방황하는 청춘의 스케치 -> [Chorus] 벼락치듯 몰아치는 록 사운드와 함께 외치는 청춘의 고뇌"
+  },
+  {
+    "id": 112,
+    "title": "해에게서 소년에게 (From Sun to Boy)",
+    "artist": "신해철 (Shin Hae-chul)",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 124,
+    "key_mood": [
+      "soaring",
+      "explosive",
+      "raw",
+      "anthemic"
+    ],
+    "sound_tags": "driving melodic rock guitar, powerful stadium drums, soaring synthesizer lead, 90s Korean art rock, commanding baritone vocals, 124 BPM",
+    "story_structure": "세상을 향해 포효하는 록 스피릿: [Verse 1] 거친 파도를 마주한 소년의 다짐 -> [Chorus] 두려움 없이 하늘을 향해 내달리는 거대한 비상"
+  },
+  {
+    "id": 113,
+    "title": "스물다섯, 스물하나 (Twenty-Five, Twenty-One)",
+    "artist": "자우림 (Jaurim)",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 76,
+    "key_mood": [
+      "melancholic",
+      "soaring",
+      "nostalgic",
+      "bittersweet"
+    ],
+    "sound_tags": "sweeping orchestral strings, heavy dynamic distorted rock guitars, cinematic drums, epic melancholic indie rock, emotive baritone warmth, 76 BPM",
+    "story_structure": "찬란해서 시리도록 아픈 청춘의 연가: [Verse 1] 아련하게 스쳐 지나간 그해 봄날 -> [Chorus] 폭풍처럼 휘몰아치는 회한과 아름다웠던 청춘의 잔상"
+  },
+  {
+    "id": 114,
+    "title": "달이 차오른다, 가자 (The Moon is Rising)",
+    "artist": "장기하와 얼굴들 (Kiha & The Faces)",
+    "category": "Modern Indie Pop",
+    "bpm": 116,
+    "key_mood": [
+      "groovy",
+      "raw",
+      "witty",
+      "punchy"
+    ],
+    "sound_tags": "punchy rhythmic bassline, tight funk drums, sharp guitar chops, rhythmic Korean talking-rock cadence, deadpan humorous delivery, 116 BPM",
+    "story_structure": "덤덤한 일상 속 묘한 카타르시스: [Verse 1] 무표정한 일상 관찰 -> [Chorus] 리듬을 타고 터지는 통쾌한 탈출의 외침"
+  },
+  {
+    "id": 115,
+    "title": "어떤이의 꿈 (Someone's Dream)",
+    "artist": "봄여름가을겨울 (SSAW)",
+    "category": "Classic Retro Pop",
+    "bpm": 115,
+    "key_mood": [
+      "groovy",
+      "breezy",
+      "soaring",
+      "warm"
+    ],
+    "sound_tags": "funky jazz-rock groove, punchy brass hits, slap bass slap, driving disco beat, optimistic 80s Korean fusion pop, 115 BPM",
+    "story_structure": "도시 속 다양한 인생 군상을 담은 노래: [Verse 1] 바쁜 거리 위 사람들의 표정 -> [Chorus] 저마다의 꿈을 향해 달리는 시원한 질주"
+  },
+  {
+    "id": 116,
+    "title": "Last Nite",
+    "artist": "The Strokes",
+    "category": "Modern Indie Pop",
+    "bpm": 104,
+    "key_mood": [
+      "raw",
+      "punchy",
+      "witty",
+      "energetic"
+    ],
+    "sound_tags": "gritty garage rock guitar, tight hi-hat drums, punchy driving bass, 2000s indie rock swagger, dry articulate vocals, 104 BPM",
+    "story_structure": "쿨한 뉴욕 개러지 록: [Verse 1] 냉소적인 도시 파티의 뒷모습 -> [Chorus] 거칠게 긁히는 기타 리프와 즉각적인 직설 화법"
+  },
+  {
+    "id": 117,
+    "title": "Reptilia",
+    "artist": "The Strokes",
+    "category": "Modern Indie Pop",
+    "bpm": 158,
+    "key_mood": [
+      "frantic",
+      "explosive",
+      "raw",
+      "energetic"
+    ],
+    "sound_tags": "furious dual electric guitar interplay, relentless sixteenth-note hi-hat, aggressive punchy bass, high-octane indie rock, urgent delivery, 158 BPM",
+    "story_structure": "숨 쉴 틈 없이 질주하는 158 BPM 록: [Verse 1] 날선 긴장감 -> [Chorus] 브레이크 없이 폭발하는 드라이브감"
+  },
+  {
+    "id": 118,
+    "title": "Take Me Out",
+    "artist": "Franz Ferdinand",
+    "category": "Modern Indie Pop",
+    "bpm": 142,
+    "key_mood": [
+      "danceable",
+      "explosive",
+      "groovy",
+      "punchy"
+    ],
+    "sound_tags": "sudden tempo shift, driving disco-punk beat, crunchy power chords, rhythmic post-punk groove, sharp infectious hook, 142 BPM",
+    "story_structure": "극적인 템포 전환과 폭발: [Verse 1] 긴장된 예열 -> [Chorus] 142 BPM으로 쿵쾅거리는 댄서블 록 비트의 절정"
+  },
+  {
+    "id": 119,
+    "title": "Song 2",
+    "artist": "Blur",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 130,
+    "key_mood": [
+      "explosive",
+      "raw",
+      "frantic",
+      "punchy"
+    ],
+    "sound_tags": "heavy distortion bass riff, acoustic verse contrast, explosive fuzz guitar blast, raw grunge energy, dynamic shout climax, 130 BPM",
+    "story_structure": "고요 속의 대폭발: [Verse 1] 담담한 어쿠스틱 비트 -> [Chorus] 벽을 부수듯 터져 나오는 극강의 디스토션 록앤롤"
+  },
+  {
+    "id": 120,
+    "title": "Friday I'm in Love",
+    "artist": "The Cure",
+    "category": "Modern Indie Pop",
+    "bpm": 136,
+    "key_mood": [
+      "breezy",
+      "romantic",
+      "soaring",
+      "joyful"
+    ],
+    "sound_tags": "sparkling 12-string acoustic guitar, bouncy bassline, shimmering post-punk pop, joyful upbeat tempo, cheerful melodic hooks, 136 BPM",
+    "story_structure": "지친 한 주를 털어버리는 금요일의 해방감: [Verse 1] 피곤했던 평일의 나열 -> [Chorus] 거짓말처럼 가벼워지는 경쾌한 사랑과 환희"
+  },
+  {
+    "id": 121,
+    "title": "Every Breath You Take",
+    "artist": "The Police",
+    "category": "Classic Retro Pop",
+    "bpm": 117,
+    "key_mood": [
+      "melancholic",
+      "obsessive",
+      "warm",
+      "clean"
+    ],
+    "sound_tags": "iconic palm-muted chorus guitar arpeggios, steady kick snare pulse, warm melodic bassline, 80s new wave classic, hypnotic groove, 117 BPM",
+    "story_structure": "차분하지만 끈질긴 시선: [Verse 1] 한 걸음 한 걸음 지켜보는 관찰 -> [Chorus] 깊은 집착과 아련함이 교차하는 서정적 고조"
+  },
+  {
+    "id": 122,
+    "title": "With or Without You",
+    "artist": "U2",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 110,
+    "key_mood": [
+      "soaring",
+      "cinematic",
+      "ethereal",
+      "passionate"
+    ],
+    "sound_tags": "infinite sustain ambient guitar, pulsing D-A-Bm-G bass ostinato, building tom-tom drums, cinematic stadium rock crescendo, passionate baritone, 110 BPM",
+    "story_structure": "끝없이 차오르는 감정의 대서사시: [Verse 1] 나직한 베이스 라인 위의 고백 -> [Chorus] 가슴이 터질 듯 웅장하게 치솟는 영혼의 찬가"
+  },
+  {
+    "id": 123,
+    "title": "Losing My Religion",
+    "artist": "R.E.M.",
+    "category": "Classic Retro Pop",
+    "bpm": 126,
+    "key_mood": [
+      "melancholic",
+      "raw",
+      "witty",
+      "bittersweet"
+    ],
+    "sound_tags": "driving mandolin acoustic strumming, melodic bassline, steady folk-rock backbeat, rich string ensemble, bittersweet contemplative vocal, 126 BPM",
+    "story_structure": "스스로에게 털어놓는 비밀스런 독백: [Verse 1] 망설이는 시선과 침묵 -> [Chorus] 만돌린의 경쾌함 뒤에 숨은 애틋한 씁쓸함"
+  },
+  {
+    "id": 124,
+    "title": "Use Somebody",
+    "artist": "Kings of Leon",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 137,
+    "key_mood": [
+      "explosive",
+      "soaring",
+      "raw",
+      "anthemic"
+    ],
+    "sound_tags": "driving southern arena rock, dynamic electric guitars, thundering kick drum, cavernous plate reverb, raw impassioned vocal grit, 137 BPM",
+    "story_structure": "도시의 밤을 헤매는 외로운 늑대의 울부짖음: [Verse 1] 쓸쓸한 호텔 방의 정적 -> [Chorus] 하늘을 찌를 듯 터지는 누군가를 향한 간절한 부름"
+  },
+  {
+    "id": 125,
+    "title": "About a Girl (MTV Unplugged)",
+    "artist": "Nirvana",
+    "category": "Britpop / Alternative Rock",
+    "bpm": 120,
+    "key_mood": [
+      "raw",
+      "acoustic",
+      "melancholic",
+      "unplugged"
+    ],
+    "sound_tags": "punchy acoustic guitar strumming, round acoustic bass, clean drum groove, intimate 90s unplugged grunge, honest rough-hewn melody, 120 BPM",
+    "story_structure": "가장 솔직하고 담백한 그런지 러브송: [Verse 1] 서툴고 어긋난 마음의 묘사 -> [Chorus] 어쿠스틱의 거친 타격감 속에 묻어나는 진심"
   }
 ]

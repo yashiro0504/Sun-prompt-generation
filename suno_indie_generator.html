@@ -1435,13 +1435,13 @@
           <div class="panel-header" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
             <div class="panel-title-wrap">
               <span class="panel-icon">📚</span>
-              <h2 class="panel-title">전득필의 100대 영미권 사운드 레퍼런스 DB</h2>
+              <h2 class="panel-title">전득필의 125대 국내외 명곡 사운드 레퍼런스 DB</h2>
             </div>
           </div>
 
           <div style="display: flex; gap: 10px; align-items: center;">
             <div class="explorer-filters">
-              <button class="filter-btn active" data-filter="all" onclick="filterDB('all')">전체 (100)</button>
+              <button class="filter-btn active" data-filter="all" id="filter-btn-all" onclick="filterDB('all')">전체 (125)</button>
               <button class="filter-btn" data-filter="Britpop / Alternative Rock" onclick="filterDB('Britpop / Alternative Rock')">Britpop</button>
               <button class="filter-btn" data-filter="Dream Pop / Bedroom Pop" onclick="filterDB('Dream Pop / Bedroom Pop')">Dream Pop</button>
               <button class="filter-btn" data-filter="Classic Retro Pop" onclick="filterDB('Classic Retro Pop')">Retro Pop</button>
@@ -1750,7 +1750,7 @@
       const res = await fetch('pop_references.json');
       if (res.ok) {
         POP_REFERENCES = await res.json();
-        console.log('Loaded 100 pop references from JSON');
+        console.log(`Loaded ${POP_REFERENCES.length} pop references from JSON`);
       } else {
         throw new Error('Fetch failed');
       }
@@ -1758,6 +1758,8 @@
       console.warn('Using fallback database');
       POP_REFERENCES = getFallbackDB();
     }
+    const allBtn = document.getElementById('filter-btn-all');
+    if (allBtn) allBtn.textContent = `전체 (${POP_REFERENCES.length})`;
     initApp();
   }
 
