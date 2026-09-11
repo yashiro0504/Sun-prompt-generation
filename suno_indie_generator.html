@@ -1481,16 +1481,17 @@
       <div class="form-group" style="margin-top:14px;">
         <label class="form-label" style="display:flex; justify-content:space-between;">
           <span>AI 작사 엔진 모델</span>
-          <span style="color:#34d399; font-size:0.75rem;">NEW v4.1 탑재</span>
+          <span style="color:#34d399; font-size:0.75rem;">자동 장애복구(Fallback) 지원</span>
         </label>
         <select id="deepseek-model-select" class="form-input" style="background:var(--bg-primary); cursor:pointer;">
-          <option value="deepseek-flash" selected>⚡ DeepSeek-V4.1 Flash (최신 V4.1 세대 · 초고속/고품질 추천)</option>
-          <option value="deepseek-v4-pro">🏆 DeepSeek-V4 Pro (플래그십 대형 모델)</option>
-          <option value="deepseek-chat">💬 DeepSeek-V3 / Chat (기존 레거시 표준)</option>
-          <option value="deepseek-reasoner">🧠 DeepSeek-R1 Reasoner (심층 추론·사유 모델)</option>
+          <option value="deepseek-chat" selected>💬 DeepSeek-V3 / Chat (안정적인 표준 · 기본 권장)</option>
+          <option value="deepseek-flash">⚡ DeepSeek-V4.1 Flash (최신 V4.1 세대 · 고속/고품질)</option>
+          <option value="deepseek-v4-flash">⚡ DeepSeek-V4 Flash (V4 표준)</option>
+          <option value="deepseek-v4-pro">🏆 DeepSeek-V4 Pro (플래그십 모델)</option>
+          <option value="deepseek-reasoner">🧠 DeepSeek-R1 Reasoner (심층 사유·추론)</option>
         </select>
         <div style="font-size:0.72rem; color:var(--text-muted); margin-top:4px;">
-          ※ 최신 <strong>V4.1 Flash</strong>는 상투어 필터링과 한국어 은유 표현력이 대폭 향상되었으며 응답 속도가 가장 빠릅니다.
+          ※ 최신 모델(V4.1) 호출 중 응답 지연이나 미지원 오류 발생 시, <strong>안정 표준(V3 Chat)으로 자동 전환</strong>되어 멈춤 없이 가사를 완성합니다.
         </div>
       </div>
       <div id="api-balance-display" style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary); background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:8px; border:1px solid var(--glass-border); display:none;"></div>
@@ -1847,13 +1848,24 @@
   }
 
   function getSelectedModel() {
-    return localStorage.getItem('deepseek_model') || 'deepseek-flash';
+    return localStorage.getItem('deepseek_model') || 'deepseek-chat';
+  }
+
+  function getModelLabel(model) {
+    switch(model) {
+      case 'deepseek-flash': return 'V4.1 Flash';
+      case 'deepseek-v4-flash': return 'V4 Flash';
+      case 'deepseek-v4-pro': return 'V4 Pro';
+      case 'deepseek-reasoner': return 'R1 Reasoner';
+      case 'deepseek-chat':
+      default: return 'V3 Chat';
+    }
   }
 
   function updateApiStatusUI() {
     const key = getApiKey();
     const model = getSelectedModel();
-    const modelLabel = model === 'deepseek-flash' ? 'V4.1 Flash' : (model === 'deepseek-v4-pro' ? 'V4 Pro' : (model === 'deepseek-reasoner' ? 'R1 Reasoner' : 'V3 Chat'));
+    const modelLabel = getModelLabel(model);
     const btn = document.getElementById('api-status-btn');
     const text = document.getElementById('api-status-text');
     const indicator = document.getElementById('lyric-engine-indicator');
@@ -1890,12 +1902,12 @@
       showToast('⚠️ API 키를 입력해 주세요');
       return;
     }
-    const model = document.getElementById('deepseek-model-select')?.value || 'deepseek-flash';
+    const model = document.getElementById('deepseek-model-select')?.value || 'deepseek-chat';
     localStorage.setItem('deepseek_api_key', key);
     localStorage.setItem('deepseek_model', model);
     updateApiStatusUI();
     closeApiModal();
-    const modelLabel = model === 'deepseek-flash' ? 'V4.1 Flash' : model;
+    const modelLabel = getModelLabel(model);
     showToast(`🔑 DeepSeek 설정 완료! (${modelLabel})`);
   }
 
@@ -1916,6 +1928,9 @@
     const model = document.getElementById('deepseek-model-select')?.value || getSelectedModel();
     showToast(`📡 DeepSeek (${model}) 연결 테스트 중...`);
 
+    const abortCtrl = new AbortController();
+    const timer = setTimeout(() => abortCtrl.abort('TIMEOUT'), 10000);
+
     try {
       const res = await fetch('https://api.deepseek.com/chat/completions', {
         method: 'POST',
@@ -1927,17 +1942,24 @@
           model: model,
           messages: [{ role: 'user', content: 'Say "OK" in 1 word.' }],
           max_tokens: 5
-        })
+        }),
+        signal: abortCtrl.signal
       });
+      clearTimeout(timer);
 
       if (res.ok) {
         showToast(`✅ DeepSeek (${model}) API 연결 성공!`);
       } else {
         const err = await res.json().catch(() => ({}));
-        showToast(`❌ 연결 실패: ${err.error?.message || '인증 오류'}`);
+        showToast(`❌ 연결 실패: ${err.error?.message || '인증 오류 (HTTP ' + res.status + ')'}`);
       }
     } catch(e) {
-      showToast(`❌ 네트워크 연결 오류: ${e.message}`);
+      clearTimeout(timer);
+      if (e === 'TIMEOUT' || e.name === 'AbortError') {
+        showToast(`⏱️ 연결 실패: 10초 내 서버 응답 없음 (${model} 지연)`);
+      } else {
+        showToast(`❌ 네트워크 연결 오류: ${e.message}`);
+      }
     }
   }
 
@@ -2194,41 +2216,153 @@
     renderYouTubeKit();
   }
 
+  let currentAbortController = null;
+  let generationTimerInterval = null;
+
+  function cancelGeneration() {
+    if (currentAbortController) {
+      try { currentAbortController.abort('USER_CANCEL'); } catch(e){}
+      currentAbortController = null;
+    }
+    if (generationTimerInterval) {
+      clearInterval(generationTimerInterval);
+      generationTimerInterval = null;
+    }
+    isGenerating = false;
+    const btnGen = document.getElementById('btn-generate-main');
+    if (btnGen) {
+      btnGen.disabled = false;
+      btnGen.innerHTML = '<span>🚀</span> 전득필 신곡 패키지 일괄 생성하기';
+    }
+    showToast('🛑 작사가 취소되었습니다. 기본 템플릿으로 표시합니다.');
+    const topicInput = document.getElementById('topic-input');
+    const topic = topicInput?.value.trim() || '비 내리는 정류장';
+    const activeMoods = getActiveMoods();
+    generateProcedural(topic, activeRefTrack || POP_REFERENCES[0], activeMoods, selectedTheme);
+  }
+
+  async function callDeepSeekWithFallback(messages, apiKey, requestedModel, maxTokens = 2000, temperature = 0.85) {
+    const candidates = [requestedModel];
+    if (requestedModel !== 'deepseek-chat') {
+      candidates.push('deepseek-chat');
+    }
+    if (requestedModel === 'deepseek-flash' && !candidates.includes('deepseek-v4-flash')) {
+      candidates.push('deepseek-v4-flash');
+    }
+
+    let lastError = null;
+
+    for (let i = 0; i < candidates.length; i++) {
+      const model = candidates[i];
+      if (i > 0) {
+        showToast(`⚡ ${candidates[i-1]} 지연/오류로 [${model}] 모델로 자동 전환 중...`);
+        const statusEl = document.getElementById('ai-active-model-name');
+        if (statusEl) statusEl.textContent = `${model} (대체 모드)`;
+      }
+
+      const abortCtrl = new AbortController();
+      currentAbortController = abortCtrl;
+      const timeoutMs = 25000;
+      const timeoutId = setTimeout(() => abortCtrl.abort('TIMEOUT'), timeoutMs);
+
+      try {
+        const res = await fetch('https://api.deepseek.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: messages,
+            temperature: temperature,
+            max_tokens: maxTokens
+          }),
+          signal: abortCtrl.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          const errMsg = errData?.error?.message || `HTTP ${res.status}`;
+          throw new Error(errMsg);
+        }
+
+        const data = await res.json();
+        return { data, modelUsed: model };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (abortCtrl.signal.aborted && abortCtrl.signal.reason === 'USER_CANCEL') {
+          throw new Error('USER_CANCEL');
+        }
+        lastError = err;
+        const isTimeout = err === 'TIMEOUT' || err.name === 'AbortError';
+        console.warn(`DeepSeek model ${model} failed:`, isTimeout ? 'Timeout (25s)' : err.message);
+      }
+    }
+
+    throw lastError || new Error('모든 DeepSeek 모델 호출에 실패했습니다.');
+  }
+
   // DeepSeek AI Generation (전득필 Persona + Anti-AI Cliché + Syllable Meter + OAC Pack)
   async function generateWithDeepSeek(topic, track, moods, theme, apiKey) {
+    if (generationTimerInterval) clearInterval(generationTimerInterval);
     isGenerating = true;
     const btnGen = document.getElementById('btn-generate-main');
-    btnGen.disabled = true;
-    btnGen.innerHTML = '<span>⏳</span> 전득필 AI 작사 & OAC 패키지 생성 중...';
+    if (btnGen) {
+      btnGen.disabled = true;
+      btnGen.innerHTML = '<span>⏳</span> 전득필 AI 작사 & OAC 패키지 생성 중...';
+    }
+
+    const currentModel = getSelectedModel();
+    const modelLabel = getModelLabel(currentModel);
 
     const lyricsBlock = document.getElementById('korean-lyrics-output');
     lyricsBlock.innerHTML = `
       <div class="ai-spinner-container">
         <div class="ai-spinner"></div>
         <div style="font-weight:700; font-size:1.05rem; color:#fcd34d;">🎙️ 전득필(Jeon Deuk-pil) 감성 작사 진행 중...</div>
-        <div style="font-size:0.82rem; color:var(--text-muted); margin-top:6px;">
-          [${track.artist}]의 사운드 질감을 바탕으로, 일상 사물의 쌉싸름한 온기를 담은 가사를 쓰고 있습니다.
+        <div id="ai-progress-status" style="color:#38bdf8; font-weight:600; font-size:0.85rem; margin-top:6px;">
+          ⏱️ 경과 시간: <span id="ai-elapsed-sec">0</span>초 · AI 응답 수신 대기 중...
+        </div>
+        <div style="font-size:0.75rem; color:#94a3b8; margin-top:3px;">
+          호출 모델: <span id="ai-active-model-name" style="color:#a7f3d0; font-weight:600;">${modelLabel}</span>
+        </div>
+        <div style="font-size:0.82rem; color:var(--text-muted); margin-top:8px;">
+          [${track?.artist || '인디'}]의 사운드 질감을 바탕으로, 일상 사물의 쌉싸름한 온기를 담은 가사를 쓰고 있습니다.
+        </div>
+        <div style="margin-top:14px;">
+          <button type="button" class="btn-sm" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; cursor:pointer; padding:6px 14px; border-radius:6px; font-weight:600;" onclick="cancelGeneration()">
+            🛑 대기 취소 및 오프라인 가사 즉시 보기
+          </button>
         </div>
       </div>
     `;
 
+    let elapsedSec = 0;
+    generationTimerInterval = setInterval(() => {
+      elapsedSec++;
+      const timerEl = document.getElementById('ai-elapsed-sec');
+      if (timerEl) timerEl.textContent = elapsedSec;
+      const progressEl = document.getElementById('ai-progress-status');
+      if (progressEl) {
+        if (elapsedSec < 4) {
+          progressEl.innerHTML = `⏱️ 경과 시간: <span id="ai-elapsed-sec">${elapsedSec}</span>초 · AI 서버로 작사 요청 전송 중...`;
+        } else if (elapsedSec < 15) {
+          progressEl.innerHTML = `⏱️ 경과 시간: <span id="ai-elapsed-sec">${elapsedSec}</span>초 · 운율과 사운드에 맞춘 노랫말 집필 중...`;
+        } else {
+          progressEl.innerHTML = `⏱️ 경과 시간: <span id="ai-elapsed-sec">${elapsedSec}</span>초 · 후렴구 통찰과 OAC 패키지 정밀 구성 중...`;
+        }
+      }
+    }, 1000);
+
     try {
       const themeKorean = THEME_NAMES[theme] || theme;
-      const moodStr = moods.join(', ') || track.key_mood.join(', ');
+      const moodStr = moods.join(', ') || (track?.key_mood ? track.key_mood.join(', ') : 'melancholic');
       const tempoGuide = getTempoEnergyGuide(track, currentBpm);
 
-      const response = await fetch('https://api.deepseek.com/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: getSelectedModel(),
-          messages: [
-            {
-              role: 'system',
-              content: `당신은 35세~55세(X세대 및 708090 세대)의 가슴을 울리는 대한민국 정통 인디 포크/모던록 싱어송라이터 '전득필(Jeon Deuk-pil)'입니다.
+      const systemPrompt = `당신은 35세~55세(X세대 및 708090 세대)의 가슴을 울리는 대한민국 정통 인디 포크/모던록 싱어송라이터 '전득필(Jeon Deuk-pil)'입니다.
 전득필은 김광석, 유재하, 신해철, 이문세, 김현철, 언니네이발관, 이소라의 계보를 잇는 묵직한 중저음 바리톤 보컬리스트입니다.
 젊은 날의 치열했던 청춘을 지나, 이제는 가장이자 사회의 허리로서 삶의 무게를 묵묵히 짊어진 30대~50대의 고단함, 지나간 시절에 대한 아련한 회한, 그리고 담담한 위로를 깊이 있는 한국어 노랫말로 노래합니다.
 
@@ -2286,16 +2420,14 @@ LYRICS:
 ...
 [Outro: ...]
 
-불필요한 인사말이나 부가 설명 없이 위 형식 그대로만 출력하세요.`
-            },
-            {
-              role: 'user',
-              content: `[전득필 신곡 작업 의뢰]
-- 사운드 레퍼런스: "${track.title}" by ${track.artist} (${track.category})
+불필요한 인사말이나 부가 설명 없이 위 형식 그대로만 출력하세요.`;
+
+      const userPrompt = `[전득필 신곡 작업 의뢰]
+- 사운드 레퍼런스: "${track?.title || '인디 록'}" by ${track?.artist || '전득필'} (${track?.category || '한국 인디'})
 - 템포 및 에너지: ${tempoGuide.styleName} (${currentBpm} BPM)
 - 지향 보컬 톤 & 호흡: ${tempoGuide.vocalTone}
-- 사운드 특징: ${track.sound_tags}
-- 레퍼런스 서사 지침: ${track.story_structure} (※주의: 가사는 인트로 없이 바로 [Verse 1]부터 시작할 것)
+- 사운드 특징: ${track?.sound_tags || '인디 록 사운드'}
+- 레퍼런스 서사 지침: ${track?.story_structure || '솔직한 일상 서사'} (※주의: 가사는 인트로 없이 바로 [Verse 1]부터 시작할 것)
 - 오늘의 일기 소재: "${topic}"
 - 서사 테마: ${themeKorean}
 - 분위기/무드: ${moodStr}
@@ -2304,21 +2436,20 @@ LYRICS:
 ${tempoGuide.lyricRules.map(r => '* ' + r).join('\n')}
 * 주의: 가사가 레퍼런스 곡의 템포(${currentBpm} BPM) 및 편곡 에너지와 절대 겉돌지 않아야 합니다. (예: 120+ BPM 빠른 록인데 느린 눈물/회한 신파 발라드 가사를 쓰면 곡이 망가집니다. 템포의 스피드와 에너지에 철저히 밀착하여 작사하세요!)
 
-전득필의 목소리와 감성으로 신곡 가사와 OAC 발매 패키지를 완성해 주세요.`
-            }
-          ],
-          temperature: 0.85,
-          max_tokens: 2000
-        })
-      });
+전득필의 목소리와 감성으로 신곡 가사와 OAC 발매 패키지를 완성해 주세요.`;
 
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error?.message || `HTTP ${response.status}`);
-      }
+      const { data, modelUsed } = await callDeepSeekWithFallback(
+        [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        apiKey,
+        currentModel,
+        2000,
+        0.85
+      );
 
-      const data = await response.json();
-      const content = data.choices[0]?.message?.content || '';
+      const content = data.choices?.[0]?.message?.content || '';
       const usage = data.usage || null;
 
       if (usage) {
@@ -2327,20 +2458,29 @@ ${tempoGuide.lyricRules.map(r => '* ' + r).join('\n')}
 
       parseAndApplyAIOutput(content, topic, theme);
       if (usage) {
-        showToast(`✨ 전득필 AI 작사 완료! (${usage.total_tokens.toLocaleString()} 토큰 소모)`);
+        showToast(`✨ 전득필 AI 작사 완료! (${modelUsed}, ${usage.total_tokens.toLocaleString()} 토큰 소모)`);
       } else {
-        showToast('✨ 전득필 신곡 패키지 생성 완료!');
+        showToast(`✨ 전득필 신곡 패키지 생성 완료! (${modelUsed})`);
       }
 
     } catch (err) {
-      console.error('DeepSeek generation failed:', err);
-      showToast(`⚠️ DeepSeek 호출 실패: ${err.message}. 템플릿으로 대체합니다.`);
-      renderTokenUsageUI(false, err.message);
-      generateProcedural(topic, track, moods, theme);
+      if (err.message !== 'USER_CANCEL') {
+        console.error('DeepSeek generation failed:', err);
+        showToast(`⚠️ DeepSeek 호출 실패: ${err.message}. 템플릿으로 대체합니다.`);
+        renderTokenUsageUI(false, err.message);
+        generateProcedural(topic, track, moods, theme);
+      }
     } finally {
+      if (generationTimerInterval) {
+        clearInterval(generationTimerInterval);
+        generationTimerInterval = null;
+      }
+      currentAbortController = null;
       isGenerating = false;
-      btnGen.disabled = false;
-      btnGen.innerHTML = '<span>🚀</span> 전득필 신곡 패키지 일괄 생성하기';
+      if (btnGen) {
+        btnGen.disabled = false;
+        btnGen.innerHTML = '<span>🚀</span> 전득필 신곡 패키지 일괄 생성하기';
+      }
     }
   }
 
@@ -2694,7 +2834,7 @@ ${tempoGuide.lyricRules.map(r => '* ' + r).join('\n')}
     currentRawLyrics =
       `[Verse 1]\n${tmpl.verse1}\n\n` +
       `[Pre-Chorus]\n${tmpl.pre}\n\n` +
-      `[Chorus: Full Band Entrance, ${currentBpm} BPM, ${track.sound_tags.split(',')[1] || 'Soaring Chorus'}]\n${tmpl.chorus}\n\n` +
+      `[Chorus: Full Band Entrance, ${currentBpm} BPM, ${(track && track.sound_tags) ? (track.sound_tags.split(',')[1] || 'Soaring Chorus') : 'Soaring Chorus'}]\n${tmpl.chorus}\n\n` +
       `[Verse 2]\n${tmpl.verse2}\n\n` +
       `${tmpl.solo}\n\n` +
       `[Bridge: Stripped down Backing & Low Vocals]\n${tmpl.bridge}\n\n` +
@@ -2955,23 +3095,14 @@ ${tempoGuide.lyricRules.join('\n')}
 위 템포(${currentBpm} BPM)의 비트와 에너지에 완벽히 밀착하여, [${sectionTag}] 섹션 가사 4줄만 작성해 주세요.
 [${sectionTag}] 태그는 출력하지 마세요. 다른 설명 없이 오직 가사 내용만 4줄 출력하세요.`;
 
-        const res = await fetch('https://api.deepseek.com/chat/completions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-          body: JSON.stringify({
-            model: getSelectedModel(),
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.9,
-            max_tokens: 300
-          })
-        });
+        const { data, modelUsed } = await callDeepSeekWithFallback(
+          [{ role: 'user', content: prompt }],
+          apiKey,
+          getSelectedModel(),
+          300,
+          0.9
+        );
 
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData?.error?.message || `API 오류 (${res.status})`);
-        }
-
-        const data = await res.json();
         if (data.usage) {
           recordTokenUsage(data.usage);
         }
@@ -2984,7 +3115,7 @@ ${tempoGuide.lyricRules.join('\n')}
         // AI가 태그를 포함해서 출력한 경우 중복 태그 제거
         const cleaned = newContent.replace(/^\s*\[.*?\]\s*/i, '').trim();
         replaceSectionInLyrics(sectionTag, cleaned);
-        showToast(`✨ [${sectionTag}] 섹션 재작사 완료!${data.usage ? ' (' + data.usage.total_tokens + ' 토큰)' : ''}`);
+        showToast(`✨ [${sectionTag}] 섹션 재작사 완료 (${modelUsed})!${data.usage ? ' (' + data.usage.total_tokens + ' 토큰)' : ''}`);
       } else {
         const fallbacks = {
           'Verse 1': `불 꺼진 편의점 앞\n접어둔 메모지 한 장\n밤공기 깊이 마시며\n혼자서 길을 걷는다`,
