@@ -1478,6 +1478,21 @@
         <label class="form-label">DeepSeek API Key</label>
         <input type="password" id="deepseek-key-input" class="form-input" placeholder="sk-...">
       </div>
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label" style="display:flex; justify-content:space-between;">
+          <span>AI 작사 엔진 모델</span>
+          <span style="color:#34d399; font-size:0.75rem;">NEW v4.1 탑재</span>
+        </label>
+        <select id="deepseek-model-select" class="form-input" style="background:var(--bg-primary); cursor:pointer;">
+          <option value="deepseek-flash" selected>⚡ DeepSeek-V4.1 Flash (최신 V4.1 세대 · 초고속/고품질 추천)</option>
+          <option value="deepseek-v4-pro">🏆 DeepSeek-V4 Pro (플래그십 대형 모델)</option>
+          <option value="deepseek-chat">💬 DeepSeek-V3 / Chat (기존 레거시 표준)</option>
+          <option value="deepseek-reasoner">🧠 DeepSeek-R1 Reasoner (심층 추론·사유 모델)</option>
+        </select>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:4px;">
+          ※ 최신 <strong>V4.1 Flash</strong>는 상투어 필터링과 한국어 은유 표현력이 대폭 향상되었으며 응답 속도가 가장 빠릅니다.
+        </div>
+      </div>
       <div id="api-balance-display" style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary); background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:8px; border:1px solid var(--glass-border); display:none;"></div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; flex-wrap:wrap; gap:10px;">
         <button class="btn-sm" style="color:#f87171;" onclick="clearApiKey()">키 삭제 (템플릿 모드로 복귀)</button>
@@ -1826,30 +1841,40 @@
     }
   }
 
-  // API Key Management
+  // API Key & Model Management
   function getApiKey() {
     return localStorage.getItem('deepseek_api_key') || '';
   }
 
+  function getSelectedModel() {
+    return localStorage.getItem('deepseek_model') || 'deepseek-flash';
+  }
+
   function updateApiStatusUI() {
     const key = getApiKey();
+    const model = getSelectedModel();
+    const modelLabel = model === 'deepseek-flash' ? 'V4.1 Flash' : (model === 'deepseek-v4-pro' ? 'V4 Pro' : (model === 'deepseek-reasoner' ? 'R1 Reasoner' : 'V3 Chat'));
     const btn = document.getElementById('api-status-btn');
     const text = document.getElementById('api-status-text');
     const indicator = document.getElementById('lyric-engine-indicator');
 
     if (key && key.startsWith('sk-')) {
       btn.className = 'api-badge connected';
-      text.textContent = '🟢 DeepSeek AI 연동됨';
-      if (indicator) indicator.innerHTML = '<span style="color:#34d399; font-weight:600;">🤖 전득필 AI 작사 활성화</span>';
+      text.textContent = `🟢 DeepSeek ${modelLabel}`;
+      if (indicator && !lastTokenUsage) {
+        indicator.innerHTML = `<span style="color:#34d399; font-weight:600;">🤖 전득필 AI (${modelLabel})</span>`;
+      }
     } else {
       btn.className = 'api-badge offline';
       text.textContent = 'DeepSeek API 설정 (키 없음)';
-      if (indicator) indicator.innerHTML = '<span style="color:var(--text-muted);">⚪ 절차적 템플릿 작사 (API 미등록)</span>';
+      if (indicator) indicator.innerHTML = '<span style="color:var(--text-muted); font-size:0.75rem;">⚪ 오프라인 템플릿 작사 (API 미등록)</span>';
     }
   }
 
   function openApiModal() {
     document.getElementById('deepseek-key-input').value = getApiKey();
+    const modelSelect = document.getElementById('deepseek-model-select');
+    if (modelSelect) modelSelect.value = getSelectedModel();
     document.getElementById('api-modal').classList.add('show');
   }
 
@@ -1865,10 +1890,13 @@
       showToast('⚠️ API 키를 입력해 주세요');
       return;
     }
+    const model = document.getElementById('deepseek-model-select')?.value || 'deepseek-flash';
     localStorage.setItem('deepseek_api_key', key);
+    localStorage.setItem('deepseek_model', model);
     updateApiStatusUI();
     closeApiModal();
-    showToast('🔑 DeepSeek API 키가 저장되었습니다!');
+    const modelLabel = model === 'deepseek-flash' ? 'V4.1 Flash' : model;
+    showToast(`🔑 DeepSeek 설정 완료! (${modelLabel})`);
   }
 
   function clearApiKey() {
@@ -1885,7 +1913,8 @@
       showToast('⚠️ 키를 입력 후 테스트해 주세요');
       return;
     }
-    showToast('📡 DeepSeek 연결 테스트 중...');
+    const model = document.getElementById('deepseek-model-select')?.value || getSelectedModel();
+    showToast(`📡 DeepSeek (${model}) 연결 테스트 중...`);
 
     try {
       const res = await fetch('https://api.deepseek.com/chat/completions', {
@@ -1895,16 +1924,16 @@
           'Authorization': `Bearer ${key}`
         },
         body: JSON.stringify({
-          model: 'deepseek-chat',
+          model: model,
           messages: [{ role: 'user', content: 'Say "OK" in 1 word.' }],
           max_tokens: 5
         })
       });
 
       if (res.ok) {
-        showToast('✅ DeepSeek API 연결 성공!');
+        showToast(`✅ DeepSeek (${model}) API 연결 성공!`);
       } else {
-        const err = await res.json();
+        const err = await res.json().catch(() => ({}));
         showToast(`❌ 연결 실패: ${err.error?.message || '인증 오류'}`);
       }
     } catch(e) {
@@ -2195,7 +2224,7 @@
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: 'deepseek-chat',
+          model: getSelectedModel(),
           messages: [
             {
               role: 'system',
@@ -2930,7 +2959,7 @@ ${tempoGuide.lyricRules.join('\n')}
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
           body: JSON.stringify({
-            model: 'deepseek-chat',
+            model: getSelectedModel(),
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.9,
             max_tokens: 300

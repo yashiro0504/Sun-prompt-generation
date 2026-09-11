@@ -833,7 +833,7 @@
         <div class="api-row">
             <select class="provider-select" id="providerSelect">
                 <option value="gemini">🔵 Google Gemini (2.0 Flash)</option>
-                <option value="deepseek">🟢 DeepSeek (V3 Chat)</option>
+                <option value="deepseek">🟢 DeepSeek (V4.1 Flash)</option>
             </select>
             <div class="api-key-wrapper">
                 <input type="password" class="api-key-input" id="apiKeyInput" placeholder="API 키를 입력하세요...">
@@ -1134,16 +1134,16 @@ const PROVIDERS = {
     },
     deepseek: {
         name: 'DeepSeek',
-        model: 'deepseek-chat',
+        model: 'deepseek-flash',
         badge: 'deepseek',
-        hint: 'DeepSeek 키 발급: <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: var(--gold);">DeepSeek Platform</a> (충전 필요)',
+        hint: 'DeepSeek 키 발급: <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: var(--gold);">DeepSeek Platform</a> (최신 V4.1 Flash 적용)',
         buildUrl() { return 'https://api.deepseek.com/chat/completions'; },
         buildHeaders(apiKey) {
             return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` };
         },
         buildBody(systemPrompt, userPrompt) {
             return {
-                model: 'deepseek-chat',
+                model: 'deepseek-flash',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt }
@@ -1163,7 +1163,7 @@ const PROVIDERS = {
                     const res = await fetch(ep, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                        body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: 'Say "connected".' }], max_tokens: 10 })
+                        body: JSON.stringify({ model: 'deepseek-flash', messages: [{ role: 'user', content: 'Say "connected".' }], max_tokens: 10 })
                     });
                     if (res.ok) return true;
 
